@@ -31,7 +31,8 @@ private object Api {
             description = "Navn og ident til brukers veileder"
         ),
         tags = setOf("Oppfølging"),
-        securitySchemes = setOf(securityScheme.name)
+        securitySchemes = setOf(securityScheme.name),
+        canThrow = CommonModels.standardResponses,
     )
 }
 

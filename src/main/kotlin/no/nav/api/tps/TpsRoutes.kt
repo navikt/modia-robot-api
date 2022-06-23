@@ -24,13 +24,14 @@ private object Api {
             status = HttpStatusCode.OK,
             description = "Brukers kontonummer om det eksisterer i TPS"
         ),
-        tags = setOf("TPS")
+        tags = setOf("TPS"),
+        canThrow = CommonModels.standardResponses,
     )
 }
 
 private object Models {
     @Serializable
     data class Kontonummer(
-        val value: String?
+        val value: String
     )
 }

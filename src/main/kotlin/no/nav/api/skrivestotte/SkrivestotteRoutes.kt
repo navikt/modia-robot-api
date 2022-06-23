@@ -7,6 +7,7 @@ import io.bkbn.kompendium.core.metadata.method.PostInfo
 import io.ktor.http.*
 import io.ktor.routing.*
 import kotlinx.serialization.Serializable
+import no.nav.api.CommonModels
 
 fun Route.configureSkrivestotteRoutes() {
     route("skrivestotte/") {
@@ -27,7 +28,8 @@ private object Api {
             status = HttpStatusCode.OK,
             description = "Tekster som matcher søket"
         ),
-        tags = setOf("Skrivestøtte")
+        tags = setOf("Skrivestøtte"),
+        canThrow = CommonModels.standardResponses,
     )
 }
 
