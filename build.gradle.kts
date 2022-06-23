@@ -44,6 +44,7 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:$prometeus_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
+    testImplementation("io.mockk:mockk:1.12.4")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
