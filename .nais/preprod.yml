@@ -1,0 +1,63 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: modia-robot-api
+  namespace: personoversikt
+  labels:
+    team: personoversikt
+spec:
+  image: {{image}}
+  port: 7070
+  liveness:
+    path: /internal/isAlive
+    initialDelay: 20
+    timeout: 1
+    periodSeconds: 5
+    failureThreshold: 10
+  readiness:
+    path: /internal/isReady
+    initialDelay: 20
+    timeout: 1
+  prometheus:
+    enabled: true
+    path: /internal/metrics
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 2000m
+      memory: 512Mi
+  ingresses:
+    - https://modia-robot-api.dev.intern.nav.no
+  replicas:
+    min: 1
+    max: 1
+    cpuThresholdPercentage: 90
+  azure:
+    application:
+      enabled: true
+      tenant: trygdeetaten.no
+      claims:
+        extra:
+          - "NAVident"
+  vault:
+    enabled: true
+    paths:
+      - kvPath: /serviceuser/data/dev/srvssolinux
+        mountPath: /var/run/secrets/nais.io/srvssolinux
+      - kvPath: /apikey/appdynamics/dev
+        mountPath: /var/run/secrets/nais.io/vault
+  env:
+    - name: LDAP_BASEDN
+      value: "dc=preprod,dc=local"
+    - name: LDAP_DOMAIN
+      value: "PREPROD.LOCAL"
+    - name: LDAP_SERVICEUSER_BASEDN
+      value: "ou=ServiceAccounts,dc=preprod,dc=local"
+    - name: LDAP_URL
+      value: "ldaps://ldapgw.preprod.local"
+    - name: LDAP_USER_BASEDN
+      value: "ou=NAV,ou=BusinessUnits,dc=preprod,dc=local"
+    - name: OPPFOLGING_URL
+      value: "https://veilarboppfolging-q1.nais.preprod.local/veilarboppfolging/api"
