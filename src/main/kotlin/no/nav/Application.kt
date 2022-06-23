@@ -17,7 +17,7 @@ fun startApplication(
     env: Env = Env(),
     services: Services = ServicesImpl(env)
 ) {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
+    embeddedServer(Netty, port = 7070, host = "0.0.0.0") {
         environment.config
         configureOpenApi()
         configureSecurity(disableSecurity, "")
