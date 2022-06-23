@@ -20,7 +20,7 @@ fun startApplication(
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         environment.config
         configureOpenApi()
-        configureSecurity(disableSecurity)
+        configureSecurity(disableSecurity, "")
         configureMonitoring()
         configureSerialization()
 
@@ -40,5 +40,5 @@ fun startApplication(
 }
 
 fun main() {
-    startApplication(disableSecurity = false)
+    startApplication(disableSecurity = true)
 }
