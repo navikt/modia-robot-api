@@ -49,6 +49,8 @@ spec:
       - kvPath: /apikey/appdynamics/dev
         mountPath: /var/run/secrets/nais.io/vault
   env:
+    - name: IDENT_ALLOW_LIST
+      value: "Z999999"
     - name: LDAP_BASEDN
       value: "dc=adeo,dc=no"
     - name: LDAP_DOMAIN
