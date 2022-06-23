@@ -22,7 +22,8 @@ fun Application.configureOpenApi() {
         jsConfig = JsConfig(
             specs = mapOf(
                 "Version 1" to URI("/openapi.json")
-            )
+            ),
+            validatorUrl = "none",
         )
     }
 }
