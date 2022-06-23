@@ -64,7 +64,8 @@ private object Models {
     data class SendSporsmalRequest(
         val tekst: String,
         val tema: String,
-        val svarSkalTilEnhetsOppgavebenk: Boolean = true,
+        val svarSkalTilEnhet: String,
+        val svarSkalTilVeileder: String? = null,
     )
 
     @Serializable
