@@ -3,6 +3,7 @@ package no.nav.api.oppfolging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import no.nav.Vault
 import no.nav.utils.getRequiredProperty
 import java.util.Hashtable
 import javax.naming.Context
@@ -13,9 +14,8 @@ import javax.naming.ldap.LdapContext
 
 class Ldap {
     val ldapUrl = getRequiredProperty("LDAP_URL")
-    val ldapUsername = getRequiredProperty("LDAP_USERNAME")
-    val ldapPassword = getRequiredProperty("LDAP_PASSWORD")
     val ldapBasedn = getRequiredProperty("LDAP_BASEDN")
+    val credentials = Vault.readCredentials("srvssolinux")
 
     @Serializable
     class Veileder(
@@ -55,8 +55,8 @@ class Ldap {
             Context.INITIAL_CONTEXT_FACTORY to "com.sun.jndi.ldap.LdapCtxFactory",
             Context.SECURITY_AUTHENTICATION to "simple",
             Context.PROVIDER_URL to ldapUrl,
-            Context.SECURITY_PRINCIPAL to ldapUsername,
-            Context.SECURITY_CREDENTIALS to ldapPassword,
+            Context.SECURITY_PRINCIPAL to credentials.username,
+            Context.SECURITY_CREDENTIALS to credentials.passord,
         )
     )
 

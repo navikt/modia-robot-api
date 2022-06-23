@@ -44,5 +44,20 @@ spec:
   vault:
     enabled: true
     paths:
+      - kvPath: /serviceuser/data/dev/srvssolinux
+        mountPath: /var/run/secrets/nais.io/srvssolinux
       - kvPath: /apikey/appdynamics/dev
         mountPath: /var/run/secrets/nais.io/vault
+  env:
+    - name: LDAP_BASEDN
+      value: "dc=preprod,dc=local"
+    - name: LDAP_DOMAIN
+      value: "PREPROD.LOCAL"
+    - name: LDAP_SERVICEUSER_BASEDN
+      value: "ou=ServiceAccounts,dc=preprod,dc=local"
+    - name: LDAP_URL
+      value: "ldaps://ldapgw.preprod.local"
+    - name: LDAP_USER_BASEDN
+      value: "ou=NAV,ou=BusinessUnits,dc=preprod,dc=local"
+    - name: OPPFOLGING_URL
+      value: "https://veilarboppfolging-q1.nais.preprod.local/veilarboppfolging/api"
