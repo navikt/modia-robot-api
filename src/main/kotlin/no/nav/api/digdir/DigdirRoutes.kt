@@ -1,7 +1,6 @@
 package no.nav.api.digdir
 
 import io.bkbn.kompendium.core.Notarized.notarizedGet
-import io.bkbn.kompendium.core.metadata.ExceptionInfo
 import io.bkbn.kompendium.core.metadata.ResponseInfo
 import io.bkbn.kompendium.core.metadata.method.GetInfo
 import io.ktor.http.*
@@ -11,7 +10,6 @@ import no.nav.api.CommonModels
 import no.nav.api.IsoLocalDateSerializer
 import no.nav.plugins.securityScheme
 import java.time.LocalDate
-import kotlin.reflect.typeOf
 
 fun Route.configureDigdirRoutes() {
     route("digdir/{fnr}/epost") {
@@ -39,8 +37,8 @@ private object Models {
     data class Epost(
         val value: String,
         @Serializable(with = IsoLocalDateSerializer::class)
-        val sistOppdatert: LocalDate?,
+        val sistOppdatert: LocalDate? = null,
         @Serializable(with = IsoLocalDateSerializer::class)
-        val sistVerifisert: LocalDate?,
+        val sistVerifisert: LocalDate? = null,
     )
 }

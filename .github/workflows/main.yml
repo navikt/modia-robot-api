@@ -65,7 +65,7 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           PRINT_PAYLOAD: true
           CLUSTER: dev-fss
-          RESOURCE: .nais/preprod.yaml
+          RESOURCE: .nais/preprod.yml
 
   deploy-prod:
     name: Deploy to prod
@@ -79,4 +79,4 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           PRINT_PAYLOAD: true
           CLUSTER: prod-fss
-          RESOURCE: .nais/prod.yaml
+          RESOURCE: .nais/prod.yml
