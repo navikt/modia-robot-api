@@ -35,7 +35,8 @@ private object Api {
             status = HttpStatusCode.OK,
             description = "Referanse til meldingen som ble sendt til bruker"
         ),
-        tags = setOf("Dialog")
+        tags = setOf("Dialog"),
+        canThrow = CommonModels.standardResponses,
     )
 
     val sendSporsmal = PostInfo<CommonModels.FnrParameter, Models.SendSporsmalRequest, Models.Response>(
@@ -48,7 +49,8 @@ private object Api {
             status = HttpStatusCode.OK,
             description = "Referanse til meldingen som ble sendt til bruker"
         ),
-        tags = setOf("Dialog")
+        tags = setOf("Dialog"),
+        canThrow = CommonModels.standardResponses,
     )
 }
 private object Models {

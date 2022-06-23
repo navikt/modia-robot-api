@@ -25,14 +25,15 @@ private object Api {
             description = "Brukers pdl data"
         ),
         tags = setOf("PDL"),
-        securitySchemes = setOf(securityScheme.name)
+        securitySchemes = setOf(securityScheme.name),
+        canThrow = CommonModels.standardResponses,
     )
 }
 
 private object Models {
     @Serializable
     data class PdlPersonalia(
-        val alder: Int?,
+        val alder: Int,
         val bostedAdresse: List<Adresse>,
         val kontaktAdresse: List<Adresse>,
         val oppholdsAdresse: List<Adresse>,
