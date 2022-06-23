@@ -40,6 +40,8 @@ dependencies {
     implementation("io.bkbn:kompendium-core:$kompendium_version")
     implementation("io.bkbn:kompendium-auth:$kompendium_version")
     implementation("io.bkbn:kompendium-swagger-ui:$kompendium_version")
+    implementation("org.webjars:webjars-locator-core:0.50")
+
     implementation("no.nav.common:token-client:$nav_common_version")
     implementation("io.micrometer:micrometer-registry-prometheus:$prometeus_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")

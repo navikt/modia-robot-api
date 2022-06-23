@@ -6,6 +6,7 @@ import io.bkbn.kompendium.oas.info.Info
 import io.bkbn.kompendium.swagger.JsConfig
 import io.bkbn.kompendium.swagger.SwaggerUI
 import io.ktor.application.*
+import no.nav.plugins.swaggerui.SwaggerUI2
 import java.net.URI
 
 fun Application.configureOpenApi() {
@@ -18,7 +19,7 @@ fun Application.configureOpenApi() {
         )
     }
 
-    install(SwaggerUI) {
+    install(SwaggerUI2) {
         jsConfig = JsConfig(
             specs = mapOf(
                 "Version 1" to URI("/openapi.json")
