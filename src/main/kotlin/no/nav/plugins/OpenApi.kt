@@ -3,11 +3,13 @@ package no.nav.plugins
 import io.bkbn.kompendium.core.Kompendium
 import io.bkbn.kompendium.oas.OpenApiSpec
 import io.bkbn.kompendium.oas.info.Info
+import io.bkbn.kompendium.oas.schema.SimpleSchema
+import io.bkbn.kompendium.oas.schema.TypedSchema
 import io.bkbn.kompendium.swagger.JsConfig
-import io.bkbn.kompendium.swagger.SwaggerUI
 import io.ktor.application.*
 import no.nav.plugins.swaggerui.SwaggerUI2
 import java.net.URI
+import kotlin.reflect.KClass
 
 fun Application.configureOpenApi() {
     install(Kompendium) {
@@ -17,6 +19,9 @@ fun Application.configureOpenApi() {
                 version = "1.0.0"
             )
         )
+        addCustomSchema(kotlinx.datetime.Instant::class, SimpleSchema("string", format = "date-time"))
+        addCustomSchema(kotlinx.datetime.LocalDate::class, SimpleSchema("string", format = "date"))
+        addCustomSchema(kotlinx.datetime.LocalDateTime::class, SimpleSchema("string", format = "date-time"))
     }
 
     install(SwaggerUI2) {
@@ -27,4 +32,9 @@ fun Application.configureOpenApi() {
             validatorUrl = "none",
         )
     }
+}
+
+private fun Kompendium.Configuration.addCustomSchema(clazz: KClass<*>, schema: TypedSchema) {
+    bodyCache[clazz.simpleName!!] = schema
+    parameterCache[clazz.simpleName!!] = schema
 }

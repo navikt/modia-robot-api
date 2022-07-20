@@ -8,6 +8,7 @@ import io.ktor.http.*
 import io.ktor.routing.*
 import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
+import no.nav.plugins.securityScheme
 
 fun Route.configureSkrivestotteRoutes() {
     route("skrivestotte/") {
@@ -29,6 +30,7 @@ private object Api {
             description = "Tekster som matcher søket"
         ),
         tags = setOf("Skrivestøtte"),
+        securitySchemes = setOf(securityScheme.name),
         canThrow = CommonModels.standardResponses,
     )
 }

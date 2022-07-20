@@ -4,12 +4,10 @@ import io.bkbn.kompendium.annotations.Param
 import io.bkbn.kompendium.annotations.ParamType
 import io.bkbn.kompendium.core.metadata.ExceptionInfo
 import io.ktor.http.*
-import kotlinx.serialization.Serializable
 import kotlin.reflect.typeOf
 
 object CommonModels {
-    @Serializable
-    class FnrParameter(
+    open class FnrParameter(
         @Param(type = ParamType.PATH)
         val fnr: String,
     )

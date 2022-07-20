@@ -10,6 +10,7 @@ import no.nav.api.oppfolging.configureOppfolgingRoutes
 import no.nav.api.pdl.configurePdlRoutes
 import no.nav.api.skrivestotte.configureSkrivestotteRoutes
 import no.nav.api.tps.configureTpsRoutes
+import no.nav.api.utbetalinger.configureUtbetalingerRoutes
 import no.nav.plugins.*
 
 fun startApplication(
@@ -33,6 +34,7 @@ fun startApplication(
                     configureDialogRoutes()
                     configureDigdirRoutes()
                     configureSkrivestotteRoutes()
+                    configureUtbetalingerRoutes()
                 }
             }
         }

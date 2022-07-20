@@ -16,7 +16,7 @@ fun Application.configureSerialization() {
             Json {
                 serializersModule = KompendiumSerializersModule.module
                 encodeDefaults = true
-                explicitNulls = false
+                explicitNulls = true
             }
         )
     }

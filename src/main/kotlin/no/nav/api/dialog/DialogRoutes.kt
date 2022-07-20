@@ -8,6 +8,7 @@ import io.ktor.http.*
 import io.ktor.routing.*
 import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
+import no.nav.plugins.securityScheme
 
 fun Route.configureDialogRoutes() {
     route("dialog/{fnr}") {
@@ -36,6 +37,7 @@ private object Api {
             description = "Referanse til meldingen som ble sendt til bruker"
         ),
         tags = setOf("Dialog"),
+        securitySchemes = setOf(securityScheme.name),
         canThrow = CommonModels.standardResponses,
     )
 
@@ -50,6 +52,7 @@ private object Api {
             description = "Referanse til meldingen som ble sendt til bruker"
         ),
         tags = setOf("Dialog"),
+        securitySchemes = setOf(securityScheme.name),
         canThrow = CommonModels.standardResponses,
     )
 }
