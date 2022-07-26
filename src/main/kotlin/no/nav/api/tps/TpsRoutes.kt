@@ -7,21 +7,22 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
 import no.nav.plugins.securityScheme
 
-fun Route.configureTpsRoutes() {
+fun Route.configureTpsRoutes(
+    tpsService: TpsService
+) {
     route("tps/{fnr}/kontonummer") {
         notarizedGet(Api.kontonummer) {
-            val fnr = call.parameters["fnr"]
-            call.respond(Models.Kontonummer("FNR: $fnr"))
+            val fnr = checkNotNull(call.parameters["fnr"])
+            call.respond(tpsService.hentKontonummer(fnr))
         }
     }
 }
 
 private object Api {
-    val kontonummer = GetInfo<CommonModels.FnrParameter, Models.Kontonummer>(
+    val kontonummer = GetInfo<CommonModels.FnrParameter, TpsService.Kontonummer>(
         summary = "Brukers kontonummer",
         description = "Hentes fra TPS",
         responseInfo = ResponseInfo(
@@ -31,12 +32,5 @@ private object Api {
         tags = setOf("TPS"),
         securitySchemes = setOf(securityScheme.name),
         canThrow = CommonModels.standardResponses,
-    )
-}
-
-private object Models {
-    @Serializable
-    data class Kontonummer(
-        val value: String
     )
 }
