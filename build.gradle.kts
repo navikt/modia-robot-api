@@ -70,6 +70,8 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
     implementation("jakarta.xml.ws:jakarta.xml.ws-api:2.3.3")
+    implementation("javax.annotation:javax.annotation-api:1.3.2")
+
 
     testImplementation("io.mockk:mockk:1.12.4")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
