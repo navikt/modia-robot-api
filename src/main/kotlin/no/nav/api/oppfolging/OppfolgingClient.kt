@@ -12,9 +12,9 @@ import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.utils.*
 
 class OppfolgingClient(
+    private val oppfolgingUrl: String,
     private val tokenclient: MachineToMachineTokenClient,
 ) {
-    private val oppfolgingUrl = getRequiredProperty("OPPFOLGING_URL")
     private val oppfolgingApi = DownstreamApi(
         cluster = "prod-fss",
         namespace = "pto",

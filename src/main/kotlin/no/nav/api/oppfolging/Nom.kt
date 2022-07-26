@@ -11,9 +11,9 @@ import no.nav.utils.*
 import okhttp3.OkHttpClient
 
 class Nom(
+    private val nomUrl: String,
     private val tokenclient: MachineToMachineTokenClient,
 ) {
-    private val nomUrl = getRequiredProperty("NOM_URL")
     private val nomApi = DownstreamApi(
         cluster = "prod-gcp",
         namespace = "nom",
