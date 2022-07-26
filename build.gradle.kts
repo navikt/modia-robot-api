@@ -7,6 +7,7 @@ val kompendium_version: String by project
 val logback_version: String by project
 val prometeus_version: String by project
 val nav_common_version: String by project
+val tjenestespec_version: String by project
 
 plugins {
     application
@@ -26,6 +27,23 @@ application {
 
 repositories {
     mavenCentral()
+
+    val githubToken = System.getenv("GITHUB_TOKEN")
+    if (githubToken.isNullOrEmpty()) {
+        maven {
+            name = "external-mirror-github-navikt"
+            url = uri("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
+        }
+    } else {
+        maven {
+            name = "github-package-registry-navikt"
+            url = uri("https://maven.pkg.github.com/navikt/maven-release")
+            credentials {
+                username = "token"
+                password = githubToken
+            }
+        }
+    }
 }
 
 dependencies {
@@ -43,8 +61,11 @@ dependencies {
     implementation("io.bkbn:kompendium-auth:$kompendium_version")
     implementation("io.bkbn:kompendium-swagger-ui:$kompendium_version")
     implementation("org.webjars:webjars-locator-core:0.50")
+    implementation("no.nav.tjenestespesifikasjoner:person-v3-tjenestespesifikasjon:$tjenestespec_version")
 
     implementation("no.nav.common:token-client:$nav_common_version")
+    implementation("no.nav.common:cxf:$nav_common_version")
+    implementation("no.nav.common:client:$nav_common_version")
     implementation("io.micrometer:micrometer-registry-prometheus:$prometeus_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
 

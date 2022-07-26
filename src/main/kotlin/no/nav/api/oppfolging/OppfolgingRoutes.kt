@@ -23,7 +23,7 @@ fun Route.configureOppfolgingRoutes(
 }
 
 private object Api {
-    val veileder = GetInfo<CommonModels.FnrParameter, Models.VeilederNavn>(
+    val veileder = GetInfo<CommonModels.FnrParameter, OppfolgingService.Oppfolging>(
         summary = "Brukers oppfølgingsveileder",
         description = "Hentes fra veilarboppfølging",
         responseInfo = ResponseInfo(
@@ -34,9 +34,4 @@ private object Api {
         securitySchemes = setOf(securityScheme.name),
         canThrow = CommonModels.standardResponses,
     )
-}
-
-private object Models {
-    @Serializable
-    data class VeilederNavn(val fornavn: String, val etternavn: String)
 }

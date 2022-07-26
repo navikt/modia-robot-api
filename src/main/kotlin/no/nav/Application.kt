@@ -16,12 +16,13 @@ import no.nav.plugins.*
 fun startApplication(
     disableSecurity: Boolean,
     env: Env = Env(),
-    services: Services = ServicesImpl(env)
+    consumers: Consumers = ConsumersImpl(env),
+    services: Services = ServicesImpl(consumers)
 ) {
     embeddedServer(Netty, port = 7070, host = "0.0.0.0") {
         environment.config
         configureOpenApi()
-        configureSecurity(disableSecurity, "")
+        configureSecurity(disableSecurity, env)
         configureMonitoring()
         configureSerialization()
 
@@ -30,7 +31,7 @@ fun startApplication(
                 route("api") {
                     configureOppfolgingRoutes(services.oppfolgingService)
                     configurePdlRoutes()
-                    configureTpsRoutes()
+                    configureTpsRoutes(services.tpsService)
                     configureDialogRoutes()
                     configureDigdirRoutes()
                     configureSkrivestotteRoutes()

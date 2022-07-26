@@ -1,23 +1,29 @@
 package no.nav.api.oppfolging
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
-import no.nav.common.token_client.client.MachineToMachineTokenClient
+import no.nav.common.client.nom.NomClient
+import no.nav.common.client.nom.VeilederNavn
+import no.nav.common.types.identer.NavIdent
+import no.nav.utils.externalServiceCall
 
 class OppfolgingService(
-    tokenclient: MachineToMachineTokenClient,
+    private val oppfolgingClient: OppfolgingClient,
+    private val nom: NomClient
 ) {
-    private val oppfolgingClient = OppfolgingClient(tokenclient)
-    private val ldap = Ldap()
-
     @Serializable
     class Oppfolging(
         val underOppfolging: Boolean,
-        val veileder: Ldap.Veileder?,
+        val veileder: Veileder?,
     )
 
-    suspend fun hentOppfolging(fnr: String): Oppfolging = withContext(Dispatchers.IO) {
+    @Serializable
+    class Veileder(
+        val ident: String,
+        val fornavn: String,
+        val etternavn: String,
+    )
+
+    suspend fun hentOppfolging(fnr: String): Oppfolging = externalServiceCall {
         val status = oppfolgingClient.hentOppfolgingStatus(fnr)
         when (status.underOppfolging) {
             null, false -> Oppfolging(underOppfolging = false, veileder = null)
@@ -25,8 +31,16 @@ class OppfolgingService(
         }
     }
 
-    suspend fun hentVeileder(fnr: String): Ldap.Veileder? = withContext(Dispatchers.IO) {
+    suspend fun hentVeileder(fnr: String): Veileder? = externalServiceCall {
         val veileder = oppfolgingClient.hentOppfolgingVeileder(fnr)
-        veileder?.veilederId?.let { ldap.hentVeilederNavn(it) }
+        veileder?.veilederId
+            ?.let { nom.finnNavn(NavIdent(it)) }
+            ?.let {
+                Veileder(
+                    ident = it.navIdent.get(),
+                    fornavn = it.fornavn,
+                    etternavn = it.etternavn
+                )
+            }
     }
 }

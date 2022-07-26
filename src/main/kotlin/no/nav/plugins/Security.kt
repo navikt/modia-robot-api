@@ -10,7 +10,7 @@ import io.bkbn.kompendium.auth.configuration.JwtAuthConfiguration
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
-import no.nav.utils.getRequiredProperty
+import no.nav.Env
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
@@ -18,8 +18,7 @@ val securityScheme = object : JwtAuthConfiguration {
     override val name: String = "jwt"
 }
 private val mockJwt = JWT.decode(JWT.create().withSubject("Z999999").sign(Algorithm.none()))
-fun Application.configureSecurity(disableSecurity: Boolean, jwksUrl: String) {
-    val allowList = getRequiredProperty("IDENT_ALLOW_LIST").split(",")
+fun Application.configureSecurity(disableSecurity: Boolean, env: Env) {
     if (disableSecurity) {
         authentication {
             jwt(securityScheme.name) {
@@ -38,11 +37,11 @@ fun Application.configureSecurity(disableSecurity: Boolean, jwksUrl: String) {
 
     authentication {
         jwt(securityScheme.name) {
-            verifier(makeJwkProvider(jwksUrl))
+            verifier(makeJwkProvider(env.jwksUrl))
             validate { credential ->
                 when {
                     credential.payload.audience == null -> null
-                    allowList.contains(credential.payload.subject) -> JWTPrincipal(credential.payload)
+                    env.identAllowList.contains(credential.payload.subject) -> JWTPrincipal(credential.payload)
                     else -> null
                 }
             }

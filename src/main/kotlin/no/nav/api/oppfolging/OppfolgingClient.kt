@@ -12,10 +12,10 @@ import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.utils.*
 
 class OppfolgingClient(
+    private val oppfolgingUrl: String,
     private val tokenclient: MachineToMachineTokenClient,
 ) {
-    val oppfolgingUrl = getRequiredProperty("OPPFOLGING_URL")
-    val oppfolgingApi = DownstreamApi(
+    private val oppfolgingApi = DownstreamApi(
         cluster = "prod-fss",
         namespace = "pto",
         application = "veilarboppfolging"
@@ -47,11 +47,11 @@ class OppfolgingClient(
         }
     }
 
-    suspend fun hentOppfolgingStatus(fnr: String): Status = withContext(Dispatchers.IO) {
+    suspend fun hentOppfolgingStatus(fnr: String): Status = externalServiceCall {
         client.get("$oppfolgingUrl/oppfolging?fnr=$fnr")
     }
 
-    suspend fun hentOppfolgingVeileder(fnr: String): VeilederId? = withContext(Dispatchers.IO) {
+    suspend fun hentOppfolgingVeileder(fnr: String): VeilederId? = externalServiceCall {
         client.get("$oppfolgingUrl/person/$fnr/oppfolgingsstatus")
     }
 }
