@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 
 val ktor_version: String by project
 val kotlin_version: String by project
@@ -80,4 +81,9 @@ tasks.withType<ShadowJar> {
     archiveBaseName.set("app")
     archiveClassifier.set("")
     archiveVersion.set("")
+    mergeServiceFiles()
+    transform(ServiceFileTransformer::class.java) {
+        setPath("META-INF/cxf")
+        include("bus-extensions.txt")
+    }
 }
