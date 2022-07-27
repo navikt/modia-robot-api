@@ -2,6 +2,7 @@ package no.nav
 
 import no.nav.api.oppfolging.Nom
 import no.nav.api.oppfolging.OppfolgingClient
+import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.common.client.nom.NomClient
 import no.nav.common.cxf.StsConfig
 import no.nav.common.token_client.builder.AzureAdTokenClientBuilder
@@ -14,6 +15,7 @@ interface  Consumers {
     val oppfolgingClient: OppfolgingClient
     val tps: PersonV3
     val nom: NomClient
+    val skrivestotteClient: SkrivestotteClient
 }
 
 class ConsumersImpl(env: Env): Consumers {
@@ -36,5 +38,5 @@ class ConsumersImpl(env: Env): Consumers {
         .configureStsForSystemUser(stsConfig)
         .build()
     override val nom: NomClient = Nom(env.nomUrl, tokenclient).client
-
+    override val skrivestotteClient: SkrivestotteClient = SkrivestotteClient()
 }

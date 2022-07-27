@@ -1,30 +1,39 @@
 package no.nav.api.skrivestotte
 
-import io.bkbn.kompendium.core.Notarized.notarizedPost
-import io.bkbn.kompendium.core.metadata.RequestInfo
+import io.bkbn.kompendium.annotations.Param
+import io.bkbn.kompendium.annotations.ParamType
+import io.bkbn.kompendium.core.Notarized.notarizedGet
 import io.bkbn.kompendium.core.metadata.ResponseInfo
-import io.bkbn.kompendium.core.metadata.method.PostInfo
+import io.bkbn.kompendium.core.metadata.method.GetInfo
+import io.ktor.application.*
 import io.ktor.http.*
+import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
 import no.nav.plugins.securityScheme
+import java.util.*
 
-fun Route.configureSkrivestotteRoutes() {
+fun Route.configureSkrivestotteRoutes(
+    skrivestotteService: SkrivestotteService
+) {
     route("skrivestotte/") {
-        notarizedPost(Api.sok) {
-            TODO()
+        notarizedGet(Api.sok) {
+            val sokeVerdi = requireNotNull(call.request.queryParameters["sokeVerdi"])
+            call.respond(skrivestotteService.hentTeksterFraSok(sokeVerdi))
+        }
+    }
+    route("skrivestotte/{id}") {
+        notarizedGet(Api.sokPaId) {
+            val id = requireNotNull(call.parameters["id"])
+            call.respond(skrivestotteService.hentTekstFraId(id))
         }
     }
 }
 
 private object Api {
-    val sok = PostInfo<Unit, Models.Sok, Models.Response>(
+    val sok = GetInfo<Models.SokeVerdiParameter, List<SkrivestotteService.Tekst>>(
         summary = "Tekster fra skrivestøtte",
         description = "Hentes fra modiapersonoversikt-skrivestotte",
-        requestInfo = RequestInfo(
-            description = "Søkestrengen som skal brukes mot skrivestøtte"
-        ),
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
             description = "Tekster som matcher søket"
@@ -33,22 +42,28 @@ private object Api {
         securitySchemes = setOf(securityScheme.name),
         canThrow = CommonModels.standardResponses,
     )
+    
+    val sokPaId = GetInfo<Models.IdParameter, SkrivestotteService.Tekst>(
+        summary = "Tekst fra skrivestøtte gitt ID",
+        description = "Hentes fra modiapersonoversikt-skrivestotte",
+        responseInfo = ResponseInfo(
+            status = HttpStatusCode.OK,
+            description = "Tekst som matcher søket på ID"
+        ),
+        tags = setOf("Skrivestøtte"),
+        securitySchemes = setOf(securityScheme.name),
+        canThrow = CommonModels.standardResponses,
+    )
 }
 
 private object Models {
-    @Serializable
-    data class Sok(
-        val value: String
+    
+    open class IdParameter(
+        @Param(type = ParamType.PATH)
+        val id: UUID
     )
-
-    @Serializable
-    data class Response(
-        val tekster: List<Tekst>
-    )
-
-    @Serializable
-    data class Tekst(
-        val tittel: String,
-        val innhold: String,
+    open class SokeVerdiParameter(
+        @Param(type = ParamType.QUERY)
+        val sokeVerdi: String
     )
 }
