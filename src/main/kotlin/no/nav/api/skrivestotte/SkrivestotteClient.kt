@@ -9,16 +9,16 @@ import kotlinx.serialization.Serializable
 import no.nav.utils.*
 import java.util.*
 
-
 enum class Locale {
     nb_NO, nn_NO, en_US, se_NO, de_DE, fr_FR, es_ES, pl_PL, ru_RU, ur
 }
 
 typealias Tekster = Map<UUID, SkrivestotteClient.Tekst>
 
-class SkrivestotteClient {
-    private val skrivestotteUrl = getRequiredProperty("SKRIVESTOTTE_URL")
-    
+class SkrivestotteClient(
+    val skrivestotteUrl: String
+) {
+
     @Serializable
     data class Tekst(
         @Serializable(with = UUIDSerializer::class)
@@ -28,7 +28,7 @@ class SkrivestotteClient {
         val innhold: Map<Locale, String>,
         val vekttall: Int = 0
     )
-    
+
     private val client = HttpClient(OkHttp) {
         install(JsonFeature) {
             serializer = KotlinxSerializer()
@@ -43,9 +43,8 @@ class SkrivestotteClient {
             )
         }
     }
-    
+
     suspend fun hentTekster(): Tekster = externalServiceCall {
         client.get("$skrivestotteUrl/skrivestotte")
     }
-    
 }

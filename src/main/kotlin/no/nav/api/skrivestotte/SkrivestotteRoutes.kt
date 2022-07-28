@@ -25,13 +25,18 @@ fun Route.configureSkrivestotteRoutes(
     route("skrivestotte/{id}") {
         notarizedGet(Api.sokPaId) {
             val id = requireNotNull(call.parameters["id"])
-            call.respond(skrivestotteService.hentTekstFraId(id))
+            val tekst = skrivestotteService.hentTekstFraId(UUID.fromString(id))
+            if (tekst != null) {
+                call.respond(tekst)
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
         }
     }
 }
 
 private object Api {
-    val sok = GetInfo<Models.SokeVerdiParameter, List<SkrivestotteService.Tekst>>(
+    val sok = GetInfo<Models.SokeVerdiParameter, List<SkrivestotteClient.Tekst>>(
         summary = "Tekster fra skrivestøtte",
         description = "Hentes fra modiapersonoversikt-skrivestotte",
         responseInfo = ResponseInfo(
@@ -40,10 +45,10 @@ private object Api {
         ),
         tags = setOf("Skrivestøtte"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
+        canThrow = CommonModels.standardResponses
     )
-    
-    val sokPaId = GetInfo<Models.IdParameter, SkrivestotteService.Tekst>(
+
+    val sokPaId = GetInfo<Models.IdParameter, SkrivestotteClient.Tekst>(
         summary = "Tekst fra skrivestøtte gitt ID",
         description = "Hentes fra modiapersonoversikt-skrivestotte",
         responseInfo = ResponseInfo(
@@ -52,12 +57,12 @@ private object Api {
         ),
         tags = setOf("Skrivestøtte"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
+        canThrow = CommonModels.standardResponses
     )
 }
 
 private object Models {
-    
+
     open class IdParameter(
         @Param(type = ParamType.PATH)
         val id: UUID

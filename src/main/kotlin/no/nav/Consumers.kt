@@ -11,14 +11,14 @@ import no.nav.common.utils.NaisUtils
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
 import no.nav.utils.CXFClient
 
-interface  Consumers {
+interface Consumers {
     val oppfolgingClient: OppfolgingClient
     val tps: PersonV3
     val nom: NomClient
     val skrivestotteClient: SkrivestotteClient
 }
 
-class ConsumersImpl(env: Env): Consumers {
+class ConsumersImpl(env: Env) : Consumers {
     private val modiaUser = NaisUtils.getCredentials("service_user")
     private val stsConfig: StsConfig = StsConfig
         .builder()
@@ -38,5 +38,5 @@ class ConsumersImpl(env: Env): Consumers {
         .configureStsForSystemUser(stsConfig)
         .build()
     override val nom: NomClient = Nom(env.nomUrl, tokenclient).client
-    override val skrivestotteClient: SkrivestotteClient = SkrivestotteClient()
+    override val skrivestotteClient: SkrivestotteClient = SkrivestotteClient(env.skrivestotteUrl)
 }
