@@ -51,23 +51,24 @@ private val nomClientMock = mockOf<NomClient> { client ->
 }
 
 private val skrivestotteClientMock = mockOf<SkrivestotteClient> { client ->
+    val hardkodetUUID = UUID.fromString("0a4df913-3651-4667-aac7-ea9a86f1d916")
     val tekst = SkrivestotteClient.Tekst(
-        id = UUID.randomUUID(),
+        id = hardkodetUUID,
         overskrift = "TestTekst",
         tags = emptyList(),
         innhold = mapOf(
-            nb_NO to "Dette er en tekst",
-            nn_NO to "Dette er ein tekst"
+            nb_NO.name to "Dette er en tekst",
+            nn_NO.name to "Dette er ein tekst"
         ),
         vekttall = 0
     )
     val tekster = mapOf(
-        UUID.randomUUID() to tekst,
+        hardkodetUUID to tekst,
         UUID.randomUUID() to tekst.copy(
             id = UUID.randomUUID(),
             innhold = mapOf(
-                nb_NO to "Dette er også en tekst",
-                en_US to "This is also a text"
+                nb_NO.name to "Dette er også en tekst",
+                en_US.name to "This is also a text"
             )
         )
     )

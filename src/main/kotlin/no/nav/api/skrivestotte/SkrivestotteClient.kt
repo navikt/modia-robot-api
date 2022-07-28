@@ -25,7 +25,7 @@ class SkrivestotteClient(
         val id: UUID?,
         val overskrift: String,
         val tags: List<String>,
-        val innhold: Map<Locale, String>,
+        val innhold: Map<String, String>,
         val vekttall: Int = 0
     )
 
