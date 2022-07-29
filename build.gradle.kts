@@ -9,6 +9,7 @@ val logback_version: String by project
 val prometeus_version: String by project
 val nav_common_version: String by project
 val tjenestespec_version: String by project
+val modia_common_utils_version: String by project
 
 plugins {
     application
@@ -63,6 +64,7 @@ dependencies {
     implementation("io.bkbn:kompendium-swagger-ui:$kompendium_version")
     implementation("org.webjars:webjars-locator-core:0.50")
     implementation("no.nav.tjenestespesifikasjoner:person-v3-tjenestespesifikasjon:$tjenestespec_version")
+    implementation("no.nav.personoversikt:kotlin-utils:$modia_common_utils_version")
 
     implementation("no.nav.common:token-client:$nav_common_version")
     implementation("no.nav.common:cxf:$nav_common_version")

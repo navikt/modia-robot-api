@@ -4,8 +4,8 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import no.nav.Consumers
 import no.nav.api.oppfolging.OppfolgingClient
-import no.nav.api.skrivestotte.Locale.*
 import no.nav.api.skrivestotte.SkrivestotteClient
+import no.nav.api.skrivestotte.SkrivestotteClient.*
 import no.nav.common.client.nom.NomClient
 import no.nav.common.client.nom.VeilederNavn
 import no.nav.common.types.identer.NavIdent
@@ -52,13 +52,13 @@ private val nomClientMock = mockOf<NomClient> { client ->
 
 private val skrivestotteClientMock = mockOf<SkrivestotteClient> { client ->
     val hardkodetUUID = UUID.fromString("0a4df913-3651-4667-aac7-ea9a86f1d916")
-    val tekst = SkrivestotteClient.Tekst(
+    val tekst = Tekst(
         id = hardkodetUUID,
         overskrift = "TestTekst",
         tags = emptyList(),
-        innhold = mapOf(
-            nb_NO.name to "Dette er en tekst",
-            nn_NO.name to "Dette er ein tekst"
+        innhold = Innhold(
+            nb_NO = "Dette er en tekst",
+            nn_NO = "Dette er ein tekst"
         ),
         vekttall = 0
     )
@@ -66,9 +66,9 @@ private val skrivestotteClientMock = mockOf<SkrivestotteClient> { client ->
         hardkodetUUID to tekst,
         UUID.randomUUID() to tekst.copy(
             id = UUID.randomUUID(),
-            innhold = mapOf(
-                nb_NO.name to "Dette er også en tekst",
-                en_US.name to "This is also a text"
+            innhold = Innhold(
+                nb_NO = "Dette er også en tekst",
+                en_US = "This is also a text"
             )
         )
     )

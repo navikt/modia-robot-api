@@ -6,12 +6,9 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import no.nav.utils.*
 import java.util.*
-
-enum class Locale {
-    nb_NO, nn_NO, en_US, se_NO, de_DE, fr_FR, es_ES, pl_PL, ru_RU, ur
-}
 
 typealias Tekster = Map<UUID, SkrivestotteClient.Tekst>
 
@@ -25,9 +22,26 @@ class SkrivestotteClient(
         val id: UUID?,
         val overskrift: String,
         val tags: List<String>,
-        val innhold: Map<String, String>,
+        val innhold: Innhold,
         val vekttall: Int = 0
     )
+    
+    @Serializable
+    data class Innhold(
+        val nb_NO: String? = null,
+        val nn_NO: String? = null,
+        val en_US: String? = null,
+        val se_NO: String? = null,
+        val de_DE: String? = null,
+        val fr_FR: String? = null,
+        val es_ES: String? = null,
+        val pl_PL: String? = null,
+        val ru_RU: String? = null,
+        val ur: String? = null
+    ) {
+        @Transient
+        val kombinert = listOfNotNull(nb_NO, nn_NO, en_US, se_NO, de_DE, fr_FR, es_ES, pl_PL, ru_RU, ur).joinToString("\u0000")
+    }
 
     private val client = HttpClient(OkHttp) {
         install(JsonFeature) {
