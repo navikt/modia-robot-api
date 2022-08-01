@@ -1,12 +1,13 @@
 package no.nav
 
 import no.nav.api.oppfolging.OppfolgingService
+import no.nav.api.skrivestotte.SkrivestotteService
 import no.nav.api.tps.TpsService
-import no.nav.common.token_client.builder.AzureAdTokenClientBuilder
 
 interface Services {
     val oppfolgingService: OppfolgingService
     val tpsService: TpsService
+    val skrivestotteService: SkrivestotteService
 }
 class ServicesImpl(consumers: Consumers) : Services {
     override val oppfolgingService = OppfolgingService(
@@ -14,4 +15,6 @@ class ServicesImpl(consumers: Consumers) : Services {
         consumers.nom
     )
     override val tpsService = TpsService(consumers.tps)
+    override val skrivestotteService = SkrivestotteService(consumers.skrivestotteClient)
+    
 }

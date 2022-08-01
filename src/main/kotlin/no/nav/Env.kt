@@ -2,7 +2,6 @@ package no.nav
 
 import no.nav.utils.getRequiredProperty
 
-
 interface Env {
     companion object {
         operator fun invoke(): Env = EnvImpl()
@@ -13,6 +12,7 @@ interface Env {
     val tpsPersonV3Url: String
     val nomUrl: String
     val identAllowList: List<String>
+    val skrivestotteUrl: String
 }
 
 class EnvImpl : Env {
@@ -22,5 +22,5 @@ class EnvImpl : Env {
     override val tpsPersonV3Url: String = getRequiredProperty("TPS_PERSONV3_URL")
     override val nomUrl: String = getRequiredProperty("NOM_URL")
     override val identAllowList: List<String> = getRequiredProperty("IDENT_ALLOW_LIST").split(",")
-
+    override val skrivestotteUrl = getRequiredProperty("SKRIVESTOTTE_URL")
 }

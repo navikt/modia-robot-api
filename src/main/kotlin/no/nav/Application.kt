@@ -34,7 +34,7 @@ fun startApplication(
                     configureTpsRoutes(services.tpsService)
                     configureDialogRoutes()
                     configureDigdirRoutes()
-                    configureSkrivestotteRoutes()
+                    configureSkrivestotteRoutes(services.skrivestotteService)
                     configureUtbetalingerRoutes()
                 }
             }
