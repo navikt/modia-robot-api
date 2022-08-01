@@ -39,8 +39,7 @@ class SkrivestotteClient(
         val ru_RU: String? = null,
         val ur: String? = null
     ) {
-        @Transient
-        val kombinert = listOfNotNull(nb_NO, nn_NO, en_US, se_NO, de_DE, fr_FR, es_ES, pl_PL, ru_RU, ur).joinToString("\u0000")
+        fun kombinert() = listOfNotNull(nb_NO, nn_NO, en_US, se_NO, de_DE, fr_FR, es_ES, pl_PL, ru_RU, ur).joinToString("\u0000")
     }
 
     private val client = HttpClient(OkHttp) {

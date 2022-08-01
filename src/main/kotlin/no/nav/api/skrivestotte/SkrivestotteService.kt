@@ -66,7 +66,7 @@ class SkrivestotteService (private val skrivestotteClient: SkrivestotteClient) {
         return tekster.associateWith {
             listOf(
                 it.overskrift,
-                it.innhold.kombinert
+                it.innhold.kombinert()
             )
                 .joinToString("\u0000")
                 .lowercase()
