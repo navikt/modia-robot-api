@@ -11,6 +11,8 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.micrometer.prometheus.*
+import no.nav.personoversikt.utils.SelftestGenerator
+import no.nav.utils.appImage
 import no.nav.utils.masked
 import org.slf4j.event.*
 
@@ -35,22 +37,40 @@ fun Application.configureMonitoring() {
         registry = appMicrometerRegistry
     }
 
+    val selftest = SelftestGenerator.getInstance(SelftestGenerator.Config(
+        appname = "modia-robot-api",
+        version = appImage
+    ))
     routing {
         get {
             call.respondRedirect("/swagger-ui")
         }
         route("internal") {
             route("isAlive") {
-                notarizedGet(Api.isAlive) { call.respondText("Alive") }
+                notarizedGet(Api.isAlive) {
+                    if (selftest.isAlive()) {
+                        call.respondText("Alive")
+                    } else {
+                        call.respondText("Not alive", status = HttpStatusCode.InternalServerError)
+                    }
+                }
             }
             route("isReady") {
-                notarizedGet(Api.isReady) { call.respondText("Ready") }
-                get("isReady") { call.respondText("Ready") }
-            }
-            route("metrics") {
-                notarizedGet(Api.metrics) {
-                    call.respond(appMicrometerRegistry.scrape())
+                notarizedGet(Api.isReady) {
+                    if (selftest.isReady()) {
+                        call.respondText("Ready")
+                    } else {
+                        call.respondText("Not ready", status = HttpStatusCode.InternalServerError)
+                    }
                 }
+            }
+
+            get("metrics") {
+                call.respond(appMicrometerRegistry.scrape())
+            }
+
+            get("selftest") {
+                call.respondText(selftest.scrape())
             }
         }
     }
@@ -69,14 +89,6 @@ private object Api {
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
             description = "App is ready"
-        ),
-        tags = setOf("Monitoring"),
-    )
-    val metrics = GetInfo<Unit, String>(
-        summary = "metrics exporter",
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = ""
         ),
         tags = setOf("Monitoring"),
     )
