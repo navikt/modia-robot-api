@@ -63,5 +63,7 @@ spec:
       value: "https://app.adeo.no/tpsws-aura/ws/Person/v3"
     - name: NOM_URL
       value: "https://nom-api.intern.nav.no"
+    - name: PDL_URL
+      value: "https://pdl-api.nais.adeo.no/graphql"
     - name: SKRIVESTOTTE_URL
       value: "https://app.adeo.no/modiapersonoversikt-skrivestotte"
