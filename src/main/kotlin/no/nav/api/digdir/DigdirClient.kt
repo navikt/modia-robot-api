@@ -7,6 +7,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
 import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.utils.*
 
@@ -15,6 +16,7 @@ class DigdirClient(
     private val tokenclient: MachineToMachineTokenClient,
 ) {
     
+    @Serializable
     data class KrrData(
         val personident: String,
         val aktiv: Boolean,
