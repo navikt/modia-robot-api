@@ -10,6 +10,7 @@ val prometeus_version: String by project
 val nav_common_version: String by project
 val tjenestespec_version: String by project
 val modia_common_utils_version: String by project
+val junit_version: String by project
 
 plugins {
     application
@@ -76,7 +77,16 @@ dependencies {
 
     testImplementation("io.mockk:mockk:1.12.4")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("io.ktor:ktor-client-mock:$ktor_version")
+    testImplementation("org.junit.jupiter:junit-jupiter:$junit_version")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+
+    testLogging {     // This is for logging and can be removed.
+        events("passed", "skipped", "failed")
+    }
 }
 
 tasks.withType<ShadowJar> {

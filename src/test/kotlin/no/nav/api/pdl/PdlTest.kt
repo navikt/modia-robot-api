@@ -1,0 +1,48 @@
+package no.nav.api.pdl
+
+import io.ktor.client.engine.mock.*
+import io.ktor.http.*
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.LocalDate
+import no.nav.common.token_client.client.MachineToMachineTokenClient
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+
+
+internal class PdlTest {
+    @Test
+    fun `should be able to deserialize pdl response`() = runBlocking {
+        val mockEngine = MockEngine { request ->
+            respond(
+                status = HttpStatusCode.OK,
+                headers = headersOf(
+                    HttpHeaders.ContentType, "application/json"
+                ),
+                content = """
+                    {
+                        "data": {
+                            "hentPerson": {
+                                "foedsel": [
+                                    { "foedselsdato": "2020-06-06" }
+                                ],
+                                "oppholdsadresse": [],
+                                "kontaktadresse": [],
+                                "bostedsadresse": []
+                            }
+                        }
+                    }
+                """.trimIndent(),
+            )
+        }
+        val tokenClient = mockk<MachineToMachineTokenClient>()
+        every { tokenClient.createMachineToMachineToken(any()) } returns ""
+
+        val pdlClient = PdlClient("http://no.no", tokenClient, mockEngine)
+        val person = pdlClient.hentPersonalia("10108000398")
+
+        assertEquals(1, person.data?.hentPerson?.foedsel?.size)
+        assertEquals(LocalDate(2020, 6, 6), person.data?.hentPerson?.foedsel?.get(0)?.foedselsdato)
+    }
+}

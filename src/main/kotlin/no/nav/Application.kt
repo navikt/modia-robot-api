@@ -30,7 +30,7 @@ fun startApplication(
             notarizedAuthenticate(securityScheme) {
                 route("api") {
                     configureOppfolgingRoutes(services.oppfolgingService)
-                    configurePdlRoutes()
+                    configurePdlRoutes(services.pdlServices)
                     configureTpsRoutes(services.tpsService)
                     configureDialogRoutes()
                     configureDigdirRoutes()
