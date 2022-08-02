@@ -6,7 +6,6 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import no.nav.utils.*
 import java.util.*
 

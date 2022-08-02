@@ -65,3 +65,5 @@ spec:
       value: "https://nom-api.intern.nav.no"
     - name: SKRIVESTOTTE_URL
       value: "https://app.adeo.no/modiapersonoversikt-skrivestotte"
+    - name: DIGDIR_KRR_URL
+      value: "https://digdir-krr-proxy.intern.nav.no"
