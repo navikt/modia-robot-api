@@ -2,7 +2,10 @@ package no.nav.mock
 
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.datetime.*
 import no.nav.Consumers
+import no.nav.api.digdir.DigdirClient
+import no.nav.api.digdir.DigdirClient.*
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.skrivestotte.SkrivestotteClient.*
@@ -14,6 +17,7 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
+import no.nav.utils.now
 import java.util.*
 
 object MockConsumers : Consumers {
@@ -21,6 +25,7 @@ object MockConsumers : Consumers {
     override val tps: PersonV3 = personV3Mock
     override val nom: NomClient = nomClientMock
     override val skrivestotteClient = skrivestotteClientMock
+    override val digdirClient = digdirClientMock
 }
 
 private val oppfolgingClientMock = mockOf<OppfolgingClient> { client ->
@@ -74,6 +79,19 @@ private val skrivestotteClientMock = mockOf<SkrivestotteClient> { client ->
     )
 
     coEvery { client.hentTekster() } returns tekster
+}
+
+private val digdirClientMock = mockOf<DigdirClient> { client ->
+    val krrData = KrrData(
+        personident = "12345678910",
+        aktiv = true,
+        kanVarsles = true,
+        reservert = false,
+        epostadresse = "test@nav.no",
+        epostadresseOppdatert = LocalDateTime.now(),
+        epostadresseVerifisert = LocalDateTime.now(),
+    )
+    coEvery { client.hentKrrData(any()) } returns krrData
 }
 
 inline fun <reified T : Any> mockOf(impl: (T) -> Unit): T {

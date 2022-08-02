@@ -13,6 +13,7 @@ interface Env {
     val nomUrl: String
     val identAllowList: List<String>
     val skrivestotteUrl: String
+    val digdirUrl: String
 }
 
 class EnvImpl : Env {
@@ -23,4 +24,5 @@ class EnvImpl : Env {
     override val nomUrl: String = getRequiredConfig("NOM_URL")
     override val identAllowList: List<String> = getRequiredConfig("IDENT_ALLOW_LIST").split(",")
     override val skrivestotteUrl = getRequiredConfig("SKRIVESTOTTE_URL")
+    override val digdirUrl = getRequiredConfig("DIGDIR_KRR_URL")
 }
