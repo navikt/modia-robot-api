@@ -8,6 +8,7 @@ metadata:
 spec:
   image: {{image}}
   port: 7070
+  webproxy: true
   liveness:
     path: /internal/isAlive
     initialDelay: 20
@@ -59,13 +60,21 @@ spec:
       value: "https://isso.adeo.no/isso/oauth2/connect/jwk_uri"
     - name: OPPFOLGING_URL
       value: "https://veilarboppfolging.nais.adeo.no/veilarboppfolging/api"
+    - name: OPPFOLGING_SCOPE
+      value: "prod-fss:pto:veilarboppfolging"
     - name: TPS_PERSONV3_URL
       value: "https://app.adeo.no/tpsws-aura/ws/Person/v3"
     - name: NOM_URL
       value: "https://nom-api.intern.nav.no"
+    - name: NOM_SCOPE
+      value: "prod-gcp:nom:nom-api"
     - name: PDL_URL
       value: "https://pdl-api.nais.adeo.no/graphql"
+    - name: PDL_SCOPE
+      value: "prod-fss:pdl:pdl-api"
     - name: SKRIVESTOTTE_URL
       value: "https://app.adeo.no/modiapersonoversikt-skrivestotte"
     - name: DIGDIR_KRR_URL
       value: "https://digdir-krr-proxy.intern.nav.no"
+    - name: DIGDIR_KRR_SCOPE
+      value: "prod-gcp:team-rocket:digdir-krr-proxy"
