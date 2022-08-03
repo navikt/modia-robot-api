@@ -59,11 +59,17 @@ spec:
       value: "https://isso-q.adeo.no/isso/oauth2/connect/jwk_uri"
     - name: OPPFOLGING_URL
       value: "https://veilarboppfolging-q1.nais.preprod.local/veilarboppfolging/api"
+    - name: OPPFOLGING_SCOPE
+      value: "dev-fss:pto:veilarboppfolging"
     - name: TPS_PERSONV3_URL
       value: "https://app-q1.adeo.no/tpsws-aura/ws/Person/v3"
     - name: NOM_URL
       value: "https://nom-api.dev.intern.nav.no"
+    - name: OPPFOLGING_SCOPE
+      value: "dev-gcp:nom:nom-api"
     - name: SKRIVESTOTTE_URL
       value: "https://app-q1.adeo.no/modiapersonoversikt-skrivestotte"
     - name: DIGDIR_KRR_URL
       value: "https://digdir-krr-proxy.dev.intern.nav.no"
+    - name: DIGDIR_KRR_SCOPE
+      value: "dev-gcp:team-rocket:digdir-krr-proxy"
