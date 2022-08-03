@@ -4,17 +4,17 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import no.nav.plugins.configureMonitoring
 import no.nav.plugins.configureOpenApi
-import kotlin.test.Test
-import kotlin.test.assertContains
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
 class ApplicationTest {
     @Test
-    fun testRoot() {
+    internal fun testRoot() {
         withTestApplication({ configureOpenApi(); configureMonitoring() }) {
             handleRequest(HttpMethod.Get, "/webjars/swagger-ui/index.html").apply {
                 assertEquals(response.status(), HttpStatusCode.OK)
-                assertContains(response.content ?: "", "swagger-ui")
+                assertTrue(response.content?.contains("swagger-ui") ?: false)
             }
         }
     }
