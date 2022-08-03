@@ -16,4 +16,5 @@ object MockEnv : Env {
     override val skrivestotteUrl: String = ""
     override val digdirUrl: String = ""
     override val digdirScope: DownstreamApi = DownstreamApi.parse("::")
+    override val utbetalingerUrl: String = ""
 }

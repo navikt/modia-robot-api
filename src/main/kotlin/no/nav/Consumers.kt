@@ -10,6 +10,7 @@ import no.nav.common.token_client.builder.AzureAdTokenClientBuilder
 import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.common.utils.NaisUtils
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
+import no.nav.tjeneste.virksomhet.utbetaling.v1.UtbetalingV1
 import no.nav.utils.CXFClient
 import no.nav.utils.bindTo
 
@@ -20,6 +21,7 @@ interface Consumers {
     val nom: NomClient
     val skrivestotteClient: SkrivestotteClient
     val digdirClient: DigdirClient
+    val utbetalinger: UtbetalingV1
 }
 
 class ConsumersImpl(env: Env) : Consumers {
@@ -44,4 +46,8 @@ class ConsumersImpl(env: Env) : Consumers {
     override val nom: NomClient = Nom(env.nomUrl, tokenclient.bindTo(env.nomScope)).client
     override val skrivestotteClient: SkrivestotteClient = SkrivestotteClient(env.skrivestotteUrl)
     override val digdirClient: DigdirClient = DigdirClient(env.digdirUrl, tokenclient.bindTo(env.digdirScope))
+    override val utbetalinger: UtbetalingV1 = CXFClient<UtbetalingV1>()
+        .address(env.utbetalingerUrl)
+        .configureStsForSystemUser(stsConfig)
+        .build()
 }

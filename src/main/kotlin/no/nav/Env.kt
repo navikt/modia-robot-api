@@ -19,6 +19,7 @@ interface Env {
     val skrivestotteUrl: String
     val digdirUrl: String
     val digdirScope: DownstreamApi
+    val utbetalingerUrl: String
 }
 
 class EnvImpl : Env {
@@ -33,6 +34,7 @@ class EnvImpl : Env {
     override val skrivestotteUrl: String = getRequiredConfig("SKRIVESTOTTE_URL")
     override val digdirUrl: String = getRequiredConfig("DIGDIR_KRR_URL")
     override val digdirScope: DownstreamApi = getRequiredConfig("DIGDIR_KRR_SCOPE").toDownstreamApi()
+    override val utbetalingerUrl: String = getRequiredConfig("UTBETALING_V1_URL")
 }
 
 private fun String.toDownstreamApi() = DownstreamApi.parse(this)

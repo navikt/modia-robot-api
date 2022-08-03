@@ -19,7 +19,7 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
-import no.nav.utils.now
+import no.nav.tjeneste.virksomhet.utbetaling.v1.UtbetalingV1
 import java.util.*
 
 object MockConsumers : Consumers {
@@ -29,6 +29,7 @@ object MockConsumers : Consumers {
     override val nom: NomClient = nomClientMock
     override val skrivestotteClient = skrivestotteClientMock
     override val digdirClient = digdirClientMock
+    override val utbetalinger = utbetalingerMock
 }
 
 private val tokenClientMock = mockOf<MachineToMachineTokenClient> { client ->
@@ -99,6 +100,10 @@ private val digdirClientMock = mockOf<DigdirClient> { client ->
         epostadresseVerifisert = LocalDateTime.now(),
     )
     coEvery { client.hentKrrData(any()) } returns krrData
+}
+
+private val utbetalingerMock = mockOf<UtbetalingV1> { client ->
+    coEvery { client.hentUtbetalingsinformasjon(any()) } returns null // TODO
 }
 
 inline fun <reified T : Any> mockOf(impl: (T) -> Unit): T {

@@ -74,3 +74,5 @@ spec:
       value: "https://digdir-krr-proxy.dev.intern.nav.no"
     - name: DIGDIR_KRR_SCOPE
       value: "dev-gcp:team-rocket:digdir-krr-proxy"
+    - name: UTBETALING_V1_URL
+      value: "https://wasapp-q1.adeo.no/nav-utbetaldata-ws/virksomhet/Utbetaling_v1"
