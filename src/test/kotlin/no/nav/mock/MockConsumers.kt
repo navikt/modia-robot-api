@@ -5,6 +5,8 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.datetime.*
 import no.nav.Consumers
+import no.nav.api.dialog.saf.SafClient
+import no.nav.api.dialog.saf.queries.HentBrukerssaker
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
 import no.nav.api.pdl.queries.HentPersonalia
@@ -30,6 +32,7 @@ object MockConsumers : Consumers {
     override val nom: NomClient = nomClientMock
     override val skrivestotteClient = skrivestotteClientMock
     override val pdlClient = pdlClientMock
+    override val safClient = safClientMock
 }
 
 private val oppfolgingClientMock = mockOf<OppfolgingClient> { client ->
@@ -103,6 +106,25 @@ private val pdlClientMock = mockOf<PdlClient> {client ->
                         gyldigFraOgMed = LocalDateTime.now().minus(1, DateTimeUnit.HOUR),
                         coAdressenavn = "c/o hansen",
                     )
+                )
+            )
+        )
+    )
+}
+
+private val safClientMock = mockOf<SafClient> { client ->
+    coEvery { client.hentBrukersSaker(any()) } returns GraphQLResponse(
+        data = HentBrukerssaker.Result(
+            saker = listOf(
+                HentBrukerssaker.Sak(
+                    fagsakId = null,
+                    sakstype = HentBrukerssaker.Sakstype.GENERELL_SAK,
+                    tema = HentBrukerssaker.Tema.DAG
+                ),
+                HentBrukerssaker.Sak(
+                    fagsakId = "abba1231",
+                    sakstype = HentBrukerssaker.Sakstype.FAGSAK,
+                    tema = HentBrukerssaker.Tema.DAG
                 )
             )
         )

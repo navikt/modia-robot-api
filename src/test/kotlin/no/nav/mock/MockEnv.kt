@@ -9,6 +9,7 @@ object MockEnv : Env {
     override val tpsPersonV3Url: String = ""
     override val nomUrl: String = ""
     override val pdlUrl: String = ""
+    override val safUrl: String = ""
     override val identAllowList: List<String> = emptyList()
     override val skrivestotteUrl: String = ""
 }
