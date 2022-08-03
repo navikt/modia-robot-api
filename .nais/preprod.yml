@@ -65,5 +65,7 @@ spec:
       value: "https://nom-api.dev.intern.nav.no"
     - name: PDL_URL
       value: "https://pdl-api-q1.dev.intern.nav.no/graphql"
+    - name: SAF_URL
+      value: "https://saf-q1.nais.preprod.local/graphql"
     - name: SKRIVESTOTTE_URL
       value: "https://app-q1.adeo.no/modiapersonoversikt-skrivestotte"
