@@ -35,6 +35,7 @@ class PdlClient(
         httpClient = httpClient,
         config = GraphQLClientConfig(
             serviceName = "PDL",
+            critical = false,
             requestConfig = {
                 val token = tokenclient.createMachineToMachineToken(pdlApi)
                 url(pdlUrl)
