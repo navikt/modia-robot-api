@@ -11,6 +11,7 @@ import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.common.utils.NaisUtils
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
 import no.nav.utils.CXFClient
+import no.nav.utils.bindTo
 
 interface Consumers {
     val oppfolgingClient: OppfolgingClient
@@ -34,12 +35,12 @@ class ConsumersImpl(env: Env) : Consumers {
         .withNaisDefaults()
         .buildMachineToMachineTokenClient()
 
-    override val oppfolgingClient: OppfolgingClient = OppfolgingClient(env.oppfolgingUrl, tokenclient)
+    override val oppfolgingClient: OppfolgingClient = OppfolgingClient(env.oppfolgingUrl, tokenclient.bindTo(env.oppfolgingScope))
     override val tps: PersonV3 = CXFClient<PersonV3>()
         .address(env.tpsPersonV3Url)
         .configureStsForSystemUser(stsConfig)
         .build()
-    override val nom: NomClient = Nom(env.nomUrl, tokenclient).client
+    override val nom: NomClient = Nom(env.nomUrl, tokenclient.bindTo(env.nomScope)).client
     override val skrivestotteClient: SkrivestotteClient = SkrivestotteClient(env.skrivestotteUrl)
-    override val digdirClient: DigdirClient = DigdirClient(env.digdirUrl, tokenclient)
+    override val digdirClient: DigdirClient = DigdirClient(env.digdirUrl, tokenclient.bindTo(env.digdirScope))
 }

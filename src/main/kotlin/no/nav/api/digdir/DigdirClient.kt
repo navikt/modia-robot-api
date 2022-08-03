@@ -8,12 +8,11 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
-import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.utils.*
 
 class DigdirClient(
     private val digdirKrrProxyUrl: String,
-    private val tokenclient: MachineToMachineTokenClient,
+    private val tokenclient: BoundedMachineToMachineTokenClient,
 ) {
     
     @Serializable
@@ -25,12 +24,6 @@ class DigdirClient(
         val epostadresse: String?,
         val epostadresseOppdatert: LocalDateTime?,
         val epostadresseVerifisert: LocalDateTime?,
-    )
-    
-    private val digdirApi = DownstreamApi(
-        cluster = "prod-gcp",
-        namespace = "team-rocket",
-        application = "digdir-krr-proxy"
     )
     
     private val client = HttpClient(OkHttp) {
@@ -51,7 +44,7 @@ class DigdirClient(
             )
             addInterceptor(
                 AuthorizationInterceptor {
-                    tokenclient.createMachineToMachineToken(digdirApi)
+                    tokenclient.createMachineToMachineToken()
                 }
             )
         }

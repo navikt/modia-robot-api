@@ -5,20 +5,14 @@ import no.nav.common.client.nom.NomClient
 import no.nav.common.client.nom.NomClientImpl
 import no.nav.common.client.nom.VeilederNavn
 import no.nav.common.health.HealthCheckResult
-import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.common.types.identer.NavIdent
 import no.nav.utils.*
 import okhttp3.OkHttpClient
 
 class Nom(
     private val nomUrl: String,
-    private val tokenclient: MachineToMachineTokenClient,
+    private val tokenclient: BoundedMachineToMachineTokenClient,
 ) {
-    private val nomApi = DownstreamApi(
-        cluster = "prod-gcp",
-        namespace = "nom",
-        application = "nom-api"
-    )
     private val httpClient = OkHttpClient
         .Builder()
         .addInterceptor(XCorrelationIdInterceptor())
@@ -33,7 +27,7 @@ class Nom(
     val client: NomClient = if (isNotProd()) {
         DevMock
     } else {
-        val tokenSupplier = { tokenclient.createMachineToMachineToken(nomApi) }
+        val tokenSupplier = { tokenclient.createMachineToMachineToken() }
         CachedNomClient(NomClientImpl(nomUrl, tokenSupplier, httpClient))
     }
 
