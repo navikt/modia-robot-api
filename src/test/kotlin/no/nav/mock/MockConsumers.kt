@@ -19,7 +19,6 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
-import no.nav.utils.now
 import java.util.*
 
 object MockConsumers : Consumers {
@@ -95,8 +94,8 @@ private val digdirClientMock = mockOf<DigdirClient> { client ->
         kanVarsles = true,
         reservert = false,
         epostadresse = "test@nav.no",
-        epostadresseOppdatert = LocalDateTime.now(),
-        epostadresseVerifisert = LocalDateTime.now(),
+        epostadresseOppdatert = Instant.parse("2019-03-06T15:29:41Z"),
+        epostadresseVerifisert = Clock.System.now(),
     )
     coEvery { client.hentKrrData(any()) } returns krrData
 }

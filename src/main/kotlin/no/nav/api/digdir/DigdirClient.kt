@@ -6,7 +6,7 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import no.nav.utils.*
 
@@ -22,8 +22,8 @@ class DigdirClient(
         val kanVarsles: Boolean?,
         val reservert: Boolean?,
         val epostadresse: String?,
-        val epostadresseOppdatert: LocalDateTime?,
-        val epostadresseVerifisert: LocalDateTime?,
+        val epostadresseOppdatert: Instant?,
+        val epostadresseVerifisert: Instant?,
     )
     
     private val client = HttpClient(OkHttp) {
