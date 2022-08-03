@@ -13,6 +13,7 @@ import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
 import no.nav.utils.CXFClient
 
 interface Consumers {
+    val tokenclient: MachineToMachineTokenClient
     val oppfolgingClient: OppfolgingClient
     val tps: PersonV3
     val nom: NomClient
@@ -29,7 +30,7 @@ class ConsumersImpl(env: Env) : Consumers {
         .password(modiaUser.password)
         .build()
 
-    private val tokenclient: MachineToMachineTokenClient = AzureAdTokenClientBuilder
+    override val tokenclient: MachineToMachineTokenClient = AzureAdTokenClientBuilder
         .builder()
         .withNaisDefaults()
         .buildMachineToMachineTokenClient()

@@ -1,6 +1,7 @@
 package no.nav.mock
 
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.datetime.*
 import no.nav.Consumers
@@ -11,6 +12,7 @@ import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.skrivestotte.SkrivestotteClient.*
 import no.nav.common.client.nom.NomClient
 import no.nav.common.client.nom.VeilederNavn
+import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.common.types.identer.NavIdent
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
@@ -21,11 +23,16 @@ import no.nav.utils.now
 import java.util.*
 
 object MockConsumers : Consumers {
+    override val tokenclient = tokenClientMock
     override val oppfolgingClient = oppfolgingClientMock
     override val tps: PersonV3 = personV3Mock
     override val nom: NomClient = nomClientMock
     override val skrivestotteClient = skrivestotteClientMock
     override val digdirClient = digdirClientMock
+}
+
+private val tokenClientMock = mockOf<MachineToMachineTokenClient> { client ->
+    every { client.createMachineToMachineToken(any()) } returns UUID.randomUUID().toString()
 }
 
 private val oppfolgingClientMock = mockOf<OppfolgingClient> { client ->
