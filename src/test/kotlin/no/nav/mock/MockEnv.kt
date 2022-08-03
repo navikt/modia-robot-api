@@ -11,4 +11,5 @@ object MockEnv : Env {
     override val pdlUrl: String = ""
     override val identAllowList: List<String> = emptyList()
     override val skrivestotteUrl: String = ""
+    override val digdirUrl: String = ""
 }

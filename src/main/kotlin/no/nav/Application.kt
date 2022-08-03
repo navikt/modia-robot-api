@@ -33,7 +33,7 @@ fun startApplication(
                     configurePdlRoutes(services.pdlServices)
                     configureTpsRoutes(services.tpsService)
                     configureDialogRoutes()
-                    configureDigdirRoutes()
+                    configureDigdirRoutes(services.digdirService)
                     configureSkrivestotteRoutes(services.skrivestotteService)
                     configureUtbetalingerRoutes()
                 }

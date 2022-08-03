@@ -67,3 +67,5 @@ spec:
       value: "https://pdl-api-q1.dev.intern.nav.no/graphql"
     - name: SKRIVESTOTTE_URL
       value: "https://app-q1.adeo.no/modiapersonoversikt-skrivestotte"
+    - name: DIGDIR_KRR_URL
+      value: "https://digdir-krr-proxy.dev.intern.nav.no"

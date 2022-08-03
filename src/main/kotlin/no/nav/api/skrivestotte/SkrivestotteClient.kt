@@ -5,8 +5,8 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import no.nav.utils.*
 import java.util.*
 
@@ -15,10 +15,9 @@ typealias Tekster = Map<UUID, SkrivestotteClient.Tekst>
 class SkrivestotteClient(
     val skrivestotteUrl: String
 ) {
-
     @Serializable
     data class Tekst(
-        @Serializable(with = UUIDSerializer::class)
+        @Contextual
         val id: UUID?,
         val overskrift: String,
         val tags: List<String>,
@@ -44,7 +43,7 @@ class SkrivestotteClient(
 
     private val client = HttpClient(OkHttp) {
         install(JsonFeature) {
-            serializer = KotlinxSerializer()
+            serializer = KotlinxSerializer(jsonSerializer)
         }
         engine {
             addInterceptor(XCorrelationIdInterceptor())

@@ -5,6 +5,8 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.datetime.*
 import no.nav.Consumers
+import no.nav.api.digdir.DigdirClient
+import no.nav.api.digdir.DigdirClient.*
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
 import no.nav.api.pdl.queries.HentPersonalia
@@ -21,6 +23,7 @@ import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
 import no.nav.utils.GraphQLResponse
 import no.nav.utils.minus
 import no.nav.utils.now
+import no.nav.utils.now
 import java.util.*
 import kotlin.time.Duration.Companion.days
 
@@ -29,6 +32,7 @@ object MockConsumers : Consumers {
     override val tps: PersonV3 = personV3Mock
     override val nom: NomClient = nomClientMock
     override val skrivestotteClient = skrivestotteClientMock
+    override val digdirClient = digdirClientMock
     override val pdlClient = pdlClientMock
 }
 
@@ -83,6 +87,19 @@ private val skrivestotteClientMock = mockOf<SkrivestotteClient> { client ->
     )
 
     coEvery { client.hentTekster() } returns tekster
+}
+
+private val digdirClientMock = mockOf<DigdirClient> { client ->
+    val krrData = KrrData(
+        personident = "12345678910",
+        aktiv = true,
+        kanVarsles = true,
+        reservert = false,
+        epostadresse = "test@nav.no",
+        epostadresseOppdatert = LocalDateTime.now(),
+        epostadresseVerifisert = LocalDateTime.now(),
+    )
+    coEvery { client.hentKrrData(any()) } returns krrData
 }
 
 private val pdlClientMock = mockOf<PdlClient> {client ->
