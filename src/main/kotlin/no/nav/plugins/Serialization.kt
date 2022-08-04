@@ -1,29 +1,25 @@
 package no.nav.plugins
 
-import io.bkbn.kompendium.oas.serialization.KompendiumSerializersModule
 import io.ktor.application.*
 import io.ktor.features.*
-import io.ktor.response.*
-import io.ktor.routing.*
 import io.ktor.serialization.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.contextual
+import no.nav.utils.UUIDSerializer
 
 @OptIn(ExperimentalSerializationApi::class)
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
         json(
             Json {
-                serializersModule = KompendiumSerializersModule.module
-                encodeDefaults = true
+                ignoreUnknownKeys = true
                 explicitNulls = true
+                serializersModule = SerializersModule {
+                    contextual(UUIDSerializer)
+                }
             }
         )
-    }
-
-    routing {
-        get("/json/kotlinx-serialization") {
-            call.respond(mapOf("hello" to "world"))
-        }
     }
 }
