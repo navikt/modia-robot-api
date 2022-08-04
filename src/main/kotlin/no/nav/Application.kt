@@ -32,9 +32,9 @@ fun startApplication(
                 route("api") {
                     configureDebugRoutes(consumers.tokenclient)
                     configureOppfolgingRoutes(services.oppfolgingService)
-                    configurePdlRoutes(services.pdlServices)
+                    configurePdlRoutes(services.pdlService)
                     configureTpsRoutes(services.tpsService)
-                    configureDialogRoutes()
+                    configureDialogRoutes(services.dialogService)
                     configureDigdirRoutes(services.digdirService)
                     configureSkrivestotteRoutes(services.skrivestotteService)
                     configureUtbetalingerRoutes()

@@ -1,6 +1,7 @@
 package no.nav
 
 import no.nav.api.digdir.DigdirClient
+import no.nav.api.dialog.saf.SafClient
 import no.nav.api.oppfolging.Nom
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
@@ -21,6 +22,7 @@ interface Consumers {
     val nom: NomClient
     val skrivestotteClient: SkrivestotteClient
     val pdlClient: PdlClient
+    val safClient: SafClient
     val digdirClient: DigdirClient
 }
 
@@ -46,5 +48,6 @@ class ConsumersImpl(env: Env) : Consumers {
     override val nom: NomClient = Nom(env.nomUrl, tokenclient.bindTo(env.nomScope)).client
     override val skrivestotteClient: SkrivestotteClient = SkrivestotteClient(env.skrivestotteUrl)
     override val pdlClient: PdlClient = PdlClient(env.pdlUrl, tokenclient.bindTo(env.pdlScope))
+    override val safClient: SafClient = SafClient(env.safUrl, tokenclient.bindTo(env.safScope))
     override val digdirClient: DigdirClient = DigdirClient(env.digdirUrl, tokenclient.bindTo(env.digdirScope))
 }

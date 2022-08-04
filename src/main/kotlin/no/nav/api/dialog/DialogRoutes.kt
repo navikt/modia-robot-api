@@ -10,7 +10,9 @@ import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
 import no.nav.plugins.securityScheme
 
-fun Route.configureDialogRoutes() {
+fun Route.configureDialogRoutes(
+    dialogService: DialogService
+) {
     route("dialog/{fnr}") {
         route("sendinfomelding") {
             notarizedPost(Api.sendInfomelding) {
