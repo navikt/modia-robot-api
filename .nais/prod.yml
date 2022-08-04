@@ -68,6 +68,14 @@ spec:
       value: "https://nom-api.intern.nav.no"
     - name: NOM_SCOPE
       value: "prod-gcp:nom:nom-api"
+    - name: PDL_URL
+      value: "https://pdl-api.nais.adeo.no/graphql"
+    - name: PDL_SCOPE
+      value: "prod-fss:pdl:pdl-api"
+    - name: SAF_URL
+      value: "https://saf.nais.adeo.no/graphql"
+    - name: SAF_SCOPE
+      value: "prod-fss:teamdokumenthandtering:saf"
     - name: SKRIVESTOTTE_URL
       value: "https://app.adeo.no/modiapersonoversikt-skrivestotte"
     - name: DIGDIR_KRR_URL

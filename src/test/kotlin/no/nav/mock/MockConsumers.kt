@@ -7,7 +7,11 @@ import kotlinx.datetime.*
 import no.nav.Consumers
 import no.nav.api.digdir.DigdirClient
 import no.nav.api.digdir.DigdirClient.*
+import no.nav.api.dialog.saf.SafClient
+import no.nav.api.dialog.saf.queries.HentBrukerssaker
 import no.nav.api.oppfolging.OppfolgingClient
+import no.nav.api.pdl.PdlClient
+import no.nav.api.pdl.queries.HentPersonalia
 import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.skrivestotte.SkrivestotteClient.*
 import no.nav.common.client.nom.NomClient
@@ -20,6 +24,9 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
 import no.nav.tjeneste.virksomhet.utbetaling.v1.UtbetalingV1
+import no.nav.utils.GraphQLResponse
+import no.nav.utils.minus
+import no.nav.utils.now
 import java.util.*
 
 object MockConsumers : Consumers {
@@ -30,6 +37,8 @@ object MockConsumers : Consumers {
     override val skrivestotteClient = skrivestotteClientMock
     override val digdirClient = digdirClientMock
     override val utbetalinger = utbetalingerMock
+    override val pdlClient = pdlClientMock
+    override val safClient = safClientMock
 }
 
 private val tokenClientMock = mockOf<MachineToMachineTokenClient> { client ->
@@ -96,14 +105,57 @@ private val digdirClientMock = mockOf<DigdirClient> { client ->
         kanVarsles = true,
         reservert = false,
         epostadresse = "test@nav.no",
-        epostadresseOppdatert = LocalDateTime.now(),
-        epostadresseVerifisert = LocalDateTime.now(),
+        epostadresseOppdatert = Instant.parse("2019-03-06T15:29:41Z"),
+        epostadresseVerifisert = Clock.System.now(),
     )
     coEvery { client.hentKrrData(any()) } returns krrData
 }
 
 private val utbetalingerMock = mockOf<UtbetalingV1> { client ->
     coEvery { client.hentUtbetalingsinformasjon(any()) } returns null // TODO
+}
+
+private val pdlClientMock = mockOf<PdlClient> {client ->
+    coEvery { client.hentPersonalia(any()) } returns GraphQLResponse(
+        data = HentPersonalia.Result(
+            hentPerson = HentPersonalia.Person(
+                foedsel = listOf(
+                    HentPersonalia.Foedsel(
+                        foedselsdato = LocalDate.now().minus(10, DateTimeUnit.YEAR)
+                    )
+                ),
+                oppholdsadresse = listOf(
+                    HentPersonalia.OppholdsAdresse(
+                        gyldigFraOgMed = LocalDateTime.now().minus(2, DateTimeUnit.HOUR),
+                        coAdressenavn = "c/o ignore",
+                    ),
+                    HentPersonalia.OppholdsAdresse(
+                        gyldigFraOgMed = LocalDateTime.now().minus(1, DateTimeUnit.HOUR),
+                        coAdressenavn = "c/o hansen",
+                    )
+                )
+            )
+        )
+    )
+}
+
+private val safClientMock = mockOf<SafClient> { client ->
+    coEvery { client.hentBrukersSaker(any()) } returns GraphQLResponse(
+        data = HentBrukerssaker.Result(
+            saker = listOf(
+                HentBrukerssaker.Sak(
+                    fagsakId = null,
+                    sakstype = HentBrukerssaker.Sakstype.GENERELL_SAK,
+                    tema = HentBrukerssaker.Tema.DAG
+                ),
+                HentBrukerssaker.Sak(
+                    fagsakId = "abba1231",
+                    sakstype = HentBrukerssaker.Sakstype.FAGSAK,
+                    tema = HentBrukerssaker.Tema.DAG
+                )
+            )
+        )
+    )
 }
 
 inline fun <reified T : Any> mockOf(impl: (T) -> Unit): T {

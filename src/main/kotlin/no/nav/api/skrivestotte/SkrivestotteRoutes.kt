@@ -18,7 +18,7 @@ fun Route.configureSkrivestotteRoutes(
 ) {
     route("skrivestotte/") {
         notarizedGet(Api.sok) {
-            val sokeVerdi = requireNotNull(call.request.queryParameters["sokeVerdi"])
+            val sokeVerdi = call.request.queryParameters["sokeVerdi"]
             call.respond(skrivestotteService.hentTeksterFraSok(sokeVerdi))
         }
     }
@@ -69,6 +69,6 @@ private object Models {
     )
     open class SokeVerdiParameter(
         @Param(type = ParamType.QUERY)
-        val sokeVerdi: String
+        val sokeVerdi: String?
     )
 }
