@@ -10,7 +10,7 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 
 class SkrivestotteService (private val skrivestotteClient: SkrivestotteClient) {
-    
+
     private var teksterCache: Map<UUID, Tekst> = emptyMap()
     private var sokbareTeksterCache: Map<Tekst, String> = emptyMap()
     private val reporter = SelftestGenerator.Reporter(name = "SkrivestotteService", critical = false)
@@ -32,15 +32,16 @@ class SkrivestotteService (private val skrivestotteClient: SkrivestotteClient) {
         }
     }
     
-    fun hentTeksterFraSok(sokeVerdi: String): List<Tekst> {
+    fun hentTeksterFraSok(sokeVerdi: String?): List<Tekst> {
         val alleTekster = teksterCache.values
-        
+
         val sokeOrd = sokeVerdi
-            .split(' ')
-            .map { it.lowercase() }
-            .filter { it.isNotBlank() }
-            
-        
+            ?.split(' ')
+            ?.map { it.lowercase() }
+            ?.filter { it.isNotBlank() }
+            ?: return alleTekster.toList()
+
+
         return alleTekster.filter { tekst ->
             sokeOrd.all { sokbareTeksterCache[tekst]?.contains(it) ?: false }
         }
