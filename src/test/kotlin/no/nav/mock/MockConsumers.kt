@@ -24,9 +24,7 @@ import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
 import no.nav.utils.GraphQLResponse
 import no.nav.utils.minus
 import no.nav.utils.now
-import no.nav.utils.now
 import java.util.*
-import kotlin.time.Duration.Companion.days
 
 object MockConsumers : Consumers {
     override val tokenclient = tokenClientMock
@@ -102,8 +100,8 @@ private val digdirClientMock = mockOf<DigdirClient> { client ->
         kanVarsles = true,
         reservert = false,
         epostadresse = "test@nav.no",
-        epostadresseOppdatert = LocalDateTime.now(),
-        epostadresseVerifisert = LocalDateTime.now(),
+        epostadresseOppdatert = Instant.parse("2019-03-06T15:29:41Z"),
+        epostadresseVerifisert = Clock.System.now(),
     )
     coEvery { client.hentKrrData(any()) } returns krrData
 }

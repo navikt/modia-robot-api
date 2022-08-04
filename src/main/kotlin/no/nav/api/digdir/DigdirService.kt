@@ -1,7 +1,7 @@
 package no.nav.api.digdir
 
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import no.nav.personoversikt.utils.SelftestGenerator
 import kotlin.concurrent.fixedRateTimer
@@ -24,8 +24,8 @@ class DigdirService (private val digdirClient: DigdirClient) {
     @Serializable
     data class Epost(
         val verdi: String? = null,
-        val sistOppdatert: LocalDateTime? = null,
-        val sistVerifisert: LocalDateTime? = null,
+        val sistOppdatert: Instant? = null,
+        val sistVerifisert: Instant? = null,
     )
     
     suspend fun hentEpost(fnr: String): Epost {
