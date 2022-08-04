@@ -1,20 +1,34 @@
 package no.nav.api.skrivestotte
 
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.contextual
 import no.nav.utils.*
 import java.util.*
 
 typealias Tekster = Map<UUID, SkrivestotteClient.Tekst>
 
 class SkrivestotteClient(
-    val skrivestotteUrl: String
+    val skrivestotteUrl: String,
+    httpEngine: HttpClientEngine = OkHttp.create {
+        addInterceptor(XCorrelationIdInterceptor())
+        addInterceptor(
+            LoggingInterceptor(
+                name = "skrivestotte",
+                callIdExtractor = { getCallId() }
+            )
+        )
+    }
 ) {
+
     @Serializable
     data class Tekst(
         @Contextual
@@ -41,18 +55,19 @@ class SkrivestotteClient(
         fun kombinert() = listOfNotNull(nb_NO, nn_NO, en_US, se_NO, de_DE, fr_FR, es_ES, pl_PL, ru_RU, ur).joinToString("\u0000")
     }
 
-    private val client = HttpClient(OkHttp) {
+    private val client = HttpClient(httpEngine) {
         install(JsonFeature) {
-            serializer = KotlinxSerializer(jsonSerializer)
-        }
-        engine {
-            addInterceptor(XCorrelationIdInterceptor())
-            addInterceptor(
-                LoggingInterceptor(
-                    name = "skrivestotte",
-                    callIdExtractor = { getCallId() }
-                )
-            )
+            serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+                serializersModule = SerializersModule {
+                    contextual(UUIDSerializer)
+                    contextual(
+                        MapSerializer(
+                            keySerializer = UUIDSerializer,
+                            valueSerializer = Tekst.serializer()
+                        )
+                    )
+                }
+            })
         }
     }
 

@@ -7,21 +7,8 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.contextual
 import java.util.*
 import kotlin.reflect.KClass
-
-val jsonSerializer = Json {
-    isLenient = false
-    ignoreUnknownKeys = false
-    allowSpecialFloatingPointValues = true
-    useArrayPolymorphism = false
-    serializersModule = SerializersModule {
-        contextual(UUIDSerializer)
-    }
-}
 
 object UUIDSerializer : KSerializer<UUID> {
     override val descriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
