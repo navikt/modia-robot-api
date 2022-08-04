@@ -36,6 +36,7 @@ class SafClient(
         httpClient = httpClient,
         config = GraphQLClientConfig(
             serviceName = "SAF",
+            critical = false,
             requestConfig = {
                 val token = tokenclient.createMachineToMachineToken()
                 url(safUrl)
