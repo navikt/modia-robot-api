@@ -13,7 +13,7 @@ import no.nav.utils.*
 
 class SafClient(
     private val safUrl: String,
-    private val tokenclient: MachineToMachineTokenClient,
+    private val tokenclient: BoundedMachineToMachineTokenClient,
     httpEngine: HttpClientEngine = OkHttp.create()
 ) {
     private val safApi = DownstreamApi(
@@ -36,8 +36,9 @@ class SafClient(
         httpClient = httpClient,
         config = GraphQLClientConfig(
             serviceName = "SAF",
+            critical = false,
             requestConfig = {
-                val token = tokenclient.createMachineToMachineToken(safApi)
+                val token = tokenclient.createMachineToMachineToken()
                 url(safUrl)
                 header("Authorization", "Bearer $token")
                 header("X-Correlation-ID", getCallId())

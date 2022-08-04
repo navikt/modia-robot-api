@@ -1,5 +1,6 @@
 package no.nav
 
+import no.nav.api.digdir.DigdirClient
 import no.nav.api.dialog.saf.SafClient
 import no.nav.api.oppfolging.Nom
 import no.nav.api.oppfolging.OppfolgingClient
@@ -12,14 +13,17 @@ import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.common.utils.NaisUtils
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
 import no.nav.utils.CXFClient
+import no.nav.utils.bindTo
 
 interface Consumers {
+    val tokenclient: MachineToMachineTokenClient
     val oppfolgingClient: OppfolgingClient
     val tps: PersonV3
     val nom: NomClient
     val skrivestotteClient: SkrivestotteClient
     val pdlClient: PdlClient
     val safClient: SafClient
+    val digdirClient: DigdirClient
 }
 
 class ConsumersImpl(env: Env) : Consumers {
@@ -31,18 +35,19 @@ class ConsumersImpl(env: Env) : Consumers {
         .password(modiaUser.password)
         .build()
 
-    private val tokenclient: MachineToMachineTokenClient = AzureAdTokenClientBuilder
+    override val tokenclient: MachineToMachineTokenClient = AzureAdTokenClientBuilder
         .builder()
         .withNaisDefaults()
         .buildMachineToMachineTokenClient()
 
-    override val oppfolgingClient: OppfolgingClient = OppfolgingClient(env.oppfolgingUrl, tokenclient)
+    override val oppfolgingClient: OppfolgingClient = OppfolgingClient(env.oppfolgingUrl, tokenclient.bindTo(env.oppfolgingScope))
     override val tps: PersonV3 = CXFClient<PersonV3>()
         .address(env.tpsPersonV3Url)
         .configureStsForSystemUser(stsConfig)
         .build()
-    override val nom: NomClient = Nom(env.nomUrl, tokenclient).client
+    override val nom: NomClient = Nom(env.nomUrl, tokenclient.bindTo(env.nomScope)).client
     override val skrivestotteClient: SkrivestotteClient = SkrivestotteClient(env.skrivestotteUrl)
-    override val pdlClient: PdlClient = PdlClient(env.pdlUrl, tokenclient)
-    override val safClient: SafClient = SafClient(env.safUrl, tokenclient)
+    override val pdlClient: PdlClient = PdlClient(env.pdlUrl, tokenclient.bindTo(env.pdlScope))
+    override val safClient: SafClient = SafClient(env.safUrl, tokenclient.bindTo(env.safScope))
+    override val digdirClient: DigdirClient = DigdirClient(env.digdirUrl, tokenclient.bindTo(env.digdirScope))
 }

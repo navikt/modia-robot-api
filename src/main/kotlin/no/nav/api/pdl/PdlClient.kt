@@ -12,15 +12,9 @@ import no.nav.utils.*
 
 class PdlClient(
     private val pdlUrl: String,
-    private val tokenclient: MachineToMachineTokenClient,
+    private val tokenclient: BoundedMachineToMachineTokenClient,
     httpEngine: HttpClientEngine = OkHttp.create()
 ) {
-    private val pdlApi = DownstreamApi(
-        cluster = "prod-fss",
-        namespace = "pdl",
-        application = "pdl-api"
-    )
-
     private val httpClient = HttpClient(httpEngine) {
         install(JsonFeature) {
             serializer = KotlinxSerializer(
@@ -35,8 +29,9 @@ class PdlClient(
         httpClient = httpClient,
         config = GraphQLClientConfig(
             serviceName = "PDL",
+            critical = false,
             requestConfig = {
-                val token = tokenclient.createMachineToMachineToken(pdlApi)
+                val token = tokenclient.createMachineToMachineToken()
                 url(pdlUrl)
                 header("Nav-Consumer-Token", "Bearer $token")
                 header("Authorization", "Bearer $token")

@@ -19,7 +19,9 @@ import org.slf4j.event.*
 fun Application.configureMonitoring() {
     install(CallLogging) {
         level = Level.INFO
-        filter { call -> call.request.path().startsWith("/") }
+        filter { call ->
+            call.request.path().contains("/internal/").not()
+        }
         callIdMdc("call-id")
         format { call ->
             "${call.response.status()}: ${call.request.httpMethod} - ${call.request.origin.uri.substringBefore("?")}".masked()

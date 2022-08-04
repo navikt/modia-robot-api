@@ -6,6 +6,7 @@ val kotlin_version: String by project
 val kotlinx_datetime_version: String by project
 val kompendium_version: String by project
 val logback_version: String by project
+val logstash_version: String by project
 val prometeus_version: String by project
 val nav_common_version: String by project
 val tjenestespec_version: String by project
@@ -73,6 +74,7 @@ dependencies {
     implementation("com.sun.xml.ws:jaxws-ri:2.3.3")
     implementation("io.micrometer:micrometer-registry-prometheus:$prometeus_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("net.logstash.logback:logstash-logback-encoder:$logstash_version")
 
 
     testImplementation("io.mockk:mockk:1.12.4")

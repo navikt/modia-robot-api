@@ -38,7 +38,7 @@ class SkrivestotteClient(
         val innhold: Innhold,
         val vekttall: Int = 0
     )
-
+    
     @Serializable
     data class Innhold(
         val nb_NO: String? = null,

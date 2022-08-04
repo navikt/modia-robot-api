@@ -5,10 +5,9 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.*
-import io.ktor.util.reflect.TypeInfo
 import kotlinx.serialization.Serializable
+import no.nav.personoversikt.utils.SelftestGenerator
 import java.util.UUID
-import kotlin.reflect.KClass
 
 interface GraphQLVariables
 interface GraphQLResult
@@ -27,12 +26,17 @@ interface GraphQLRequest<VARS : GraphQLVariables, TYPE : GraphQLResult> {
 }
 data class GraphQLClientConfig(
     val serviceName: String,
+    val critical: Boolean,
     val requestConfig: suspend HttpRequestBuilder.(callId: String) -> Unit = {},
 )
 class GraphQLClient(
     val config: GraphQLClientConfig,
     val httpClient: HttpClient
 ) {
+    val selftestReporter = SelftestGenerator.Reporter(config.serviceName, config.critical)
+        // Report OK to get application ready (/isReady)
+        .also { it.reportOk() }
+
     suspend inline fun <VARS : GraphQLVariables, reified DATA : GraphQLResult, REQ : GraphQLRequest<VARS, DATA>> execute(
         request: REQ
     ): GraphQLResponse<DATA> {
@@ -63,18 +67,22 @@ class GraphQLClient(
                     "${config.serviceName}-response-error: $callId ($requestId)",
                     logMessage
                 )
-                throw Exception(response.errors.joinToString(", ") { it.message })
+                val exception = Exception(response.errors.joinToString(", ") { it.message })
+                selftestReporter.reportError(exception)
+                throw exception
             }
             TjenestekallLogger.info(
                 "${config.serviceName}-response: $callId ($requestId)",
                 logMessage
             )
+            selftestReporter.reportOk()
             return response
         } catch (exception: Throwable) {
             TjenestekallLogger.error(
                 "${config.serviceName}-response-error: $callId ($requestId)",
                 mapOf("exception" to exception)
             )
+            selftestReporter.reportError(exception)
             throw exception
         }
     }
