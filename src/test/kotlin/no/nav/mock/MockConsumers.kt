@@ -5,6 +5,8 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.datetime.*
 import no.nav.Consumers
+import no.nav.api.digdir.DigdirClient
+import no.nav.api.digdir.DigdirClient.*
 import no.nav.api.dialog.saf.SafClient
 import no.nav.api.dialog.saf.queries.HentBrukerssaker
 import no.nav.api.oppfolging.OppfolgingClient
@@ -14,6 +16,7 @@ import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.skrivestotte.SkrivestotteClient.*
 import no.nav.common.client.nom.NomClient
 import no.nav.common.client.nom.VeilederNavn
+import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.common.types.identer.NavIdent
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
@@ -24,15 +27,20 @@ import no.nav.utils.GraphQLResponse
 import no.nav.utils.minus
 import no.nav.utils.now
 import java.util.*
-import kotlin.time.Duration.Companion.days
 
 object MockConsumers : Consumers {
+    override val tokenclient = tokenClientMock
     override val oppfolgingClient = oppfolgingClientMock
     override val tps: PersonV3 = personV3Mock
     override val nom: NomClient = nomClientMock
     override val skrivestotteClient = skrivestotteClientMock
+    override val digdirClient = digdirClientMock
     override val pdlClient = pdlClientMock
     override val safClient = safClientMock
+}
+
+private val tokenClientMock = mockOf<MachineToMachineTokenClient> { client ->
+    every { client.createMachineToMachineToken(any()) } returns UUID.randomUUID().toString()
 }
 
 private val oppfolgingClientMock = mockOf<OppfolgingClient> { client ->
@@ -86,6 +94,19 @@ private val skrivestotteClientMock = mockOf<SkrivestotteClient> { client ->
     )
 
     coEvery { client.hentTekster() } returns tekster
+}
+
+private val digdirClientMock = mockOf<DigdirClient> { client ->
+    val krrData = KrrData(
+        personident = "12345678910",
+        aktiv = true,
+        kanVarsles = true,
+        reservert = false,
+        epostadresse = "test@nav.no",
+        epostadresseOppdatert = Instant.parse("2019-03-06T15:29:41Z"),
+        epostadresseVerifisert = Clock.System.now(),
+    )
+    coEvery { client.hentKrrData(any()) } returns krrData
 }
 
 private val pdlClientMock = mockOf<PdlClient> {client ->

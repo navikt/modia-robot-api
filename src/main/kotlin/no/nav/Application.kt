@@ -4,6 +4,7 @@ import io.bkbn.kompendium.auth.Notarized.notarizedAuthenticate
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import no.nav.api.debug.configureDebugRoutes
 import no.nav.api.dialog.configureDialogRoutes
 import no.nav.api.digdir.configureDigdirRoutes
 import no.nav.api.oppfolging.configureOppfolgingRoutes
@@ -29,11 +30,12 @@ fun startApplication(
         routing {
             notarizedAuthenticate(securityScheme) {
                 route("api") {
+                    configureDebugRoutes(consumers.tokenclient)
                     configureOppfolgingRoutes(services.oppfolgingService)
                     configurePdlRoutes(services.pdlService)
                     configureTpsRoutes(services.tpsService)
                     configureDialogRoutes(services.dialogService)
-                    configureDigdirRoutes()
+                    configureDigdirRoutes(services.digdirService)
                     configureSkrivestotteRoutes(services.skrivestotteService)
                     configureUtbetalingerRoutes()
                 }
