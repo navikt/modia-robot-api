@@ -10,29 +10,33 @@ interface Env {
     }
     val soapStsUrl: String
     val jwksUrl: String
+    val tpsPersonV3Url: String
     val oppfolgingUrl: String
     val oppfolgingScope: DownstreamApi
-    val tpsPersonV3Url: String
     val nomUrl: String
     val nomScope: DownstreamApi
-    val identAllowList: List<String>
-    val skrivestotteUrl: String
+    val pdlUrl: String
+    val pdlScope: DownstreamApi
     val digdirUrl: String
     val digdirScope: DownstreamApi
+    val skrivestotteUrl: String
+    val identAllowList: List<String>
 }
 
 class EnvImpl : Env {
     override val soapStsUrl: String = getRequiredConfig("SECURITYTOKENSERVICE_URL")
     override val jwksUrl: String = getRequiredConfig("ISSO_JWKS_URL")
+    override val tpsPersonV3Url: String = getRequiredConfig("TPS_PERSONV3_URL")
     override val oppfolgingUrl: String = getRequiredConfig("OPPFOLGING_URL")
     override val oppfolgingScope: DownstreamApi = getRequiredConfig("OPPFOLGING_SCOPE").toDownstreamApi()
-    override val tpsPersonV3Url: String = getRequiredConfig("TPS_PERSONV3_URL")
     override val nomUrl: String = getRequiredConfig("NOM_URL")
     override val nomScope: DownstreamApi = getRequiredConfig("NOM_SCOPE").toDownstreamApi()
-    override val identAllowList: List<String> = getRequiredConfig("IDENT_ALLOW_LIST").split(",")
-    override val skrivestotteUrl: String = getRequiredConfig("SKRIVESTOTTE_URL")
+    override val pdlUrl: String = getRequiredConfig("PDL_URL")
+    override val pdlScope: DownstreamApi = getRequiredConfig("PDL_SCOPE").toDownstreamApi()
     override val digdirUrl: String = getRequiredConfig("DIGDIR_KRR_URL")
     override val digdirScope: DownstreamApi = getRequiredConfig("DIGDIR_KRR_SCOPE").toDownstreamApi()
+    override val skrivestotteUrl: String = getRequiredConfig("SKRIVESTOTTE_URL")
+    override val identAllowList: List<String> = getRequiredConfig("IDENT_ALLOW_LIST").split(",")
 }
 
 private fun String.toDownstreamApi() = DownstreamApi.parse(this)

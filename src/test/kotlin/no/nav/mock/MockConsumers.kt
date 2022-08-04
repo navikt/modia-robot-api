@@ -8,6 +8,8 @@ import no.nav.Consumers
 import no.nav.api.digdir.DigdirClient
 import no.nav.api.digdir.DigdirClient.*
 import no.nav.api.oppfolging.OppfolgingClient
+import no.nav.api.pdl.PdlClient
+import no.nav.api.pdl.queries.HentPersonalia
 import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.skrivestotte.SkrivestotteClient.*
 import no.nav.common.client.nom.NomClient
@@ -19,6 +21,9 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
+import no.nav.utils.GraphQLResponse
+import no.nav.utils.minus
+import no.nav.utils.now
 import java.util.*
 
 object MockConsumers : Consumers {
@@ -28,6 +33,7 @@ object MockConsumers : Consumers {
     override val nom: NomClient = nomClientMock
     override val skrivestotteClient = skrivestotteClientMock
     override val digdirClient = digdirClientMock
+    override val pdlClient = pdlClientMock
 }
 
 private val tokenClientMock = mockOf<MachineToMachineTokenClient> { client ->
@@ -98,6 +104,30 @@ private val digdirClientMock = mockOf<DigdirClient> { client ->
         epostadresseVerifisert = Clock.System.now(),
     )
     coEvery { client.hentKrrData(any()) } returns krrData
+}
+
+private val pdlClientMock = mockOf<PdlClient> {client ->
+    coEvery { client.hentPersonalia(any()) } returns GraphQLResponse(
+        data = HentPersonalia.Result(
+            hentPerson = HentPersonalia.Person(
+                foedsel = listOf(
+                    HentPersonalia.Foedsel(
+                        foedselsdato = LocalDate.now().minus(10, DateTimeUnit.YEAR)
+                    )
+                ),
+                oppholdsadresse = listOf(
+                    HentPersonalia.OppholdsAdresse(
+                        gyldigFraOgMed = LocalDateTime.now().minus(2, DateTimeUnit.HOUR),
+                        coAdressenavn = "c/o ignore",
+                    ),
+                    HentPersonalia.OppholdsAdresse(
+                        gyldigFraOgMed = LocalDateTime.now().minus(1, DateTimeUnit.HOUR),
+                        coAdressenavn = "c/o hansen",
+                    )
+                )
+            )
+        )
+    )
 }
 
 inline fun <reified T : Any> mockOf(impl: (T) -> Unit): T {

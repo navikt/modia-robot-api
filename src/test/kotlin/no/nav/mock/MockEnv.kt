@@ -7,13 +7,15 @@ import no.nav.utils.parse
 object MockEnv : Env {
     override val soapStsUrl: String = ""
     override val jwksUrl: String = ""
+    override val tpsPersonV3Url: String = ""
     override val oppfolgingUrl: String = ""
     override val oppfolgingScope: DownstreamApi = DownstreamApi.parse("::")
-    override val tpsPersonV3Url: String = ""
     override val nomUrl: String = ""
     override val nomScope: DownstreamApi = DownstreamApi.parse("::")
-    override val identAllowList: List<String> = emptyList()
-    override val skrivestotteUrl: String = ""
+    override val pdlUrl: String = ""
+    override val pdlScope: DownstreamApi = DownstreamApi.parse("::")
     override val digdirUrl: String = ""
     override val digdirScope: DownstreamApi = DownstreamApi.parse("::")
+    override val identAllowList: List<String> = emptyList()
+    override val skrivestotteUrl: String = ""
 }
