@@ -24,6 +24,9 @@ class DigdirClient(
         val epostadresse: String?,
         val epostadresseOppdatert: Instant?,
         val epostadresseVerifisert: Instant?,
+        val mobiltelefonnummer: String?,
+        val mobiltelefonnummerOppdatert: Instant?,
+        val mobiltelefonnummerVerifisert: Instant?
     )
     
     private val client = HttpClient(OkHttp) {

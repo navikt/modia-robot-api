@@ -108,6 +108,9 @@ private val digdirClientMock = mockOf<DigdirClient> { client ->
         epostadresse = "test@nav.no",
         epostadresseOppdatert = Instant.parse("2019-03-06T15:29:41Z"),
         epostadresseVerifisert = Clock.System.now(),
+        mobiltelefonnummer = "90909090",
+        mobiltelefonnummerOppdatert = Clock.System.now(),
+        mobiltelefonnummerVerifisert = Clock.System.now()
     )
     coEvery { client.hentKrrData(any()) } returns krrData
 }

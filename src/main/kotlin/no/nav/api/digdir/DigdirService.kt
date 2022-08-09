@@ -22,18 +22,24 @@ class DigdirService (private val digdirClient: DigdirClient) {
     }
     
     @Serializable
-    data class Epost(
-        val verdi: String? = null,
-        val sistOppdatert: Instant? = null,
-        val sistVerifisert: Instant? = null,
+    data class Kontaktinformasjon(
+        val epostadresse: String? = null,
+        val epostadresseOppdatert: Instant? = null,
+        val epostadresseVerifisert: Instant? = null,
+        val mobiltelefonnummer: String? = null,
+        val mobiltelefonnummerOppdatert: Instant? = null,
+        val mobiltelefonnummerVerifisert: Instant? = null,
     )
     
-    suspend fun hentEpost(fnr: String): Epost {
+    suspend fun hentKontaktinformasjon(fnr: String): Kontaktinformasjon {
         val krrData = digdirClient.hentKrrData(fnr)
-        return Epost(
-            verdi = krrData.epostadresse,
-            sistOppdatert = krrData.epostadresseOppdatert,
-            sistVerifisert = krrData.epostadresseVerifisert
+        return Kontaktinformasjon(
+            epostadresse = krrData.epostadresse,
+            epostadresseOppdatert = krrData.epostadresseOppdatert,
+            epostadresseVerifisert = krrData.epostadresseVerifisert,
+            mobiltelefonnummer = krrData.mobiltelefonnummer,
+            mobiltelefonnummerOppdatert = krrData.mobiltelefonnummerOppdatert,
+            mobiltelefonnummerVerifisert = krrData.mobiltelefonnummerVerifisert
         )
     }
 }
