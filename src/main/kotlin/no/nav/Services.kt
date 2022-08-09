@@ -7,6 +7,7 @@ import no.nav.api.oppfolging.OppfolgingService
 import no.nav.api.pdl.PdlService
 import no.nav.api.skrivestotte.SkrivestotteService
 import no.nav.api.tps.TpsService
+import no.nav.api.utbetalinger.UtbetalingerService
 
 interface Services {
     val oppfolgingService: OppfolgingService
@@ -16,6 +17,7 @@ interface Services {
     val pdlService: PdlService
     val safService: SafService
     val dialogService: DialogService
+    val utbetalingerService: UtbetalingerService
 }
 class ServicesImpl(consumers: Consumers) : Services {
     override val oppfolgingService = OppfolgingService(
@@ -28,4 +30,5 @@ class ServicesImpl(consumers: Consumers) : Services {
     override val pdlService = PdlService(consumers.pdlClient)
     override val safService = SafService(consumers.safClient)
     override val dialogService = DialogService(safService)
+    override val utbetalingerService = UtbetalingerService(consumers.utbetalinger)
 }

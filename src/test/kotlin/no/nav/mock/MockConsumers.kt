@@ -14,6 +14,8 @@ import no.nav.api.pdl.PdlClient
 import no.nav.api.pdl.queries.HentPersonalia
 import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.skrivestotte.SkrivestotteClient.*
+import no.nav.api.utbetalinger.UtbetalingerClient
+import no.nav.api.utbetalinger.utbetalinger
 import no.nav.common.client.nom.NomClient
 import no.nav.common.client.nom.VeilederNavn
 import no.nav.common.token_client.client.MachineToMachineTokenClient
@@ -35,6 +37,7 @@ object MockConsumers : Consumers {
     override val nom: NomClient = nomClientMock
     override val skrivestotteClient = skrivestotteClientMock
     override val digdirClient = digdirClientMock
+    override val utbetalinger = utbetalingerMock
     override val pdlClient = pdlClientMock
     override val safClient = safClientMock
 }
@@ -107,6 +110,10 @@ private val digdirClientMock = mockOf<DigdirClient> { client ->
         epostadresseVerifisert = Clock.System.now(),
     )
     coEvery { client.hentKrrData(any()) } returns krrData
+}
+
+private val utbetalingerMock = mockOf<UtbetalingerClient> { client ->
+    coEvery { client.hentUtbetalinger(any(), any(), any()) } returns utbetalinger
 }
 
 private val pdlClientMock = mockOf<PdlClient> {client ->

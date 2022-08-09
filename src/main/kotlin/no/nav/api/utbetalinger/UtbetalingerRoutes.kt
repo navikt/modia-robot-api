@@ -9,32 +9,27 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayIn
-import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
+import no.nav.api.utbetalinger.UtbetalingerService.*
 import no.nav.plugins.securityScheme
 
-fun Route.configureUtbetalingerRoutes() {
+fun Route.configureUtbetalingerRoutes(
+    utbetalingerService: UtbetalingerService
+) {
     route("utbetalinger/{fnr}/ytelseoversikt") {
         notarizedGet(Api.utbetalinger) {
-            val fnr = call.parameters["fnr"]
+            val fnr = requireNotNull(call.parameters["fnr"])
             val fra = LocalDate.parse(call.request.queryParameters["fra"] ?: "")
             val til = LocalDate.parse(call.request.queryParameters["til"] ?: "")
 
-            call.respond(Models.Utbetalinger(
-                ytelse = "Dagpenger",
-                fra = Clock.System.todayIn(TimeZone.currentSystemDefault()),
-                til = Clock.System.todayIn(TimeZone.currentSystemDefault()),
-            ))
+            call.respond(utbetalingerService.hentUtbetalinger(fnr, fra, til))
         }
     }
 }
 
 private object Api {
-    val utbetalinger = GetInfo<Models.UrlParameters, Models.Utbetalinger>(
+    val utbetalinger = GetInfo<Models.UrlParameters, List<Utbetalinger>>(
         summary = "Brukers utbetalinger",
         description = "Hentes fra utbetaldata",
         responseInfo = ResponseInfo(
@@ -55,11 +50,4 @@ private object Models {
         @Param(type = ParamType.QUERY)
         val til: LocalDate,
     ) : CommonModels.FnrParameter(fnr)
-
-    @Serializable
-    data class Utbetalinger(
-        val ytelse: String,
-        val fra: LocalDate,
-        val til: LocalDate
-    )
 }

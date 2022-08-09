@@ -37,7 +37,7 @@ fun startApplication(
                     configureDialogRoutes(services.dialogService)
                     configureDigdirRoutes(services.digdirService)
                     configureSkrivestotteRoutes(services.skrivestotteService)
-                    configureUtbetalingerRoutes()
+                    configureUtbetalingerRoutes(services.utbetalingerService)
                 }
             }
         }

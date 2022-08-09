@@ -66,6 +66,7 @@ dependencies {
     implementation("io.bkbn:kompendium-swagger-ui:$kompendium_version")
     implementation("org.webjars:webjars-locator-core:0.50")
     implementation("no.nav.tjenestespesifikasjoner:person-v3-tjenestespesifikasjon:$tjenestespec_version")
+    implementation("no.nav.tjenestespesifikasjoner:utbetaling-tjenestespesifikasjon:$tjenestespec_version")
     implementation("no.nav.personoversikt:kotlin-utils:$modia_common_utils_version")
 
     implementation("no.nav.common:token-client:$nav_common_version")
