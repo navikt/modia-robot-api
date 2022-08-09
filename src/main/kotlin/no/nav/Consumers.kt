@@ -6,13 +6,13 @@ import no.nav.api.oppfolging.Nom
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
 import no.nav.api.skrivestotte.SkrivestotteClient
+import no.nav.api.utbetalinger.UtbetalingerClient
 import no.nav.common.client.nom.NomClient
 import no.nav.common.cxf.StsConfig
 import no.nav.common.token_client.builder.AzureAdTokenClientBuilder
 import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.common.utils.NaisUtils
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
-import no.nav.tjeneste.virksomhet.utbetaling.v1.UtbetalingV1
 import no.nav.utils.CXFClient
 import no.nav.utils.bindTo
 
@@ -25,7 +25,7 @@ interface Consumers {
     val pdlClient: PdlClient
     val safClient: SafClient
     val digdirClient: DigdirClient
-    val utbetalinger: UtbetalingV1
+    val utbetalinger: UtbetalingerClient
 }
 
 class ConsumersImpl(env: Env) : Consumers {
@@ -52,8 +52,5 @@ class ConsumersImpl(env: Env) : Consumers {
     override val pdlClient: PdlClient = PdlClient(env.pdlUrl, tokenclient.bindTo(env.pdlScope))
     override val safClient: SafClient = SafClient(env.safUrl, tokenclient.bindTo(env.safScope))
     override val digdirClient: DigdirClient = DigdirClient(env.digdirUrl, tokenclient.bindTo(env.digdirScope))
-    override val utbetalinger: UtbetalingV1 = CXFClient<UtbetalingV1>()
-        .address(env.utbetalingerUrl)
-        .configureStsForSystemUser(stsConfig)
-        .build()
+    override val utbetalinger: UtbetalingerClient = UtbetalingerClient(env.utbetalingerUrl, stsConfig)
 }

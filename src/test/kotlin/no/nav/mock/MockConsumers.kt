@@ -14,6 +14,8 @@ import no.nav.api.pdl.PdlClient
 import no.nav.api.pdl.queries.HentPersonalia
 import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.skrivestotte.SkrivestotteClient.*
+import no.nav.api.utbetalinger.UtbetalingerClient
+import no.nav.api.utbetalinger.utbetalinger
 import no.nav.common.client.nom.NomClient
 import no.nav.common.client.nom.VeilederNavn
 import no.nav.common.token_client.client.MachineToMachineTokenClient
@@ -23,7 +25,6 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
-import no.nav.tjeneste.virksomhet.utbetaling.v1.UtbetalingV1
 import no.nav.utils.GraphQLResponse
 import no.nav.utils.minus
 import no.nav.utils.now
@@ -111,8 +112,8 @@ private val digdirClientMock = mockOf<DigdirClient> { client ->
     coEvery { client.hentKrrData(any()) } returns krrData
 }
 
-private val utbetalingerMock = mockOf<UtbetalingV1> { client ->
-    coEvery { client.hentUtbetalingsinformasjon(any()) } returns null // TODO
+private val utbetalingerMock = mockOf<UtbetalingerClient> { client ->
+    coEvery { client.hentUtbetalinger(any(), any(), any()) } returns utbetalinger
 }
 
 private val pdlClientMock = mockOf<PdlClient> {client ->
