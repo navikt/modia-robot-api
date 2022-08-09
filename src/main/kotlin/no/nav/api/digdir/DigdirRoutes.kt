@@ -14,20 +14,20 @@ import no.nav.plugins.securityScheme
 fun Route.configureDigdirRoutes(
     digdirService: DigdirService
 ) {
-    route("digdir/{fnr}/epost") {
-        notarizedGet(Api.epost) {
+    route("digdir/{fnr}/kontaktinformasjon") {
+        notarizedGet(Api.kontaktinformasjon) {
             val ident = requireNotNull(call.parameters["fnr"])
-            call.respond(digdirService.hentEpost(ident))
+            call.respond(digdirService.hentKontaktinformasjon(ident))
         }
     }
 }
 private object Api {
-    val epost = GetInfo<CommonModels.FnrParameter, Epost>(
-        summary = "Brukers epost",
+    val kontaktinformasjon = GetInfo<CommonModels.FnrParameter, Kontaktinformasjon>(
+        summary = "Brukers epost og mobiltelefonnummer",
         description = "Hentes fra digdir-proxy",
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
-            description = "Brukers epost"
+            description = "Brukers epost og mobiltelefonnummer"
         ),
         tags = setOf("Kontakt- og reservasjonsregisteret"),
         securitySchemes = setOf(securityScheme.name),
