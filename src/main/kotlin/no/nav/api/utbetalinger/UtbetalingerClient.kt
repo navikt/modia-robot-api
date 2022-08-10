@@ -8,6 +8,7 @@ import no.nav.tjeneste.virksomhet.utbetaling.v1.meldinger.WSHentUtbetalingsinfor
 import no.nav.utils.CXFClient
 import no.nav.utils.externalServiceCall
 import no.nav.utils.toJodaLocalDate
+import javax.xml.namespace.QName
 
 class UtbetalingerClient(
     utbetalingerUrl: String,
@@ -15,6 +16,9 @@ class UtbetalingerClient(
 ) {
     
     val client: UtbetalingV1 = CXFClient<UtbetalingV1>()
+        .wsdl("classpath:wsdl/utbetaling/no/nav/tjeneste/virksomhet/utbetaling/v1/Binding.wsdl")
+        .serviceName(QName("http://nav.no/tjeneste/virksomhet/utbetaling/v1/Binding", "Utbetaling_v1"))
+        .endpointName(QName("http://nav.no/tjeneste/virksomhet/utbetaling/v1/Binding", "Utbetaling_v1Port"))
         .address(utbetalingerUrl)
         .configureStsForSystemUser(stsConfig)
         .build()
