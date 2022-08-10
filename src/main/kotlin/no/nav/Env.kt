@@ -23,6 +23,8 @@ interface Env {
     val safUrl: String
     val safScope: DownstreamApi
     val skrivestotteUrl: String
+    val sfUrl: String
+    val sfScope: DownstreamApi
     val identAllowList: List<String>
 }
 
@@ -42,6 +44,8 @@ class EnvImpl : Env {
     override val safUrl: String = getRequiredConfig("SAF_URL")
     override val safScope: DownstreamApi = getRequiredConfig("SAF_SCOPE").toDownstreamApi()
     override val skrivestotteUrl: String = getRequiredConfig("SKRIVESTOTTE_URL")
+    override val sfUrl: String = getRequiredConfig("SF_HENVENDELSE_URL")
+    override val sfScope: DownstreamApi = getRequiredConfig("SF_HENVENDELSE_SCOPE").toDownstreamApi()
     override val identAllowList: List<String> = getRequiredConfig("IDENT_ALLOW_LIST").split(",")
 }
 
