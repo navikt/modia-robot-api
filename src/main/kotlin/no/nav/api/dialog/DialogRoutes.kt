@@ -4,10 +4,13 @@ import io.bkbn.kompendium.core.Notarized.notarizedPost
 import io.bkbn.kompendium.core.metadata.RequestInfo
 import io.bkbn.kompendium.core.metadata.ResponseInfo
 import io.bkbn.kompendium.core.metadata.method.PostInfo
+import io.ktor.application.*
 import io.ktor.http.*
+import io.ktor.request.*
+import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
+import no.nav.api.dialog.DialogService.*
 import no.nav.plugins.securityScheme
 
 fun Route.configureDialogRoutes(
@@ -16,23 +19,38 @@ fun Route.configureDialogRoutes(
     route("dialog/{fnr}") {
         route("sendinfomelding") {
             notarizedPost(Api.sendInfomelding) {
-                TODO()
+                val fnr = requireNotNull(call.parameters["fnr"])
+                val request : SendInfomeldingRequest = call.receive()
+                call.respond(
+                    dialogService.sendInfomelding(
+                        fnr,
+                        request
+                    )
+                )
             }
         }
         route("sendsporsmal") {
             notarizedPost(Api.sendSporsmal) {
-                TODO()
+                val fnr = requireNotNull(call.parameters["fnr"])
+                val request: SendSporsmalRequest = call.receive()
+                call.respond(
+                    dialogService.sendSporsmal(
+                        fnr,
+                        request
+                    )
+                )
             }
         }
     }
 }
 
 private object Api {
-    val sendInfomelding = PostInfo<CommonModels.FnrParameter, Models.SendInfomeldingRequest, Models.Response>(
+    val sendInfomelding = PostInfo<CommonModels.FnrParameter, SendInfomeldingRequest, Response>(
         summary = "Sender infomelding til bruker",
         description = "",
         requestInfo = RequestInfo(
-            description = "Innholdet i meldingen, og temaet meldingen skal knyttes"
+            description = "Innholdet i meldingen, temaet meldingen skal knyttes, og enheten som sender " +
+                    "meldingen siden salesforce trenger denne informasjonen for å opprette en ny melding"
         ),
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
@@ -43,11 +61,12 @@ private object Api {
         canThrow = CommonModels.standardResponses,
     )
 
-    val sendSporsmal = PostInfo<CommonModels.FnrParameter, Models.SendSporsmalRequest, Models.Response>(
-        summary = "Sender infomelding til bruker",
+    val sendSporsmal = PostInfo<CommonModels.FnrParameter, SendSporsmalRequest, Response>(
+        summary = "Sender spørsmål til bruker",
         description = "",
         requestInfo = RequestInfo(
-            description = "Innholdet i meldingen, og temaet meldingen skal knyttes"
+            description = "Innholdet i meldingen, temaet meldingen skal knyttes, og enheten som sender " +
+                    "meldingen siden salesforce trenger denne informasjonen for å opprette en ny melding"
         ),
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
@@ -56,25 +75,5 @@ private object Api {
         tags = setOf("Dialog"),
         securitySchemes = setOf(securityScheme.name),
         canThrow = CommonModels.standardResponses,
-    )
-}
-private object Models {
-    @Serializable
-    data class SendInfomeldingRequest(
-        val tekst: String,
-        val tema: String,
-    )
-
-    @Serializable
-    data class SendSporsmalRequest(
-        val tekst: String,
-        val tema: String,
-        val svarSkalTilEnhet: String,
-        val svarSkalTilVeileder: String? = null,
-    )
-
-    @Serializable
-    data class Response(
-        val kjedeId: String,
     )
 }
