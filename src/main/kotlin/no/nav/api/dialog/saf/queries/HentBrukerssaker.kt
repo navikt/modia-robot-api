@@ -25,6 +25,7 @@ data class HentBrukerssaker(override val variables: Variables) :
     @Serializable
     data class Sak(
         val fagsakId: String?,
+        val fagsaksystem: String?,
         val sakstype: Sakstype?,
         val tema: Tema?
     )
