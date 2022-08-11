@@ -12,14 +12,7 @@ class DialogService(
     private val pdlService: PdlService
 ) {
     @Serializable
-    data class SendInfomeldingRequest(
-        val tekst: String,
-        val tema: String,
-        val enhet: String
-    )
-
-    @Serializable
-    data class SendSporsmalRequest(
+    data class SendInformeldingEllerSporsmalRequest(
         val tekst: String,
         val tema: String,
         val enhet: String
@@ -49,7 +42,7 @@ class DialogService(
         val kjedeId: String
     )
 
-    suspend fun sendSporsmal(fnr:String, request: SendSporsmalRequest): Response {
+    suspend fun sendSporsmal(fnr:String, request: SendInformeldingEllerSporsmalRequest): Response {
         val meldingRequest = MeldingRequest(
             aktorId = pdlService.hentAktorid(fnr),
             temagruppe = hentTemagruppeForTema(request.tema),
@@ -71,7 +64,7 @@ class DialogService(
         return Response(nyHenvendelse.kjedeId)
     }
 
-    suspend fun sendInfomelding(fnr:String, request: SendInfomeldingRequest): Response {
+    suspend fun sendInfomelding(fnr:String, request: SendInformeldingEllerSporsmalRequest): Response {
         val meldingRequest = MeldingRequest(
             aktorId = pdlService.hentAktorid(fnr),
             temagruppe = hentTemagruppeForTema(request.tema),

@@ -20,7 +20,7 @@ fun Route.configureDialogRoutes(
         route("sendinfomelding") {
             notarizedPost(Api.sendInfomelding) {
                 val fnr = requireNotNull(call.parameters["fnr"])
-                val request : SendInfomeldingRequest = call.receive()
+                val request : SendInformeldingEllerSporsmalRequest = call.receive()
                 call.respond(
                     dialogService.sendInfomelding(
                         fnr,
@@ -32,7 +32,7 @@ fun Route.configureDialogRoutes(
         route("sendsporsmal") {
             notarizedPost(Api.sendSporsmal) {
                 val fnr = requireNotNull(call.parameters["fnr"])
-                val request: SendSporsmalRequest = call.receive()
+                val request: SendInformeldingEllerSporsmalRequest = call.receive()
                 call.respond(
                     dialogService.sendSporsmal(
                         fnr,
@@ -45,12 +45,11 @@ fun Route.configureDialogRoutes(
 }
 
 private object Api {
-    val sendInfomelding = PostInfo<CommonModels.FnrParameter, SendInfomeldingRequest, Response>(
+    val sendInfomelding = PostInfo<CommonModels.FnrParameter, SendInformeldingEllerSporsmalRequest, Response>(
         summary = "Sender infomelding til bruker",
         description = "",
         requestInfo = RequestInfo(
-            description = "Innholdet i meldingen, temaet meldingen skal knyttes, og enheten som sender " +
-                    "meldingen siden salesforce trenger denne informasjonen for å opprette en ny melding"
+            description = "Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen"
         ),
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
@@ -61,12 +60,11 @@ private object Api {
         canThrow = CommonModels.standardResponses,
     )
 
-    val sendSporsmal = PostInfo<CommonModels.FnrParameter, SendSporsmalRequest, Response>(
+    val sendSporsmal = PostInfo<CommonModels.FnrParameter, SendInformeldingEllerSporsmalRequest, Response>(
         summary = "Sender spørsmål til bruker",
         description = "",
         requestInfo = RequestInfo(
-            description = "Innholdet i meldingen, temaet meldingen skal knyttes, og enheten som sender " +
-                    "meldingen siden salesforce trenger denne informasjonen for å opprette en ny melding"
+            description = "Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen"
         ),
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
