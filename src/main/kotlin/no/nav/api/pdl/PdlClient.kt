@@ -7,6 +7,7 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
+import no.nav.api.pdl.queries.HentNavn
 import no.nav.api.pdl.queries.HentPersonalia
 import no.nav.utils.*
 
@@ -56,4 +57,14 @@ class PdlClient(
             )
         }
     }
+    
+    suspend fun hentNavn(fnr: String): GraphQLResponse<HentNavn.Result> {
+        return externalServiceCall {
+            graphqlClient.execute(
+                HentNavn(HentNavn.Variables(fnr))
+            )
+        }
+    }
+    
+    
 }

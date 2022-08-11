@@ -8,6 +8,19 @@ import no.nav.utils.now
 class PdlService(
     private val client: PdlClient
 ) {
+    
+    data class Navn(
+        val fornavn: String,
+        val mellomnavn: String?,
+        val etternavn: String
+    ) {
+        
+        val fulltNavn = listOfNotNull(fornavn, mellomnavn, etternavn).joinToString(" ")
+        
+        companion object {
+            val UKJENT = Navn("", "", "")
+        }
+    }
     suspend fun hentPersonalia(fnr: String): PdlPersonalia {
         val person = client.hentPersonalia(fnr).data?.hentPerson
         return PdlPersonalia(
@@ -20,6 +33,15 @@ class PdlService(
 
     suspend fun hentAktorid(fnr: String): String {
         return requireNotNull(client.hentAktorid(fnr).data?.hentAktorid?.ident)
+    }
+    
+    suspend fun hentNavn(fnr: String): Navn {
+        val navn = client.hentNavn(fnr).data?.hentPerson?.navn?.firstOrNull() ?: return Navn.UKJENT
+        return Navn(
+            fornavn = navn.fornavn,
+            mellomnavn = navn.mellomnavn,
+            etternavn = navn.etternavn
+        )
     }
 
     private fun hentAlder(person: HentPersonalia.Person?): Int? {
