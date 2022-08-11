@@ -5,12 +5,12 @@ import no.nav.api.dialog.DialogService.*
 class SFService(
     private val sfClient: SFClient
     ) {
-    suspend fun sendSporsmal(request: MeldingRequest): Response {
+    suspend fun sendSporsmal(request: SfMeldingRequest): Response {
         val nyHenvendelse = sfClient.sendSporsmal(request)
         return Response(nyHenvendelse.kjedeId)
     }
 
-    suspend fun sendInfomelding(request: MeldingRequest): Response {
+    suspend fun sendInfomelding(request: SfMeldingRequest): Response {
         val nyHenvendelse = sfClient.sendInfomelding(request)
         return Response(nyHenvendelse.kjedeId)
     }
