@@ -78,7 +78,7 @@ private val skrivestotteClientMock = mockOf<SkrivestotteClient> { client ->
     val tekst = Tekst(
         id = hardkodetUUID,
         overskrift = "TestTekst",
-        tags = emptyList(),
+        tags = listOf("nøs", "kontonummer", "retur"),
         innhold = Innhold(
             nb_NO = "Dette er en tekst",
             nn_NO = "Dette er ein tekst"
@@ -92,7 +92,8 @@ private val skrivestotteClientMock = mockOf<SkrivestotteClient> { client ->
             innhold = Innhold(
                 nb_NO = "Dette er også en tekst",
                 en_US = "This is also a text"
-            )
+            ),
+            tags = emptyList()
         )
     )
 
