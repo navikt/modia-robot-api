@@ -87,4 +87,4 @@ spec:
     - name: SF_HENVENDELSE_URL
       value: "https://sf-henvendelse.dev.intern.nav.no/api"
     - name: SF_HENVENDELSE_SCOPE
-      value: "dev-external:teamcrm:salesforce"
+      value: "dev-fss:teamcrm:sf-henvendelse"
