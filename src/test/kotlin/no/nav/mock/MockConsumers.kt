@@ -1,5 +1,6 @@
 package no.nav.mock
 
+import HentAktorid
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -9,6 +10,7 @@ import no.nav.api.digdir.DigdirClient
 import no.nav.api.digdir.DigdirClient.*
 import no.nav.api.dialog.saf.SafClient
 import no.nav.api.dialog.saf.queries.HentBrukerssaker
+import no.nav.api.dialog.sf.SFClient
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
 import no.nav.api.pdl.queries.HentPersonalia
@@ -40,6 +42,7 @@ object MockConsumers : Consumers {
     override val utbetalinger = utbetalingerMock
     override val pdlClient = pdlClientMock
     override val safClient = safClientMock
+    override val sfClient = sfClientMock
 }
 
 private val tokenClientMock = mockOf<MachineToMachineTokenClient> { client ->
@@ -142,6 +145,11 @@ private val pdlClientMock = mockOf<PdlClient> {client ->
             )
         )
     )
+    coEvery { client.hentAktorid(any()) } returns GraphQLResponse(
+        data = HentAktorid.Result(
+            hentAktorid = HentAktorid.Aktorid(ident = "10108000398")
+        )
+    )
 }
 
 private val safClientMock = mockOf<SafClient> { client ->
@@ -150,17 +158,26 @@ private val safClientMock = mockOf<SafClient> { client ->
             saker = listOf(
                 HentBrukerssaker.Sak(
                     fagsakId = null,
+                    fagsaksystem = null,
                     sakstype = HentBrukerssaker.Sakstype.GENERELL_SAK,
                     tema = HentBrukerssaker.Tema.DAG
                 ),
                 HentBrukerssaker.Sak(
                     fagsakId = "abba1231",
+                    fagsaksystem = "AO01",
                     sakstype = HentBrukerssaker.Sakstype.FAGSAK,
                     tema = HentBrukerssaker.Tema.DAG
                 )
             )
         )
     )
+}
+
+private val sfClientMock = mockOf<SFClient> {client ->
+    coEvery { client.sendSporsmal(any()) } returns SFClient.HenvendelseDTO(kjedeId = "1234")
+    coEvery { client.sendInfomelding(any()) } returns SFClient.HenvendelseDTO(kjedeId = "5678")
+    coEvery { client.journalforMelding(any()) } returns Unit
+    coEvery { client.lukkTraad(any()) } returns Unit
 }
 
 inline fun <reified T : Any> mockOf(impl: (T) -> Unit): T {

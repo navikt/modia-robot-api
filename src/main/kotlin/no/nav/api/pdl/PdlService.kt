@@ -18,6 +18,10 @@ class PdlService(
         )
     }
 
+    suspend fun hentAktorid(fnr: String): String {
+        return requireNotNull(client.hentAktorid(fnr).data?.hentAktorid?.ident)
+    }
+
     private fun hentAlder(person: HentPersonalia.Person?): Int? {
         return person?.foedsel?.firstOrNull()?.foedselsdato?.periodUntil(LocalDate.now())?.years
     }

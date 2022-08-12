@@ -3,6 +3,7 @@ package no.nav
 import no.nav.api.digdir.DigdirService
 import no.nav.api.dialog.DialogService
 import no.nav.api.dialog.saf.SafService
+import no.nav.api.dialog.sf.SFService
 import no.nav.api.oppfolging.OppfolgingService
 import no.nav.api.pdl.PdlService
 import no.nav.api.skrivestotte.SkrivestotteService
@@ -16,6 +17,7 @@ interface Services {
     val digdirService: DigdirService
     val pdlService: PdlService
     val safService: SafService
+    val sfService: SFService
     val dialogService: DialogService
     val utbetalingerService: UtbetalingerService
 }
@@ -29,6 +31,7 @@ class ServicesImpl(consumers: Consumers) : Services {
     override val digdirService = DigdirService(consumers.digdirClient)
     override val pdlService = PdlService(consumers.pdlClient)
     override val safService = SafService(consumers.safClient)
-    override val dialogService = DialogService(safService)
+    override val sfService = SFService(consumers.sfClient)
+    override val dialogService = DialogService(safService, sfService, pdlService)
     override val utbetalingerService = UtbetalingerService(consumers.utbetalinger)
 }

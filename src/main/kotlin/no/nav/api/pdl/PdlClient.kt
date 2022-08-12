@@ -1,5 +1,6 @@
 package no.nav.api.pdl
 
+import HentAktorid
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.okhttp.*
@@ -7,7 +8,6 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import no.nav.api.pdl.queries.HentPersonalia
-import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.utils.*
 
 class PdlClient(
@@ -45,6 +45,14 @@ class PdlClient(
         return externalServiceCall {
             graphqlClient.execute(
                 HentPersonalia(HentPersonalia.Variables(fnr))
+            )
+        }
+    }
+
+    suspend fun hentAktorid(fnr: String): GraphQLResponse<HentAktorid.Result> {
+        return externalServiceCall {
+            graphqlClient.execute(
+                HentAktorid(HentAktorid.Variables(fnr))
             )
         }
     }

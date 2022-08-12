@@ -21,4 +21,6 @@ object MockEnv : Env {
     override val safScope: DownstreamApi = DownstreamApi.parse("::")
     override val identAllowList: List<String> = emptyList()
     override val skrivestotteUrl: String = ""
+    override val sfUrl: String = ""
+    override val sfScope: DownstreamApi = DownstreamApi.parse("::")
 }

@@ -6,7 +6,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
-import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.utils.BoundedMachineToMachineTokenClient
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
