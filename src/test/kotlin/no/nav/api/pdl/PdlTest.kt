@@ -2,12 +2,14 @@ package no.nav.api.pdl
 
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
 import no.nav.utils.BoundedMachineToMachineTokenClient
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 
@@ -15,6 +17,9 @@ internal class PdlTest {
     @Test
     fun `should be able to deserialize pdl response`() = runBlocking {
         val mockEngine = MockEngine { request ->
+            val body = (request.body as TextContent).text
+            assertTrue(body.contains("variables"))
+            assertTrue(body.contains("hentPerson"))
             respond(
                 status = HttpStatusCode.OK,
                 headers = headersOf(

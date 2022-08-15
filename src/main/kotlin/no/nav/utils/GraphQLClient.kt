@@ -2,12 +2,15 @@ package no.nav.utils
 
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.engine.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
 import no.nav.personoversikt.utils.SelftestGenerator
-import java.util.UUID
+import java.util.*
 
 interface GraphQLVariables
 interface GraphQLResult
@@ -94,6 +97,17 @@ class GraphQLClient(
                 ?.readText()
                 ?.replace("[\n\r]", "")
                 ?: throw Exception("Unknown graphql file: \"/$source/$name.graphql\"")
+        }
+
+        fun createHttpClient(httpEngine: HttpClientEngine): HttpClient = HttpClient(httpEngine) {
+            install(JsonFeature) {
+                serializer = KotlinxSerializer(
+                    kotlinx.serialization.json.Json {
+                        ignoreUnknownKeys = true
+                        encodeDefaults = true
+                    }
+                )
+            }
         }
     }
 }
