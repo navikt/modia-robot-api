@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
+import no.nav.tjeneste.virksomhet.utbetaling.v1.HentUtbetalingsinformasjonPeriodeIkkeGyldig
 import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.WSPeriode
 import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.WSUtbetaling
 import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.WSYtelse
@@ -30,6 +31,14 @@ internal class UtbetalingerServiceTest {
         assertEquals("Alderspensjon som skal sorteres riktig alfabetisk", utbetalinger[2].ytelse)
         assertEquals("Dagpenger som også burde bli sortert på dato", utbetalinger[3].ytelse)
         assertEquals(LocalDate(2022, 8, 1), utbetalinger[1].til)
+    }
+    
+    @Test
+    fun `skal feile i service når utbetalingV1 feiler`() {
+        every { runBlocking { client.hentUtbetalinger(any(), any(), any()) } } throws HentUtbetalingsinformasjonPeriodeIkkeGyldig()
+        assertThrows(HentUtbetalingsinformasjonPeriodeIkkeGyldig::class.java) {
+            runBlocking { service.hentUtbetalinger("12345678910", LocalDate.now(), LocalDate.now()) }
+        }
     }
     
 }
