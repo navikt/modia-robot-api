@@ -1,11 +1,8 @@
 package no.nav.api.pdl
 
 import HentAktorid
-import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import no.nav.api.pdl.queries.HentPersonalia
 import no.nav.utils.*
@@ -15,18 +12,8 @@ class PdlClient(
     private val tokenclient: BoundedMachineToMachineTokenClient,
     httpEngine: HttpClientEngine = OkHttp.create()
 ) {
-    private val httpClient = HttpClient(httpEngine) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(
-                kotlinx.serialization.json.Json {
-                    ignoreUnknownKeys = true
-                }
-            )
-        }
-    }
-
     private val graphqlClient = GraphQLClient(
-        httpClient = httpClient,
+        httpClient = GraphQLClient.createHttpClient(httpEngine),
         config = GraphQLClientConfig(
             serviceName = "PDL",
             critical = false,
