@@ -26,7 +26,7 @@ fun LocalDateTime.plus(duration: Duration): LocalDateTime {
 }
 
 fun LocalDate.toJodaLocalDate(): JodaLocalDate {
-    return JodaLocalDate(this.year, this.dayOfMonth, this.dayOfMonth)
+    return JodaLocalDate(this.year, this.monthNumber, this.dayOfMonth)
 }
 
 fun DateTime.toKotlinLocalDate(): LocalDate {
