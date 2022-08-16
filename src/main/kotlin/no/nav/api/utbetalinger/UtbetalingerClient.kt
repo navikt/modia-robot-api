@@ -2,6 +2,9 @@ package no.nav.api.utbetalinger
 
 import kotlinx.datetime.LocalDate
 import no.nav.common.cxf.StsConfig
+import no.nav.tjeneste.virksomhet.utbetaling.v1.HentUtbetalingsinformasjonIkkeTilgang
+import no.nav.tjeneste.virksomhet.utbetaling.v1.HentUtbetalingsinformasjonPeriodeIkkeGyldig
+import no.nav.tjeneste.virksomhet.utbetaling.v1.HentUtbetalingsinformasjonPersonIkkeFunnet
 import no.nav.tjeneste.virksomhet.utbetaling.v1.UtbetalingV1
 import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.*
 import no.nav.tjeneste.virksomhet.utbetaling.v1.meldinger.WSHentUtbetalingsinformasjonRequest
@@ -36,7 +39,17 @@ class UtbetalingerClient(
                     .withFom(fra.toJodaLocalDate().toDateTimeAtStartOfDay())
                     .withTom(til.toJodaLocalDate().toDateTimeAtStartOfDay())
             )
-        client.hentUtbetalingsinformasjon(request).utbetalingListe
+        try {
+            client.hentUtbetalingsinformasjon(request).utbetalingListe
+        } catch (ex: HentUtbetalingsinformasjonPeriodeIkkeGyldig) {
+            throw RuntimeException("Utbetalingsperioden er ikke gyldig. ", ex)
+        } catch (ex: HentUtbetalingsinformasjonPersonIkkeFunnet) {
+            throw RuntimeException("Person ikke funnet. ", ex)
+        } catch (ex: HentUtbetalingsinformasjonIkkeTilgang) {
+            throw RuntimeException("Ikke tilgang. ", ex)
+        } catch (ex: Exception) {
+            throw RuntimeException("Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.", ex)
+        }
     }
 
     suspend fun ping() = externalServiceCall {
