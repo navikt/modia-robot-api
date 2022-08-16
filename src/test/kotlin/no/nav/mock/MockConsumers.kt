@@ -147,7 +147,13 @@ private val pdlClientMock = mockOf<PdlClient> {client ->
     )
     coEvery { client.hentAktorid(any()) } returns GraphQLResponse(
         data = HentAktorid.Result(
-            hentAktorid = HentAktorid.Aktorid(ident = "10108000398")
+            hentIdenter = HentAktorid.IdentListe(
+                identer = listOf(
+                    HentAktorid.IdentInfo(
+                        ident = "10108000398"
+                    )
+                )
+            )
         )
     )
 }

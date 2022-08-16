@@ -17,7 +17,7 @@ data class HentPersonalia(override val variables: Variables)
     data class Variables(val ident: String) : GraphQLVariables
 
     @Serializable
-    data class Result(val hentPerson: Person) : GraphQLResult
+    data class Result(val hentPerson: Person?) : GraphQLResult
 
     @Serializable
     data class Person(

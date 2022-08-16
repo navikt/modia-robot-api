@@ -18,8 +18,11 @@ data class HentAktorid(override val variables: Variables)
     }
 
     @Serializable
-    data class Result(val hentAktorid: Aktorid) : GraphQLResult
+    data class IdentInfo(val ident: String)
 
     @Serializable
-    data class Aktorid(val ident: String)
+    data class IdentListe(val identer: List<IdentInfo>)
+
+    @Serializable
+    data class Result(val hentIdenter: IdentListe?) : GraphQLResult
 }
