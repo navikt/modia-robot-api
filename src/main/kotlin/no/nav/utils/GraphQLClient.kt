@@ -17,9 +17,9 @@ interface GraphQLResult
 @Serializable
 data class GraphQLError(
     val message: String,
-    val location: List<Location>,
+    val locations: List<Location>,
     val path: List<String>,
-    val extensions: List<Extensions>
+    val extensions: List<Extension>
 )
 @Serializable
 data class Location(
@@ -28,7 +28,7 @@ data class Location(
 )
 
 @Serializable
-data class Extensions(
+data class Extension(
     val code: String,
     val details: Details,
     val classification: String
