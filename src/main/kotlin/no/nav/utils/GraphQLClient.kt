@@ -16,7 +16,29 @@ interface GraphQLVariables
 interface GraphQLResult
 @Serializable
 data class GraphQLError(
-    val message: String
+    val message: String,
+    val locations: List<Location>,
+    val path: List<String>,
+    val extensions: List<Extension>
+)
+@Serializable
+data class Location(
+    val line: Int,
+    val column: Int
+)
+
+@Serializable
+data class Extension(
+    val code: String,
+    val details: Details,
+    val classification: String
+)
+
+@Serializable
+data class Details(
+    val type: String,
+    val cause: String,
+    val policy: String
 )
 @Serializable
 data class GraphQLResponse<DATA>(
