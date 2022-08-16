@@ -1,10 +1,11 @@
 package no.nav.api.utbetalinger
 
+import io.ktor.http.*
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
-import no.nav.tjeneste.virksomhet.utbetaling.v1.HentUtbetalingsinformasjonPeriodeIkkeGyldig
+import no.nav.plugins.WebStatusException
 import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.WSPeriode
 import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.WSUtbetaling
 import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.WSYtelse
@@ -35,8 +36,8 @@ internal class UtbetalingerServiceTest {
     
     @Test
     fun `skal feile i service når utbetalingV1 feiler`() {
-        every { runBlocking { client.hentUtbetalinger(any(), any(), any()) } } throws HentUtbetalingsinformasjonPeriodeIkkeGyldig()
-        assertThrows(HentUtbetalingsinformasjonPeriodeIkkeGyldig::class.java) {
+        every { runBlocking { client.hentUtbetalinger(any(), any(), any()) } } throws WebStatusException("Feil mot utbetalinger", HttpStatusCode.InternalServerError)
+        assertThrows(WebStatusException::class.java) {
             runBlocking { service.hentUtbetalinger("12345678910", LocalDate.now(), LocalDate.now()) }
         }
     }

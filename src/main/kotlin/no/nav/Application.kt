@@ -26,6 +26,7 @@ fun startApplication(
         configureSecurity(disableSecurity, env)
         configureMonitoring()
         configureSerialization()
+        configureExceptionHandling()
 
         routing {
             notarizedAuthenticate(securityScheme) {
