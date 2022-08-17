@@ -6,7 +6,7 @@ import no.nav.utils.*
 @Serializable
 data class HentBrukerssaker(override val variables: Variables) :
     GraphQLRequest<HentBrukerssaker.Variables, HentBrukerssaker.Result> {
-    override val query: String = GraphQLClient.readQuery("saf", "hentBrukerssaker")
+    override val query: String = GraphQLClient.readQuery("saf/queries", "hentBrukerssaker")
 
     @Serializable
     data class Variables(val brukerId: BrukerIdInput) : GraphQLVariables

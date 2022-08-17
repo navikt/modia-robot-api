@@ -7,7 +7,7 @@ import no.nav.utils.GraphQLVariables
 @Serializable
 data class HentAktorid(override val variables: Variables)
     : GraphQLRequest<HentAktorid.Variables, HentAktorid.Result> {
-    override val query: String = GraphQLClient.readQuery("pdl", "hentAktorid")
+    override val query: String = GraphQLClient.readQuery("pdl/queries", "hentAktorid")
 
     @Serializable
     data class Variables(val ident: String, val grupper: List<IdentGruppe> = listOf(IdentGruppe.AKTORID)) : GraphQLVariables

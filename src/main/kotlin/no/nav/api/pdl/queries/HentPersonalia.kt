@@ -11,7 +11,7 @@ import no.nav.utils.GraphQLVariables
 @Serializable
 data class HentPersonalia(override val variables: Variables)
     : GraphQLRequest<HentPersonalia.Variables, HentPersonalia.Result> {
-    override val query: String = readQuery("pdl", "hentPersonalia")
+    override val query: String = readQuery("pdl/queries", "hentPersonalia")
 
     @Serializable
     data class Variables(val ident: String) : GraphQLVariables
