@@ -41,14 +41,14 @@ class SFClient(
     @Serializable
     data class HenvendelseDTO(val kjedeId: String)
 
-    suspend fun sendSporsmal(request: MeldingRequest): HenvendelseDTO = externalServiceCall {
+    suspend fun sendSporsmal(request: SfMeldingRequest): HenvendelseDTO = externalServiceCall {
         client.post("$sfUrl/henvendelse/ny/melding") {
             contentType(ContentType.Application.Json)
             body = request
         }
     }
 
-    suspend fun sendInfomelding(request: MeldingRequest): HenvendelseDTO = externalServiceCall {
+    suspend fun sendInfomelding(request: SfMeldingRequest): HenvendelseDTO = externalServiceCall {
         client.post("$sfUrl/henvendelse/ny/melding") {
             contentType(ContentType.Application.Json)
             body = request

@@ -13,6 +13,7 @@ import no.nav.api.dialog.saf.queries.HentBrukerssaker
 import no.nav.api.dialog.sf.SFClient
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
+import no.nav.api.pdl.queries.HentNavn
 import no.nav.api.pdl.queries.HentPersonalia
 import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.skrivestotte.SkrivestotteClient.*
@@ -151,6 +152,20 @@ private val pdlClientMock = mockOf<PdlClient> {client ->
                 identer = listOf(
                     HentAktorid.IdentInfo(
                         ident = "10108000398"
+                    )
+                )
+            )
+        )
+    )
+    
+    coEvery { client.hentNavn(any()) } returns GraphQLResponse(
+        data = HentNavn.Result(
+            hentPerson = HentNavn.Person(
+                navn = listOf(
+                    HentNavn.Navn(
+                        fornavn = "Aremark",
+                        mellomnavn = null,
+                        etternavn = "Testfamilien"
                     )
                 )
             )
