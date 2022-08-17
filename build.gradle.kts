@@ -1,3 +1,5 @@
+import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLDownloadSDLTask
+import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 
@@ -12,12 +14,14 @@ val nav_common_version: String by project
 val tjenestespec_version: String by project
 val modia_common_utils_version: String by project
 val junit_version: String by project
+val graphql_kotlin_version: String by project
 
 plugins {
     application
     kotlin("jvm") version "1.7.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.expediagroup.graphql") version "5.5.0"
 }
 
 group = "no.nav"
@@ -76,6 +80,7 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:$prometeus_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstash_version")
+    implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphql_kotlin_version")
 
 
     testImplementation("io.mockk:mockk:1.12.4")
@@ -101,4 +106,27 @@ tasks.withType<ShadowJar> {
         setPath("META-INF/cxf")
         include("bus-extensions.txt")
     }
+}
+
+val graphqlDownloadSDL by tasks.getting(GraphQLDownloadSDLTask::class) {
+    endpoint.set("https://navikt.github.io/saf/saf-api-sdl.graphqls")
+    outputFile.set(file("src/main/resources/saf/schema.graphql"))
+}
+
+val graphqlGenerateClient by tasks.getting(GraphQLGenerateClientTask::class) {
+    packageName.set("no.nav.consumer.saf.generated")
+    schemaFile.set(graphqlDownloadOtherSDL.outputFile)
+    queryFileDirectory.dir("src/main/resources/saf/queries")
+    dependsOn("graphqlDownloadSDL")
+}
+
+val graphqlDownloadOtherSDL by tasks.creating(GraphQLDownloadSDLTask::class) {
+    endpoint.set("https://navikt.github.io/pdl/pdl-api-sdl.graphqls")
+    outputFile.set(file("src/main/resources/pdl/schema.graphql"))
+}
+val graphqlGenerateOtherClient by tasks.creating(GraphQLGenerateClientTask::class) {
+    packageName.set("no.nav.consumer.pdl.generated")
+    schemaFile.set(graphqlDownloadOtherSDL.outputFile)
+    queryFileDirectory.dir("src/main/resources/pdl/queries")
+    dependsOn("graphqlDownloadOtherSDL")
 }
