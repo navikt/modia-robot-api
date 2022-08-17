@@ -111,11 +111,11 @@ tasks.withType<ShadowJar> {
 val graphqlDownloadSDL by tasks.getting(GraphQLDownloadSDLTask::class) {
     endpoint.set("https://navikt.github.io/saf/saf-api-sdl.graphqls")
     outputFile.set(file("src/main/resources/saf/schema.graphql"))
-}
 
+}
 val graphqlGenerateClient by tasks.getting(GraphQLGenerateClientTask::class) {
     packageName.set("no.nav.consumer.saf.generated")
-    schemaFile.set(graphqlDownloadOtherSDL.outputFile)
+    schemaFile.set(graphqlDownloadSDL.outputFile)
     queryFileDirectory.dir("src/main/resources/saf/queries")
     dependsOn("graphqlDownloadSDL")
 }
