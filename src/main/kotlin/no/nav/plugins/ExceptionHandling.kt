@@ -4,6 +4,7 @@ import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.response.*
+import kotlinx.serialization.Serializable
 
 class WebStatusException(message: String, val status: HttpStatusCode) : Exception(message)
 
@@ -25,6 +26,7 @@ fun Application.configureExceptionHandling() {
     }
 }
 
+@Serializable
 internal data class HttpErrorResponse(
     val message: String? = null,
     val cause: String? = null
