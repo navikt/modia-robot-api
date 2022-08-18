@@ -108,25 +108,24 @@ tasks.withType<ShadowJar> {
     }
 }
 
-val graphqlDownloadSDL by tasks.getting(GraphQLDownloadSDLTask::class) {
+val downloadSAFSchema by tasks.creating(GraphQLDownloadSDLTask::class) {
     endpoint.set("https://navikt.github.io/saf/saf-api-sdl.graphqls")
-    outputFile.set(file("src/main/resources/saf/schema.graphql"))
-
+    outputFile.set(file("${project.projectDir}/src/main/resources/saf/schema.graphqls"))
 }
-val graphqlGenerateClient by tasks.getting(GraphQLGenerateClientTask::class) {
-    packageName.set("no.nav.consumer.saf.generated")
-    schemaFile.set(graphqlDownloadSDL.outputFile)
-    queryFileDirectory.dir("src/main/resources/saf/queries")
-    dependsOn("graphqlDownloadSDL")
+val generateSAFClient by tasks.creating(GraphQLGenerateClientTask::class) {
+    packageName.set("no.nav.api.generated.saf")
+    schemaFile.set(downloadSAFSchema.outputFile)
+    queryFiles.from(fileTree("${project.projectDir}/src/main/resources/saf/queries/").files)
+    dependsOn("downloadSAFSchema")
 }
 
-val graphqlDownloadOtherSDL by tasks.creating(GraphQLDownloadSDLTask::class) {
+val downloadPDLSchema by tasks.creating(GraphQLDownloadSDLTask::class) {
     endpoint.set("https://navikt.github.io/pdl/pdl-api-sdl.graphqls")
-    outputFile.set(file("src/main/resources/pdl/schema.graphql"))
+    outputFile.set(file("${project.projectDir}/src/main/resources/pdl/schema.graphqls"))
 }
-val graphqlGenerateOtherClient by tasks.creating(GraphQLGenerateClientTask::class) {
-    packageName.set("no.nav.consumer.pdl.generated")
-    schemaFile.set(graphqlDownloadOtherSDL.outputFile)
-    queryFileDirectory.dir("src/main/resources/pdl/queries")
-    dependsOn("graphqlDownloadOtherSDL")
+val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
+    packageName.set("no.nav.api.generated.pdl")
+    schemaFile.set(downloadPDLSchema.outputFile)
+    queryFiles.from(fileTree("${project.projectDir}/src/main/resources/pdl/queries/").files)
+    dependsOn("downloadPDLSchema")
 }
