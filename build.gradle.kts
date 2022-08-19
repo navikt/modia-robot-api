@@ -1,3 +1,5 @@
+import com.expediagroup.graphql.plugin.gradle.config.GraphQLScalar
+import com.expediagroup.graphql.plugin.gradle.config.GraphQLSerializer
 import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLDownloadSDLTask
 import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
@@ -116,6 +118,7 @@ val generateSAFClient by tasks.creating(GraphQLGenerateClientTask::class) {
     packageName.set("no.nav.api.generated.saf")
     schemaFile.set(downloadSAFSchema.outputFile)
     queryFiles.from(fileTree("${project.projectDir}/src/main/resources/saf/queries/").files)
+    serializer.set(GraphQLSerializer.KOTLINX)
     dependsOn("downloadSAFSchema")
 }
 
@@ -127,5 +130,27 @@ val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
     packageName.set("no.nav.api.generated.pdl")
     schemaFile.set(downloadPDLSchema.outputFile)
     queryFiles.from(fileTree("${project.projectDir}/src/main/resources/pdl/queries/").files)
+    serializer.set(GraphQLSerializer.KOTLINX)
+    customScalars.add(
+        GraphQLScalar(
+            "Long",
+            "kotlin.Long",
+            "no.nav.api.pdl.converters.LongScalarConverter"
+        )
+    )
+    customScalars.add(
+        GraphQLScalar(
+            "Date",
+            "kotlinx.datetime.LocalDate",
+            "no.nav.api.pdl.converters.DateScalarConverter"
+        )
+    )
+    customScalars.add(
+        GraphQLScalar(
+            "DateTime",
+            "kotlinx.datetime.LocalDateTime",
+            "no.nav.api.pdl.converters.DateTimeScalarConverter"
+        )
+    )
     dependsOn("downloadPDLSchema")
 }
