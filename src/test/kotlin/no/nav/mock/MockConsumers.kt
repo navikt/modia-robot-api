@@ -1,6 +1,6 @@
 package no.nav.mock
 
-import HentAktorid
+import com.expediagroup.graphql.client.serialization.types.KotlinxGraphQLResponse
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -9,12 +9,20 @@ import no.nav.Consumers
 import no.nav.api.digdir.DigdirClient
 import no.nav.api.digdir.DigdirClient.*
 import no.nav.api.dialog.saf.SafClient
-import no.nav.api.dialog.saf.queries.HentBrukerssaker
 import no.nav.api.dialog.sf.SFClient
+import no.nav.api.generated.pdl.HentAktorid
+import no.nav.api.generated.pdl.HentNavn
+import no.nav.api.generated.pdl.hentaktorid.*
+import no.nav.api.generated.pdl.hentpersonalia.*
+import no.nav.api.generated.pdl.HentPersonalia
+import no.nav.api.generated.pdl.hentnavn.Navn
+import no.nav.api.generated.pdl.hentnavn.Person
+import no.nav.api.generated.saf.HentBrukerssaker
+import no.nav.api.generated.saf.enums.Sakstype
+import no.nav.api.generated.saf.enums.Tema
+import no.nav.api.generated.saf.hentbrukerssaker.Sak
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
-import no.nav.api.pdl.queries.HentNavn
-import no.nav.api.pdl.queries.HentPersonalia
 import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.skrivestotte.SkrivestotteClient.*
 import no.nav.api.utbetalinger.UtbetalingerClient
@@ -28,7 +36,6 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
-import no.nav.utils.GraphQLResponse
 import no.nav.utils.minus
 import no.nav.utils.now
 import java.util.*
@@ -125,32 +132,34 @@ private val utbetalingerMock = mockOf<UtbetalingerClient> { client ->
 }
 
 private val pdlClientMock = mockOf<PdlClient> {client ->
-    coEvery { client.hentPersonalia(any()) } returns GraphQLResponse(
+    coEvery { client.hentPersonalia(any()) } returns KotlinxGraphQLResponse(
         data = HentPersonalia.Result(
-            hentPerson = HentPersonalia.Person(
+            hentPerson = Person(
                 foedsel = listOf(
-                    HentPersonalia.Foedsel(
+                    Foedsel(
                         foedselsdato = LocalDate.now().minus(10, DateTimeUnit.YEAR)
                     )
                 ),
                 oppholdsadresse = listOf(
-                    HentPersonalia.OppholdsAdresse(
+                    Oppholdsadresse(
                         gyldigFraOgMed = LocalDateTime.now().minus(2, DateTimeUnit.HOUR),
                         coAdressenavn = "c/o ignore",
                     ),
-                    HentPersonalia.OppholdsAdresse(
+                    Oppholdsadresse(
                         gyldigFraOgMed = LocalDateTime.now().minus(1, DateTimeUnit.HOUR),
                         coAdressenavn = "c/o hansen",
                     )
-                )
+                ),
+                kontaktadresse = emptyList(),
+                bostedsadresse = emptyList()
             )
         )
     )
-    coEvery { client.hentAktorid(any()) } returns GraphQLResponse(
+    coEvery { client.hentAktorid(any()) } returns KotlinxGraphQLResponse(
         data = HentAktorid.Result(
-            hentIdenter = HentAktorid.IdentListe(
+            hentIdenter = Identliste(
                 identer = listOf(
-                    HentAktorid.IdentInfo(
+                    IdentInformasjon(
                         ident = "10108000398"
                     )
                 )
@@ -158,11 +167,11 @@ private val pdlClientMock = mockOf<PdlClient> {client ->
         )
     )
     
-    coEvery { client.hentNavn(any()) } returns GraphQLResponse(
+    coEvery { client.hentNavn(any()) } returns KotlinxGraphQLResponse(
         data = HentNavn.Result(
-            hentPerson = HentNavn.Person(
+            hentPerson = Person(
                 navn = listOf(
-                    HentNavn.Navn(
+                    Navn(
                         fornavn = "Aremark",
                         mellomnavn = null,
                         etternavn = "Testfamilien"
@@ -174,20 +183,20 @@ private val pdlClientMock = mockOf<PdlClient> {client ->
 }
 
 private val safClientMock = mockOf<SafClient> { client ->
-    coEvery { client.hentBrukersSaker(any()) } returns GraphQLResponse(
+    coEvery { client.hentBrukersSaker(any()) } returns KotlinxGraphQLResponse(
         data = HentBrukerssaker.Result(
             saker = listOf(
-                HentBrukerssaker.Sak(
+                Sak(
                     fagsakId = null,
                     fagsaksystem = null,
-                    sakstype = HentBrukerssaker.Sakstype.GENERELL_SAK,
-                    tema = HentBrukerssaker.Tema.DAG
+                    sakstype = Sakstype.GENERELL_SAK,
+                    tema = Tema.DAG
                 ),
-                HentBrukerssaker.Sak(
+                Sak(
                     fagsakId = "abba1231",
                     fagsaksystem = "AO01",
-                    sakstype = HentBrukerssaker.Sakstype.FAGSAK,
-                    tema = HentBrukerssaker.Tema.DAG
+                    sakstype = Sakstype.FAGSAK,
+                    tema = Tema.DAG
                 )
             )
         )

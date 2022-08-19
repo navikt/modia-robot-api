@@ -1,7 +1,7 @@
 package no.nav.api.pdl
 
 import kotlinx.datetime.*
-import no.nav.api.pdl.queries.HentPersonalia
+import no.nav.api.generated.pdl.hentpersonalia.*
 import no.nav.utils.TjenestekallLogger
 import no.nav.utils.now
 
@@ -44,11 +44,11 @@ class PdlService(
         )
     }
 
-    private fun hentAlder(person: HentPersonalia.Person?): Int? {
+    private fun hentAlder(person: Person?): Int? {
         return person?.foedsel?.firstOrNull()?.foedselsdato?.periodUntil(LocalDate.now())?.years
     }
 
-    private fun hentBostedsAdresse(person: HentPersonalia.Person?): PdlAdresse? {
+    private fun hentBostedsAdresse(person: Person?): PdlAdresse? {
         return person?.bostedsadresse
             ?.sortedByDescending { it.gyldigFraOgMed }
             ?.firstNotNullOfOrNull { adresse ->
@@ -68,7 +68,7 @@ class PdlService(
             }
     }
 
-    private fun hentKontaktAdresse(person: HentPersonalia.Person?): PdlAdresse? {
+    private fun hentKontaktAdresse(person: Person?): PdlAdresse? {
         return person?.kontaktadresse
             ?.sortedByDescending { it.gyldigFraOgMed }
             ?.firstNotNullOfOrNull { adresse ->
@@ -91,7 +91,7 @@ class PdlService(
             }
     }
 
-    private fun hentOppholdsAdresse(person: HentPersonalia.Person?): PdlAdresse? {
+    private fun hentOppholdsAdresse(person: Person?): PdlAdresse? {
         return person?.oppholdsadresse
             ?.sortedByDescending { it.gyldigFraOgMed }
             ?.firstNotNullOfOrNull { adresse ->
@@ -112,29 +112,29 @@ class PdlService(
             }
     }
 
-    private fun lagAdresseFraVegadresse(adresse: HentPersonalia.Vegadresse) = PdlAdresse(
+    private fun lagAdresseFraVegadresse(adresse: Vegadresse) = PdlAdresse(
         linje1 = listOf(adresse.adressenavn, adresse.husnummer, adresse.husbokstav, adresse.bruksenhetsnummer),
         linje2 = listOf(adresse.postnummer) // TODO hente postnummer kodeverk
     )
 
-    private fun lagAdresseFraMatrikkeladresse(adresse: HentPersonalia.Matrikkeladresse) = PdlAdresse(
+    private fun lagAdresseFraMatrikkeladresse(adresse: Matrikkeladresse) = PdlAdresse(
         linje1 = listOf(adresse.bruksenhetsnummer, adresse.tilleggsnavn),
         linje2 = listOf(adresse.postnummer, adresse.kommunenummer)
     )
 
-    private fun lagAdresseFraUtenlandskadresse(adresse: HentPersonalia.UtenlandskAdresse) = PdlAdresse(
+    private fun lagAdresseFraUtenlandskadresse(adresse: UtenlandskAdresse) = PdlAdresse(
         linje1 = listOf(adresse.postboksNummerNavn, adresse.adressenavnNummer, adresse.bygningEtasjeLeilighet),
         linje2 = listOf(adresse.postkode, adresse.bySted, adresse.regionDistriktOmraade),
         linje3 = listOf(adresse.landkode), // TODO hente land-kodeverk
     )
 
-    private fun lagAdresseFraUtenlandskadresseFrittFormat(adresse: HentPersonalia.UtenlandskAdresseIFrittFormat) = PdlAdresse(
+    private fun lagAdresseFraUtenlandskadresseFrittFormat(adresse: UtenlandskAdresseIFrittFormat) = PdlAdresse(
         linje1 = listOf(adresse.adresselinje1),
         linje2 = listOf(adresse.adresselinje2),
         linje3 = listOf(adresse.adresselinje3, adresse.postkode, adresse.byEllerStedsnavn, adresse.landkode), // TODO hente land-kodeverk
     )
 
-    private fun lagAdresseFraUkjentbosted(adresse: HentPersonalia.UkjentBosted) = PdlAdresse(
+    private fun lagAdresseFraUkjentbosted(adresse: UkjentBosted) = PdlAdresse(
         linje1 = listOf(adresse.bostedskommune ?: "Ukjent kommune")
     )
 
@@ -148,13 +148,13 @@ class PdlService(
         linje1 = listOf(coAdresse)
     )
 
-    private fun lagAdresseFraPostboksadresse(adresse: HentPersonalia.Postboksadresse) = PdlAdresse(
+    private fun lagAdresseFraPostboksadresse(adresse: Postboksadresse) = PdlAdresse(
         linje1 = listOf(adresse.postbokseier),
         linje2 = listOf("Postboks", adresse.postboks),
         linje3 = listOf(adresse.postnummer), // TODO hente postnummer kodeverk
     )
 
-    private fun lagAdresseFraFrittformat(adresse: HentPersonalia.PostadresseIFrittFormat) = PdlAdresse(
+    private fun lagAdresseFraFrittformat(adresse: PostadresseIFrittFormat) = PdlAdresse(
         linje1 = listOf(adresse.adresselinje1),
         linje2 = listOf(adresse.adresselinje2),
         linje3 = listOf(adresse.adresselinje3, adresse.postnummer), // TODO hente postnummer kodeverk

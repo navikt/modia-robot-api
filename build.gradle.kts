@@ -1,3 +1,7 @@
+import com.expediagroup.graphql.plugin.gradle.config.GraphQLScalar
+import com.expediagroup.graphql.plugin.gradle.config.GraphQLSerializer
+import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLDownloadSDLTask
+import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 
@@ -12,12 +16,14 @@ val nav_common_version: String by project
 val tjenestespec_version: String by project
 val modia_common_utils_version: String by project
 val junit_version: String by project
+val graphql_kotlin_version: String by project
 
 plugins {
     application
     kotlin("jvm") version "1.7.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.expediagroup.graphql") version "5.5.0"
 }
 
 group = "no.nav"
@@ -76,6 +82,7 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:$prometeus_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstash_version")
+    implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphql_kotlin_version")
 
 
     testImplementation("io.mockk:mockk:1.12.4")
@@ -101,4 +108,49 @@ tasks.withType<ShadowJar> {
         setPath("META-INF/cxf")
         include("bus-extensions.txt")
     }
+}
+
+val downloadSAFSchema by tasks.creating(GraphQLDownloadSDLTask::class) {
+    endpoint.set("https://navikt.github.io/saf/saf-api-sdl.graphqls")
+    outputFile.set(file("${project.projectDir}/src/main/resources/saf/schema.graphqls"))
+}
+val generateSAFClient by tasks.creating(GraphQLGenerateClientTask::class) {
+    packageName.set("no.nav.api.generated.saf")
+    schemaFile.set(downloadSAFSchema.outputFile)
+    queryFiles.from(fileTree("${project.projectDir}/src/main/resources/saf/queries/").files)
+    serializer.set(GraphQLSerializer.KOTLINX)
+    dependsOn("downloadSAFSchema")
+}
+
+val downloadPDLSchema by tasks.creating(GraphQLDownloadSDLTask::class) {
+    endpoint.set("https://navikt.github.io/pdl/pdl-api-sdl.graphqls")
+    outputFile.set(file("${project.projectDir}/src/main/resources/pdl/schema.graphqls"))
+}
+val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
+    packageName.set("no.nav.api.generated.pdl")
+    schemaFile.set(downloadPDLSchema.outputFile)
+    queryFiles.from(fileTree("${project.projectDir}/src/main/resources/pdl/queries/").files)
+    serializer.set(GraphQLSerializer.KOTLINX)
+    customScalars.add(
+        GraphQLScalar(
+            "Long",
+            "kotlin.Long",
+            "no.nav.api.pdl.converters.LongScalarConverter"
+        )
+    )
+    customScalars.add(
+        GraphQLScalar(
+            "Date",
+            "kotlinx.datetime.LocalDate",
+            "no.nav.api.pdl.converters.DateScalarConverter"
+        )
+    )
+    customScalars.add(
+        GraphQLScalar(
+            "DateTime",
+            "kotlinx.datetime.LocalDateTime",
+            "no.nav.api.pdl.converters.DateTimeScalarConverter"
+        )
+    )
+    dependsOn("downloadPDLSchema")
 }
