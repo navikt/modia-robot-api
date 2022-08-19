@@ -11,9 +11,12 @@ import no.nav.api.digdir.DigdirClient.*
 import no.nav.api.dialog.saf.SafClient
 import no.nav.api.dialog.sf.SFClient
 import no.nav.api.generated.pdl.HentAktorid
+import no.nav.api.generated.pdl.HentNavn
 import no.nav.api.generated.pdl.hentaktorid.*
 import no.nav.api.generated.pdl.hentpersonalia.*
 import no.nav.api.generated.pdl.HentPersonalia
+import no.nav.api.generated.pdl.hentnavn.Navn
+import no.nav.api.generated.pdl.hentnavn.Person
 import no.nav.api.generated.saf.HentBrukerssaker
 import no.nav.api.generated.saf.enums.Sakstype
 import no.nav.api.generated.saf.enums.Tema
@@ -33,7 +36,6 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
-import no.nav.utils.GraphQLResponse
 import no.nav.utils.minus
 import no.nav.utils.now
 import java.util.*
@@ -159,6 +161,20 @@ private val pdlClientMock = mockOf<PdlClient> {client ->
                 identer = listOf(
                     IdentInformasjon(
                         ident = "10108000398"
+                    )
+                )
+            )
+        )
+    )
+    
+    coEvery { client.hentNavn(any()) } returns KotlinxGraphQLResponse(
+        data = HentNavn.Result(
+            hentPerson = Person(
+                navn = listOf(
+                    Navn(
+                        fornavn = "Aremark",
+                        mellomnavn = null,
+                        etternavn = "Testfamilien"
                     )
                 )
             )

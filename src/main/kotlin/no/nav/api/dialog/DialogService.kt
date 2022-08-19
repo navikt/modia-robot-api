@@ -12,7 +12,7 @@ class DialogService(
     private val pdlService: PdlService
 ) {
     @Serializable
-    data class SendInformeldingEllerSporsmalRequest(
+    data class MeldingRequest(
         val tekst: String,
         val tema: String,
         val enhet: String
@@ -24,7 +24,7 @@ class DialogService(
     )
 
     @Serializable
-    data class MeldingRequest(
+    data class SfMeldingRequest(
         val aktorId: String,
         val temagruppe: String,
         val enhet: String,
@@ -42,17 +42,10 @@ class DialogService(
         val kjedeId: String
     )
 
-    suspend fun sendSporsmal(fnr:String, request: SendInformeldingEllerSporsmalRequest): Response {
-        val meldingRequest = MeldingRequest(
-            aktorId = pdlService.hentAktorid(fnr),
-            temagruppe = hentTemagruppeForTema(request.tema),
-            enhet = request.enhet,
-            fritekst = request.tekst,
-            tema = request.tema,
-            tildelMeg = false
-        )
+    suspend fun sendSporsmal(fnr:String, request: MeldingRequest): Response {
+        val sfMeldingRequest = lagSfMeldingRequest(fnr, request)
         val sak = safService.hentBrukersSaker(fnr).firstOrNull { it.tema?.name == request.tema }
-        val nyHenvendelse = sfService.sendSporsmal(meldingRequest)
+        val nyHenvendelse = sfService.sendSporsmal(sfMeldingRequest)
         val journalforRequest = JournalforRequest(
             journalforendeEnhet = request.enhet,
             fagsakId = sak?.fagsakId,
@@ -64,17 +57,10 @@ class DialogService(
         return Response(nyHenvendelse.kjedeId)
     }
 
-    suspend fun sendInfomelding(fnr:String, request: SendInformeldingEllerSporsmalRequest): Response {
-        val meldingRequest = MeldingRequest(
-            aktorId = pdlService.hentAktorid(fnr),
-            temagruppe = hentTemagruppeForTema(request.tema),
-            enhet = request.enhet,
-            fritekst = request.tekst,
-            tema = request.tema,
-            tildelMeg = false
-        )
+    suspend fun sendInfomelding(fnr:String, request: MeldingRequest): Response {
+        val sfMeldingRequest = lagSfMeldingRequest(fnr, request)
         val sak = safService.hentBrukersSaker(fnr).firstOrNull { it.tema?.name == request.tema }
-        val nyHenvendelse = sfService.sendInfomelding(meldingRequest)
+        val nyHenvendelse = sfService.sendInfomelding(sfMeldingRequest)
         val journalforRequest = JournalforRequest(
             journalforendeEnhet = request.enhet,
             fagsakId = sak?.fagsakId,
@@ -85,5 +71,23 @@ class DialogService(
         sfService.lukkTraad(nyHenvendelse.kjedeId)
         sfService.journalforMelding(journalforRequest)
         return Response(nyHenvendelse.kjedeId)
+    }
+    
+    private suspend fun lagSfMeldingRequest(fnr: String, request: MeldingRequest) = SfMeldingRequest(
+        aktorId = pdlService.hentAktorid(fnr),
+        temagruppe = hentTemagruppeForTema(request.tema),
+        enhet = request.enhet,
+        fritekst = parseFritekst(fnr, request.tekst),
+        tema = request.tema,
+        tildelMeg = false
+    )
+    
+    suspend fun parseFritekst(fnr: String, tekst: String): String {
+        val navn = pdlService.hentNavn(fnr)
+        return tekst
+            .replace("[bruker.fornavn]", navn.fornavn)
+            .replace("[bruker.etternavn]", navn.etternavn)
+            .replace("[bruker.navn]", navn.fulltNavn)
+            .replace("[bruker.fnr]", fnr)
     }
 }

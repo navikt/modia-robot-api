@@ -11,7 +11,7 @@ import java.net.URL
 
 typealias HeadersBuilder = HttpRequestBuilder.() -> Unit
 
-class LoggingGraphQLKtorClient2(
+class LoggingGraphQLKtorClient(
     private val name: String,
     critical: Boolean,
     url: URL,

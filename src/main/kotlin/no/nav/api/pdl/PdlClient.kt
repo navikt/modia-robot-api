@@ -7,6 +7,7 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.request.*
 import no.nav.api.generated.pdl.HentPersonalia
 import no.nav.api.generated.pdl.HentAktorid
+import no.nav.api.generated.pdl.HentNavn
 import no.nav.api.generated.pdl.enums.IdentGruppe
 import no.nav.utils.*
 import java.net.URL
@@ -16,7 +17,7 @@ class PdlClient(
     private val tokenclient: BoundedMachineToMachineTokenClient,
     httpEngine: HttpClientEngine = OkHttp.create()
 ) {
-    private val graphqlKtorClient = LoggingGraphQLKtorClient2(
+    private val graphqlKtorClient = LoggingGraphQLKtorClient(
         name = "PDL",
         critical = false,
         url = URL(pdlUrl),
@@ -54,4 +55,15 @@ class PdlClient(
             )
         }
     }
+    
+    suspend fun hentNavn(fnr: String): GraphQLClientResponse<HentNavn.Result> {
+        return externalServiceCall {
+            graphqlKtorClient.execute(
+                request = HentNavn(HentNavn.Variables(fnr)),
+                requestCustomizer = requestConfig
+            )
+        }
+    }
+    
+    
 }

@@ -16,7 +16,7 @@ class SafClient(
     private val tokenclient: BoundedMachineToMachineTokenClient,
     httpEngine: HttpClientEngine = OkHttp.create()
 ) {
-    private val graphqlKtorClient = LoggingGraphQLKtorClient2(
+    private val graphqlKtorClient = LoggingGraphQLKtorClient(
         name = "SAF",
         critical = false,
         url = URL(safUrl),
