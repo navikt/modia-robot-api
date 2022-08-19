@@ -8,7 +8,6 @@ import io.ktor.client.request.*
 import no.nav.api.generated.pdl.HentPersonalia
 import no.nav.api.generated.pdl.HentAktorid
 import no.nav.api.generated.pdl.HentNavn
-import no.nav.api.generated.pdl.enums.IdentGruppe
 import no.nav.utils.*
 import java.net.URL
 
@@ -26,7 +25,6 @@ class PdlClient(
 
     private val requestConfig: HeadersBuilder = {
         val token = tokenclient.createMachineToMachineToken()
-        url(pdlUrl)
         header("Nav-Consumer-Token", "Bearer $token")
         header("Authorization", "Bearer $token")
         header("Tema", "GEN")
@@ -47,8 +45,7 @@ class PdlClient(
             graphqlKtorClient.execute(
                 request = HentAktorid(
                     HentAktorid.Variables(
-                        ident = fnr,
-                        grupper = listOf(IdentGruppe.AKTORID)
+                        ident = fnr
                     )
                 ),
                 requestCustomizer = requestConfig
