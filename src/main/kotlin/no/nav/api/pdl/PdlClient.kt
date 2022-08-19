@@ -16,7 +16,7 @@ class PdlClient(
     private val tokenclient: BoundedMachineToMachineTokenClient,
     httpEngine: HttpClientEngine = OkHttp.create()
 ) {
-    private val graphqlKtorClient = LoggingGraphQLKtorClient(
+    private val graphqlClient = LoggingGraphQLKtorClient(
         name = "PDL",
         critical = false,
         url = URL(pdlUrl),
@@ -33,7 +33,7 @@ class PdlClient(
 
     suspend fun hentPersonalia(fnr: String): GraphQLClientResponse<HentPersonalia.Result> {
         return externalServiceCall {
-            graphqlKtorClient.execute(
+            graphqlClient.execute(
                 request = HentPersonalia(HentPersonalia.Variables(fnr)),
                 requestCustomizer = requestConfig
             )
@@ -42,7 +42,7 @@ class PdlClient(
 
     suspend fun hentAktorid(fnr: String): GraphQLClientResponse<HentAktorid.Result> {
         return externalServiceCall {
-            graphqlKtorClient.execute(
+            graphqlClient.execute(
                 request = HentAktorid(
                     HentAktorid.Variables(
                         ident = fnr
@@ -55,7 +55,7 @@ class PdlClient(
     
     suspend fun hentNavn(fnr: String): GraphQLClientResponse<HentNavn.Result> {
         return externalServiceCall {
-            graphqlKtorClient.execute(
+            graphqlClient.execute(
                 request = HentNavn(HentNavn.Variables(fnr)),
                 requestCustomizer = requestConfig
             )

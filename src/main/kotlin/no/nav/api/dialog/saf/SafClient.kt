@@ -16,7 +16,7 @@ class SafClient(
     private val tokenclient: BoundedMachineToMachineTokenClient,
     httpEngine: HttpClientEngine = OkHttp.create()
 ) {
-    private val graphqlKtorClient = LoggingGraphQLKtorClient(
+    private val graphqlClient = LoggingGraphQLKtorClient(
         name = "SAF",
         critical = false,
         url = URL(safUrl),
@@ -25,7 +25,7 @@ class SafClient(
 
     suspend fun hentBrukersSaker(fnr: String): GraphQLClientResponse<HentBrukerssaker.Result> {
         return externalServiceCall {
-            graphqlKtorClient.execute(
+            graphqlClient.execute(
                 request = HentBrukerssaker(
                     HentBrukerssaker.Variables(
                         BrukerIdInput(
