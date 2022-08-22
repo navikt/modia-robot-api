@@ -45,6 +45,8 @@ spec:
   vault:
     enabled: true
     paths:
+      - kvPath: /serviceuser/data/prod/srvmodiarobotapi
+        mountPath: /var/run/secrets/nais.io/srvmodiarobotapi
       - kvPath: /serviceuser/data/prod/srvmodiabrukerdialog
         mountPath: /var/run/secrets/nais.io/service_user
       - kvPath: /serviceuser/data/prod/srvssolinux
