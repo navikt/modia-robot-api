@@ -13,10 +13,15 @@ class OppfolgingClient(
     private val tokenclient: BoundedMachineToMachineTokenClient,
 ) {
     @Serializable
-    class Status(val underOppfolging: Boolean?)
+    class Status(val erUnderOppfolging: Boolean?)
 
     @Serializable
-    class VeilederId(val veilederId: String?)
+    class VeilederIdent(val veilederIdent: NavIdent?)
+    
+    @Serializable
+    data class NavIdent(
+        val id: String
+    )
 
     private val client = HttpClient(OkHttp) {
         install(JsonFeature) {
@@ -39,10 +44,10 @@ class OppfolgingClient(
     }
 
     suspend fun hentOppfolgingStatus(fnr: String): Status = externalServiceCall {
-        client.get("$oppfolgingUrl/oppfolging?fnr=$fnr")
+        client.get("$oppfolgingUrl/v2/oppfolging?fnr=$fnr")
     }
 
-    suspend fun hentOppfolgingVeileder(fnr: String): VeilederId? = externalServiceCall {
-        client.get("$oppfolgingUrl/person/$fnr/oppfolgingsstatus")
+    suspend fun hentOppfolgingVeileder(fnr: String): VeilederIdent? = externalServiceCall {
+        client.get("$oppfolgingUrl/v2/veileder?fnr=$fnr")
     }
 }
