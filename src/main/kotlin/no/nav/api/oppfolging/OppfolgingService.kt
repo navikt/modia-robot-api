@@ -2,7 +2,6 @@ package no.nav.api.oppfolging
 
 import kotlinx.serialization.Serializable
 import no.nav.common.client.nom.NomClient
-import no.nav.common.client.nom.VeilederNavn
 import no.nav.common.types.identer.NavIdent
 import no.nav.utils.externalServiceCall
 
@@ -25,7 +24,7 @@ class OppfolgingService(
 
     suspend fun hentOppfolging(fnr: String): Oppfolging = externalServiceCall {
         val status = oppfolgingClient.hentOppfolgingStatus(fnr)
-        when (status.underOppfolging) {
+        when (status.erUnderOppfolging) {
             null, false -> Oppfolging(underOppfolging = false, veileder = null)
             true -> Oppfolging(underOppfolging = true, veileder = hentVeileder(fnr))
         }
@@ -33,8 +32,8 @@ class OppfolgingService(
 
     suspend fun hentVeileder(fnr: String): Veileder? = externalServiceCall {
         val veileder = oppfolgingClient.hentOppfolgingVeileder(fnr)
-        veileder?.veilederId
-            ?.let { nom.finnNavn(NavIdent(it)) }
+        veileder?.veilederIdent
+            ?.let { nom.finnNavn(NavIdent(it.id)) }
             ?.let {
                 Veileder(
                     ident = it.navIdent.get(),

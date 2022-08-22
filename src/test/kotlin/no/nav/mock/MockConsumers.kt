@@ -59,10 +59,10 @@ private val tokenClientMock = mockOf<MachineToMachineTokenClient> { client ->
 
 private val oppfolgingClientMock = mockOf<OppfolgingClient> { client ->
     coEvery { client.hentOppfolgingStatus(any()) } returns OppfolgingClient.Status(
-        underOppfolging = true
+        erUnderOppfolging = true
     )
-    coEvery { client.hentOppfolgingVeileder(any()) } returns OppfolgingClient.VeilederId(
-        veilederId = "Z123456"
+    coEvery { client.hentOppfolgingVeileder(any()) } returns OppfolgingClient.VeilederIdent(
+        veilederIdent = OppfolgingClient.NavIdent("Z123456")
     )
 }
 
