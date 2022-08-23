@@ -116,3 +116,5 @@ class BasicAuthorizationInterceptor(private val username: String, private val pa
 })
 
 fun getCallId(): String = MDC.get("CallId") ?: UUID.randomUUID().toString()
+
+val navConsumerId = "srvmodiarobotapi"

@@ -40,6 +40,13 @@ class OppfolgingClient(
                     tokenclient.createMachineToMachineToken()
                 }
             )
+            addInterceptor(
+                HeadersInterceptor {
+                    mapOf(
+                        "Nav-Consumer-Id" to navConsumerId
+                    )
+                }
+            )
         }
     }
 
