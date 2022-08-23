@@ -25,7 +25,6 @@ class PdlClient(
 
     private val requestConfig: HeadersBuilder = {
         val token = tokenclient.createMachineToMachineToken()
-        header("Nav-Consumer-Token", "Bearer $token")
         header("Authorization", "Bearer $token")
         header("Tema", "GEN")
         header("X-Correlation-ID", getCallId())
