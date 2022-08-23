@@ -90,3 +90,5 @@ spec:
       value: "https://sf-henvendelse.dev.intern.nav.no/api"
     - name: SF_HENVENDELSE_SCOPE
       value: "dev-fss:teamcrm:sf-henvendelse"
+    - name: CXF_SECURE_LOG
+      value: "enabled"
