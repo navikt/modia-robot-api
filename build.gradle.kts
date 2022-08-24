@@ -133,13 +133,6 @@ val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
     serializer.set(GraphQLSerializer.KOTLINX)
     customScalars.add(
         GraphQLScalar(
-            "Long",
-            "kotlin.Long",
-            "no.nav.api.pdl.converters.LongScalarConverter"
-        )
-    )
-    customScalars.add(
-        GraphQLScalar(
             "Date",
             "kotlinx.datetime.LocalDate",
             "no.nav.api.pdl.converters.DateScalarConverter"
