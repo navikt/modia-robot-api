@@ -1,4 +1,8 @@
 <configuration>
+    <include resource="no/nav/common/log/logback-stdout-json.xml"/>
+    <include resource="no/nav/common/log/logback-securelogs.xml"/>
+    <include resource="no/nav/common/log/logback-cxf.xml"/>
+
     <appender name="stdout_json" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
