@@ -22,6 +22,8 @@ spec:
   prometheus:
     enabled: true
     path: /internal/metrics
+  secureLogs:
+    enabled: true
   resources:
     requests:
       cpu: 50m
@@ -90,3 +92,5 @@ spec:
       value: "https://sf-henvendelse.dev.intern.nav.no/api"
     - name: SF_HENVENDELSE_SCOPE
       value: "dev-fss:teamcrm:sf-henvendelse"
+    - name: CXF_SECURE_LOG
+      value: "enabled"
