@@ -38,7 +38,6 @@ class SafClient(
                     val token = tokenclient.createMachineToMachineToken()
                     header("Authorization", "Bearer $token")
                     header("X-Correlation-ID", getCallId())
-                    header("Content-Type", "application/json")
                 }
             )
         }
