@@ -16,12 +16,7 @@ class OppfolgingClient(
     class Status(val erUnderOppfolging: Boolean?)
 
     @Serializable
-    class VeilederIdent(val veilederIdent: NavIdent?)
-    
-    @Serializable
-    data class NavIdent(
-        val id: String
-    )
+    class VeilederIdent(val veilederIdent: String?)
 
     private val client = HttpClient(OkHttp) {
         install(JsonFeature) {
