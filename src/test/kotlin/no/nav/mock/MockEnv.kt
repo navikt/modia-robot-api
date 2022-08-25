@@ -17,6 +17,8 @@ object MockEnv : Env {
     override val digdirUrl: String = ""
     override val digdirScope: DownstreamApi = DownstreamApi.parse("::")
     override val utbetalingerUrl: String = ""
+    override val utbetalingSokosUrl: String = ""
+    override val utbetalingSokosScope: DownstreamApi = DownstreamApi.parse("::")
     override val safUrl: String = ""
     override val safScope: DownstreamApi = DownstreamApi.parse("::")
     override val identAllowList: List<String> = emptyList()
