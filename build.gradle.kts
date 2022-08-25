@@ -134,7 +134,7 @@ val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
     customScalars.add(
         GraphQLScalar(
             "Long",
-            "kotlin.Long",
+            "no.nav.api.pdl.converters.PdlLong",
             "no.nav.api.pdl.converters.LongScalarConverter"
         )
     )
