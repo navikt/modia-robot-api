@@ -109,7 +109,7 @@ class UtbetalingerRestClient(
             fom = fra.toString(),
             tom = til.toString()
         ),
-        periodetype = PeriodeType.YTELSESPERIODE
+        periodetype = PeriodeType.UTBETALINGSPERIODE
     )
 }
 
