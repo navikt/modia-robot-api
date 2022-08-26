@@ -33,7 +33,7 @@ class OppfolgingService(
     suspend fun hentVeileder(fnr: String): Veileder? = externalServiceCall {
         val veileder = oppfolgingClient.hentOppfolgingVeileder(fnr)
         veileder?.veilederIdent
-            ?.let { nom.finnNavn(NavIdent(it.id)) }
+            ?.let { nom.finnNavn(NavIdent(it)) }
             ?.let {
                 Veileder(
                     ident = it.navIdent.get(),

@@ -62,7 +62,7 @@ private val oppfolgingClientMock = mockOf<OppfolgingClient> { client ->
         erUnderOppfolging = true
     )
     coEvery { client.hentOppfolgingVeileder(any()) } returns OppfolgingClient.VeilederIdent(
-        veilederIdent = OppfolgingClient.NavIdent("Z123456")
+        veilederIdent = "Z123456"
     )
 }
 
