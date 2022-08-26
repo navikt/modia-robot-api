@@ -23,7 +23,7 @@ fun Route.configureUtbetalingerRoutes(
             val fra = LocalDate.parse(call.request.queryParameters["fra"] ?: "")
             val til = LocalDate.parse(call.request.queryParameters["til"] ?: "")
 
-            call.respond(utbetalingerService.hentRestUtbetalinger(fnr, fra, til))
+            call.respond(utbetalingerService.hentUtbetalinger(fnr, fra, til))
         }
     }
 }

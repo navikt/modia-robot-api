@@ -8,7 +8,6 @@ import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
 import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.utbetalinger.UtbetalingerClient
-import no.nav.api.utbetalinger.UtbetalingerRestClient
 import no.nav.common.client.nom.NomClient
 import no.nav.common.cxf.StsConfig
 import no.nav.common.token_client.builder.AzureAdTokenClientBuilder
@@ -28,7 +27,6 @@ interface Consumers {
     val safClient: SafClient
     val digdirClient: DigdirClient
     val utbetalingerClient: UtbetalingerClient
-    val utbetalingerRestClient: UtbetalingerRestClient
     val sfClient: SFClient
 }
 
@@ -56,7 +54,6 @@ class ConsumersImpl(env: Env) : Consumers {
     override val pdlClient: PdlClient = PdlClient(env.pdlUrl, tokenclient.bindTo(env.pdlScope))
     override val safClient: SafClient = SafClient(env.safUrl, tokenclient.bindTo(env.safScope))
     override val digdirClient: DigdirClient = DigdirClient(env.digdirUrl, tokenclient.bindTo(env.digdirScope))
-    override val utbetalingerClient: UtbetalingerClient = UtbetalingerClient(env.utbetalingerUrl, stsConfig)
-    override val utbetalingerRestClient: UtbetalingerRestClient = UtbetalingerRestClient(env.utbetalingSokosUrl, tokenclient.bindTo(env.utbetalingSokosScope))
+    override val utbetalingerClient: UtbetalingerClient = UtbetalingerClient(env.utbetalingSokosUrl, tokenclient.bindTo(env.utbetalingSokosScope))
     override val sfClient: SFClient = SFClient(env.sfUrl, tokenclient.bindTo(env.sfScope))
 }

@@ -26,8 +26,6 @@ import no.nav.api.pdl.PdlClient
 import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.skrivestotte.SkrivestotteClient.*
 import no.nav.api.utbetalinger.UtbetalingerClient
-import no.nav.api.utbetalinger.UtbetalingerRestClient
-import no.nav.api.utbetalinger.restUtbetalinger
 import no.nav.api.utbetalinger.utbetalinger
 import no.nav.common.client.nom.NomClient
 import no.nav.common.client.nom.VeilederNavn
@@ -50,7 +48,6 @@ object MockConsumers : Consumers {
     override val skrivestotteClient = skrivestotteClientMock
     override val digdirClient = digdirClientMock
     override val utbetalingerClient = utbetalingerMock
-    override val utbetalingerRestClient = utbetalingerRestMock
     override val pdlClient = pdlClientMock
     override val safClient = safClientMock
     override val sfClient = sfClientMock
@@ -132,10 +129,6 @@ private val digdirClientMock = mockOf<DigdirClient> { client ->
 
 private val utbetalingerMock = mockOf<UtbetalingerClient> { client ->
     coEvery { client.hentUtbetalinger(any(), any(), any()) } returns utbetalinger
-}
-
-private val utbetalingerRestMock = mockOf<UtbetalingerRestClient> { client ->
-    coEvery { client.hentUtbetalinger(any(), any(), any()) } returns restUtbetalinger
 }
 
 private val pdlClientMock = mockOf<PdlClient> {client ->

@@ -33,5 +33,5 @@ class ServicesImpl(consumers: Consumers) : Services {
     override val safService = SafService(consumers.safClient)
     override val sfService = SFService(consumers.sfClient)
     override val dialogService = DialogService(safService, sfService, pdlService)
-    override val utbetalingerService = UtbetalingerService(consumers.utbetalingerClient, consumers.utbetalingerRestClient)
+    override val utbetalingerService = UtbetalingerService(consumers.utbetalingerClient)
 }

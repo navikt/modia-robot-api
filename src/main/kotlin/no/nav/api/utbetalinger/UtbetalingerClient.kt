@@ -1,45 +1,95 @@
 package no.nav.api.utbetalinger
 
+import io.ktor.client.*
+import io.ktor.client.engine.okhttp.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.datetime.LocalDate
-import no.nav.common.cxf.StsConfig
+import kotlinx.serialization.Serializable
 import no.nav.plugins.WebStatusException
-import no.nav.tjeneste.virksomhet.utbetaling.v1.UtbetalingV1
-import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.*
-import no.nav.tjeneste.virksomhet.utbetaling.v1.meldinger.WSHentUtbetalingsinformasjonRequest
-import no.nav.utils.CXFClient
-import no.nav.utils.externalServiceCall
-import no.nav.utils.toJodaLocalDate
-import javax.xml.namespace.QName
+import no.nav.utils.*
 
 class UtbetalingerClient(
-    utbetalingerUrl: String,
-    stsConfig: StsConfig
+    private val utbetalingerUrl: String,
+    private val tokenclient: BoundedMachineToMachineTokenClient,
 ) {
     
-    val client: UtbetalingV1 = CXFClient<UtbetalingV1>()
-        .wsdl("classpath:wsdl/utbetaling/no/nav/tjeneste/virksomhet/utbetaling/v1/Binding.wsdl")
-        .serviceName(QName("http://nav.no/tjeneste/virksomhet/utbetaling/v1/Binding", "Utbetaling_v1"))
-        .endpointName(QName("http://nav.no/tjeneste/virksomhet/utbetaling/v1/Binding", "Utbetaling_v1Port"))
-        .address(utbetalingerUrl)
-        .configureStsForSystemUser(stsConfig)
-        .build()
-
-    suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate): List<WSUtbetaling> = externalServiceCall {
-        val request = WSHentUtbetalingsinformasjonRequest()
-            .withId(
-                WSIdent()
-                    .withIdent(fnr)
-                    .withIdentType(WSIdenttyper().withValue("Personnr"))
-                    .withRolle(WSIdentroller().withValue("Rettighetshaver"))
+    @Serializable
+    data class UtbetaldataRequest(
+        val ident: String,
+        val rolle: Rolle,
+        val periode: Periode,
+        val periodetype: PeriodeType
+    )
+    
+    @Serializable
+    enum class Rolle {
+        RETTIGHETSHAVER, UTBETALT_TIL
+    }
+    
+    @Serializable
+    data class Periode(
+        val fom: String,
+        val tom: String
+    )
+    
+    @Serializable
+    enum class PeriodeType {
+        UTBETALINGSPERIODE, YTELSESPERIODE
+    }
+    
+    @Serializable
+    class Utbetaling(
+        val utbetalingsstatus: String,
+        val ytelseListe: List<Ytelse>,
+    )
+    
+    @Serializable
+    class Ytelse(
+        val ytelsestype: String?,
+        val ytelsesperiode: Periode,
+    )
+    
+    private val client = HttpClient(OkHttp) {
+        install(JsonFeature) {
+            serializer = KotlinxSerializer(
+                kotlinx.serialization.json.Json {
+                    ignoreUnknownKeys = true
+                }
             )
-            .withPeriode(
-                WSForespurtPeriode()
-                    .withFom(fra.toJodaLocalDate().toDateTimeAtStartOfDay())
-                    .withTom(til.toJodaLocalDate().toDateTimeAtStartOfDay())
+        }
+        engine {
+            addInterceptor(XCorrelationIdInterceptor())
+            addInterceptor(
+                LoggingInterceptor(
+                    name = "utbetaldata-sokos",
+                    callIdExtractor = { getCallId() }
+                )
             )
+            addInterceptor(
+                AuthorizationInterceptor {
+                    tokenclient.createMachineToMachineToken()
+                }
+            )
+            addInterceptor(
+                HeadersInterceptor {
+                    mapOf(
+                        "nav-call-id" to getCallId()
+                    )
+                }
+            )
+        }
+    }
+    
+    suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate): List<Utbetaling> = externalServiceCall {
+        val request: UtbetaldataRequest = lagUtbetaldataRequest(fnr, fra, til)
         try {
-            client.hentUtbetalingsinformasjon(request).utbetalingListe
+            client.post("$utbetalingerUrl/v1/hent-utbetalingsinformasjon/intern") {
+                contentType(ContentType.Application.Json)
+                body = request
+            }
         } catch (ex: Exception) {
             throw WebStatusException(
                 message = ex.message ?: "Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.",
@@ -47,8 +97,19 @@ class UtbetalingerClient(
             )
         }
     }
-
-    suspend fun ping() = externalServiceCall {
-        client.ping()
-    }
+    
+    private fun lagUtbetaldataRequest(
+        fnr: String,
+        fra: LocalDate,
+        til: LocalDate
+    ) = UtbetaldataRequest(
+        ident = fnr,
+        rolle = Rolle.RETTIGHETSHAVER,
+        periode = Periode(
+            fom = fra.toString(),
+            tom = til.toString()
+        ),
+        periodetype = PeriodeType.UTBETALINGSPERIODE
+    )
 }
+
