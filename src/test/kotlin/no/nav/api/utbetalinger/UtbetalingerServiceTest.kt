@@ -5,13 +5,9 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
+import no.nav.api.utbetalinger.UtbetalingerClient.*
 import no.nav.plugins.WebStatusException
-import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.WSPeriode
-import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.WSUtbetaling
-import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.WSYtelse
-import no.nav.tjeneste.virksomhet.utbetaling.v1.informasjon.WSYtelsestyper
 import no.nav.utils.now
-import org.joda.time.DateTime
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -19,6 +15,7 @@ internal class UtbetalingerServiceTest {
     
     private val client: UtbetalingerClient = mockk()
     private val service: UtbetalingerService = UtbetalingerService(client)
+    
     
     @Test
     fun `skal hente ut og sortere utbetalinger for bruker`() {
@@ -44,63 +41,63 @@ internal class UtbetalingerServiceTest {
     
 }
 
-fun medYtelse(type: String, fra: DateTime, til: DateTime): WSYtelse =
-    WSYtelse()
-    .withYtelsestype(WSYtelsestyper().withValue(type))
-    .withYtelsesperiode(
-        WSPeriode()
-            .withFom(fra)
-            .withTom(til)
+fun medYtelse(type: String, fom: String, tom: String) = Ytelse(
+    ytelsestype = type,
+    ytelsesperiode = Periode(
+        fom = fom,
+        tom = tom
     )
+)
 
 val ytelser = listOf(
     medYtelse(
         type = "Dagpenger",
-        fra = DateTime(2021, 1, 1, 0, 0),
-        til = DateTime(2021, 5, 1, 0, 0)
+        fom = "2021-01-01",
+        tom = "2021-05-01"
     ),
     medYtelse(
         type = "Dagpenger som går over ulike år",
-        fra = DateTime(2021, 12, 1, 0, 0),
-        til = DateTime(2022, 5, 1, 0, 0)
+        fom = "2021-12-01",
+        tom = "2022-05-01"
     ),
     medYtelse(
         type = "Dagpenger som burde bli sortert på dato",
-        fra = DateTime(2022, 7, 2, 0, 0),
-        til = DateTime(2022, 8, 1, 0, 0)
+        fom = "2022-07-02",
+        tom = "2022-08-01"
     ),
     medYtelse(
         type = "Dagpenger som også burde bli sortert på dato",
-        fra = DateTime(2022, 5, 2, 0, 0),
-        til = DateTime(2022, 7, 1, 0, 0)
+        fom = "2022-05-02",
+        tom = "2022-07-01"
     ),
     medYtelse(
         type = "Alderspensjon som skal sorteres riktig alfabetisk",
-        fra = DateTime(2022, 5, 2, 0, 0),
-        til = DateTime(2022, 7, 1, 0, 0)
-    )
+        fom = "2022-05-02",
+        tom = "2022-07-01"
+    ),
 )
 
-val utbetalinger = listOf<WSUtbetaling>(
-    WSUtbetaling()
-        .withUtbetalingsstatus("utbetalt")
-        .withYtelseListe(ytelser),
-    WSUtbetaling()
-        .withUtbetalingsstatus("ikke utbetalt")
-        .withYtelseListe(ytelser),
-    WSUtbetaling()
-        .withUtbetalingsstatus("utbetalt")
-        .withUtbetalingsmelding("Denne har ingen ytelser knyttet til seg"),
-    WSUtbetaling()
-        .withUtbetalingsstatus("utbetalt")
-        .withYtelseListe(
-            listOf(
-                medYtelse(
-                    type = "Barnetrygd",
-                    fra = DateTime(2022, 5, 2, 0, 0),
-                    til = DateTime(2025, 7, 1, 0, 0)
-                )
+val utbetalinger = listOf(
+    Utbetaling(
+        utbetalingsstatus = "utbetalt",
+        ytelseListe = ytelser
+    ),
+    Utbetaling(
+        utbetalingsstatus = "ikke utbetalt",
+        ytelseListe = ytelser
+    ),
+    Utbetaling(
+        utbetalingsstatus = "utbetalt",
+        ytelseListe = emptyList()
+    ),
+    Utbetaling(
+        utbetalingsstatus = "utbetalt",
+        ytelseListe = listOf(
+            medYtelse(
+                type = "Barnetrygd",
+                fom = "2022-05-02",
+                tom = "2025-07-01"
             )
-        ),
-    
+        )
+    ),
 )

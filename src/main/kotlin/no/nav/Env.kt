@@ -19,7 +19,8 @@ interface Env {
     val pdlScope: DownstreamApi
     val digdirUrl: String
     val digdirScope: DownstreamApi
-    val utbetalingerUrl: String
+    val utbetalingSokosUrl: String
+    val utbetalingSokosScope: DownstreamApi
     val safUrl: String
     val safScope: DownstreamApi
     val skrivestotteUrl: String
@@ -40,7 +41,8 @@ class EnvImpl : Env {
     override val pdlScope: DownstreamApi = getRequiredConfig("PDL_SCOPE").toDownstreamApi()
     override val digdirUrl: String = getRequiredConfig("DIGDIR_KRR_URL")
     override val digdirScope: DownstreamApi = getRequiredConfig("DIGDIR_KRR_SCOPE").toDownstreamApi()
-    override val utbetalingerUrl: String = getRequiredConfig("UTBETALING_V1_URL")
+    override val utbetalingSokosUrl: String = getRequiredConfig("UTBETALDATA_SOKOS_URL")
+    override val utbetalingSokosScope: DownstreamApi = getRequiredConfig("UTBETAL_SOKOS_SCOPE").toDownstreamApi()
     override val safUrl: String = getRequiredConfig("SAF_URL")
     override val safScope: DownstreamApi = getRequiredConfig("SAF_SCOPE").toDownstreamApi()
     override val skrivestotteUrl: String = getRequiredConfig("SKRIVESTOTTE_URL")

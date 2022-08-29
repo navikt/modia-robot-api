@@ -47,7 +47,7 @@ object MockConsumers : Consumers {
     override val nom: NomClient = nomClientMock
     override val skrivestotteClient = skrivestotteClientMock
     override val digdirClient = digdirClientMock
-    override val utbetalinger = utbetalingerMock
+    override val utbetalingerClient = utbetalingerMock
     override val pdlClient = pdlClientMock
     override val safClient = safClientMock
     override val sfClient = sfClientMock

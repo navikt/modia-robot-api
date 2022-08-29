@@ -26,7 +26,7 @@ interface Consumers {
     val pdlClient: PdlClient
     val safClient: SafClient
     val digdirClient: DigdirClient
-    val utbetalinger: UtbetalingerClient
+    val utbetalingerClient: UtbetalingerClient
     val sfClient: SFClient
 }
 
@@ -54,6 +54,6 @@ class ConsumersImpl(env: Env) : Consumers {
     override val pdlClient: PdlClient = PdlClient(env.pdlUrl, tokenclient.bindTo(env.pdlScope))
     override val safClient: SafClient = SafClient(env.safUrl, tokenclient.bindTo(env.safScope))
     override val digdirClient: DigdirClient = DigdirClient(env.digdirUrl, tokenclient.bindTo(env.digdirScope))
-    override val utbetalinger: UtbetalingerClient = UtbetalingerClient(env.utbetalingerUrl, stsConfig)
+    override val utbetalingerClient: UtbetalingerClient = UtbetalingerClient(env.utbetalingSokosUrl, tokenclient.bindTo(env.utbetalingSokosScope))
     override val sfClient: SFClient = SFClient(env.sfUrl, tokenclient.bindTo(env.sfScope))
 }

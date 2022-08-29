@@ -86,8 +86,10 @@ spec:
       value: "https://digdir-krr-proxy.dev.intern.nav.no"
     - name: DIGDIR_KRR_SCOPE
       value: "dev-gcp:team-rocket:digdir-krr-proxy"
-    - name: UTBETALING_V1_URL
-      value: "https://wasapp-q1.adeo.no/nav-utbetaldata-ws/virksomhet/Utbetaling_v1"
+    - name: UTBETALDATA_SOKOS_URL
+      value: "https://sokos-utbetaldata.dev.intern.nav.no"
+    - name: UTBETAL_SOKOS_SCOPE
+      value: "dev-fss:okonomi:sokos-utbetaldata"
     - name: SF_HENVENDELSE_URL
       value: "https://sf-henvendelse.dev.intern.nav.no/api"
     - name: SF_HENVENDELSE_SCOPE
