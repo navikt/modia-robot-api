@@ -1,10 +1,12 @@
 package no.nav.api.utbetalinger
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
@@ -85,14 +87,23 @@ class UtbetalingerClient(
     
     suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate): List<Utbetaling> = externalServiceCall {
         val request: UtbetaldataRequest = lagUtbetaldataRequest(fnr, fra, til)
-        try {
-            client.post("$utbetalingerUrl/v1/hent-utbetalingsinformasjon/intern") {
-                contentType(ContentType.Application.Json)
-                body = request
-            }
-        } catch (ex: Exception) {
-            throw WebStatusException(
-                message = ex.message ?: "Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.",
+        val response = client.post<HttpResponse>("$utbetalingerUrl/v1/hent-utbetalingsinformasjon/intern") {
+            contentType(ContentType.Application.Json)
+            body = request
+        }
+
+        when (response.status) {
+            HttpStatusCode.NotFound -> emptyList()
+            HttpStatusCode.OK -> response
+                .runCatching { receive<List<Utbetaling>>() }
+                .onFailure { TjenestekallLogger.error("Feil ved deseralisering av json", mapOf("exception" to it)) }
+                .getOrThrow()
+            else -> throw WebStatusException(
+                message = """
+                    Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.
+                    HttpStatus: ${response.status}
+                    Body: ${response.readText()}
+                """.trimIndent(),
                 status = HttpStatusCode.InternalServerError
             )
         }
