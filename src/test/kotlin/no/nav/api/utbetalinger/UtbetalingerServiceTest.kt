@@ -1,5 +1,6 @@
 package no.nav.api.utbetalinger
 
+import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import io.mockk.every
 import io.mockk.mockk
@@ -7,6 +8,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
 import no.nav.api.utbetalinger.UtbetalingerClient.*
 import no.nav.plugins.WebStatusException
+import no.nav.utils.BoundedMachineToMachineTokenClient
 import no.nav.utils.now
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -37,6 +39,29 @@ internal class UtbetalingerServiceTest {
         assertThrows(WebStatusException::class.java) {
             runBlocking { service.hentUtbetalinger("12345678910", LocalDate.now(), LocalDate.now()) }
         }
+    }
+    
+    @Test
+    fun `skal håndtere 404`() {
+        val mockEngine = MockEngine { request ->
+            respond(
+                status = HttpStatusCode.NotFound,
+                headers = headersOf(
+                    HttpHeaders.ContentType, "application/json"
+                ),
+                content = ""
+            )
+        }
+        
+        val tokenClient = mockk<BoundedMachineToMachineTokenClient>()
+        every { tokenClient.createMachineToMachineToken() } returns ""
+        
+        val utbetalingerClient = UtbetalingerClient("http://no.no", tokenClient, mockEngine)
+        val utbetalinger = runBlocking {
+            utbetalingerClient.hentUtbetalinger("10108000398", LocalDate.parse("2020-01-01"), LocalDate.now())
+        }
+        
+        assertEquals(0, utbetalinger.size)
     }
     
 }

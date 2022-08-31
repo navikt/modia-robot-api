@@ -2,6 +2,7 @@ package no.nav.api.utbetalinger
 
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
@@ -16,6 +17,7 @@ import no.nav.utils.*
 class UtbetalingerClient(
     private val utbetalingerUrl: String,
     private val tokenclient: BoundedMachineToMachineTokenClient,
+    httpEngine: HttpClientEngine = lagHttpEngine(tokenclient)
 ) {
     
     @Serializable
@@ -54,7 +56,7 @@ class UtbetalingerClient(
         val ytelsesperiode: Periode,
     )
     
-    private val client = HttpClient(OkHttp) {
+    private val client = HttpClient(httpEngine) {
         install(JsonFeature) {
             serializer = KotlinxSerializer(
                 kotlinx.serialization.json.Json {
@@ -62,27 +64,7 @@ class UtbetalingerClient(
                 }
             )
         }
-        engine {
-            addInterceptor(XCorrelationIdInterceptor())
-            addInterceptor(
-                LoggingInterceptor(
-                    name = "utbetaldata-sokos",
-                    callIdExtractor = { getCallId() }
-                )
-            )
-            addInterceptor(
-                AuthorizationInterceptor {
-                    tokenclient.createMachineToMachineToken()
-                }
-            )
-            addInterceptor(
-                HeadersInterceptor {
-                    mapOf(
-                        "nav-call-id" to getCallId()
-                    )
-                }
-            )
-        }
+        expectSuccess = false
     }
     
     suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate): List<Utbetaling> = externalServiceCall {
@@ -122,5 +104,31 @@ class UtbetalingerClient(
         ),
         periodetype = PeriodeType.UTBETALINGSPERIODE
     )
+    
+    companion object {
+        fun lagHttpEngine(tokenclient: BoundedMachineToMachineTokenClient): HttpClientEngine {
+            return OkHttp.create {
+                addInterceptor(XCorrelationIdInterceptor())
+                addInterceptor(
+                    LoggingInterceptor(
+                        name = "utbetaldata-sokos",
+                        callIdExtractor = { getCallId() }
+                    )
+                )
+                addInterceptor(
+                    AuthorizationInterceptor {
+                        tokenclient.createMachineToMachineToken()
+                    }
+                )
+                addInterceptor(
+                    HeadersInterceptor {
+                        mapOf(
+                            "nav-call-id" to getCallId()
+                        )
+                    }
+                )
+            }
+        }
+    }
 }
 
