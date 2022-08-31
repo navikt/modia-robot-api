@@ -91,11 +91,19 @@ class UtbetalingerClient(
             contentType(ContentType.Application.Json)
             body = request
         }
+
         when (response.status) {
             HttpStatusCode.NotFound -> emptyList()
-            HttpStatusCode.OK -> response.receive()
+            HttpStatusCode.OK -> response
+                .runCatching { receive<List<Utbetaling>>() }
+                .onFailure { TjenestekallLogger.error("Feil ved deseralisering av json", mapOf("exception" to it)) }
+                .getOrThrow()
             else -> throw WebStatusException(
-                message = "Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.",
+                message = """
+                    Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.
+                    HttpStatus: ${response.status}
+                    Body: ${response.readText()}
+                """.trimIndent(),
                 status = HttpStatusCode.InternalServerError
             )
         }
