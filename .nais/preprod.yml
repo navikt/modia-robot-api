@@ -87,7 +87,7 @@ spec:
     - name: DIGDIR_KRR_SCOPE
       value: "dev-gcp:team-rocket:digdir-krr-proxy"
     - name: UTBETALDATA_SOKOS_URL
-      value: "https://sokos-utbetaldata.dev.intern.nav.no"
+      value: "https://sokos-utbetaldata.dev.intern.nav.no/utbetaldata/api"
     - name: UTBETAL_SOKOS_SCOPE
       value: "dev-fss:okonomi:sokos-utbetaldata"
     - name: SF_HENVENDELSE_URL
