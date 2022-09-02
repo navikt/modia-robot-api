@@ -46,5 +46,5 @@ fun startApplication(
 }
 
 fun main() {
-    startApplication(disableSecurity = true)
+    startApplication(disableSecurity = false)
 }
