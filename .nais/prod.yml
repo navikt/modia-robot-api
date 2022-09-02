@@ -57,7 +57,7 @@ spec:
         mountPath: /var/run/secrets/nais.io/vault
   env:
     - name: IDENT_ALLOW_LIST
-      value: "Z999999"
+      value: "R154727,R156418,R158345,R158346,R160569,R165950,R165951,R165952,R150818,R150819,R155645,R162552,D159483,U143410"
     - name: SECURITYTOKENSERVICE_URL
       value: "https://sts.adeo.no/SecurityTokenServiceProvider/"
     - name: ISSO_JWKS_URL
