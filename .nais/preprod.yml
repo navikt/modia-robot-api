@@ -63,7 +63,7 @@ spec:
     - name: ISSO_JWKS_URL
       value: "https://isso-q.adeo.no/isso/oauth2/connect/jwk_uri"
     - name: OPPFOLGING_URL
-      value: "https://veilarboppfolging-q1.nais.preprod.local/veilarboppfolging/api"
+      value: "https://veilarboppfolging.dev.intern.nav.no/veilarboppfolging/api"
     - name: OPPFOLGING_SCOPE
       value: "dev-fss:pto:veilarboppfolging"
     - name: TPS_PERSONV3_URL
