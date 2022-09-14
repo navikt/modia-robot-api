@@ -49,7 +49,7 @@ class DialogService(
         val journalforRequest = JournalforRequest(
             journalforendeEnhet = request.enhet,
             fagsakId = sak?.fagsakId,
-            fagsaksystem = sak?.fagsaksystem,
+            fagsaksystem = if (sak?.fagsakId != null) sak.fagsaksystem else null,
             temakode = request.tema,
             kjedeId = nyHenvendelse.kjedeId
         )
@@ -64,7 +64,7 @@ class DialogService(
         val journalforRequest = JournalforRequest(
             journalforendeEnhet = request.enhet,
             fagsakId = sak?.fagsakId,
-            fagsaksystem = sak?.fagsaksystem,
+            fagsaksystem = if (sak?.fagsakId != null) sak.fagsaksystem else null,
             temakode = request.tema,
             kjedeId = nyHenvendelse.kjedeId
         )
