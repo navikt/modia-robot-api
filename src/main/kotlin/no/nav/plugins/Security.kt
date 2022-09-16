@@ -28,7 +28,7 @@ fun Application.configureSecurity(disableSecurity: Boolean, env: Env) {
                         override fun verify(jwt: DecodedJWT?): DecodedJWT = mockJwt
                     }
                 }
-                validate { object : Principal {} }
+                validate { JWTPrincipal(mockJwt) }
                 realm = "modia-robot-api"
             }
         }
