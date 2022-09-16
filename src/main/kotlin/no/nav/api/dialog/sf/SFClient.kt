@@ -41,22 +41,31 @@ class SFClient(
     @Serializable
     data class HenvendelseDTO(val kjedeId: String)
 
-    suspend fun sendSporsmal(request: SfMeldingRequest): HenvendelseDTO = externalServiceCall {
+    suspend fun sendSporsmal(request: SfMeldingRequest, ident: String): HenvendelseDTO = externalServiceCall {
         client.post("$sfUrl/henvendelse/ny/melding") {
+            headers {
+                append("Nav-Ident", ident)
+            }
             contentType(ContentType.Application.Json)
             body = request
         }
     }
 
-    suspend fun sendInfomelding(request: SfMeldingRequest): HenvendelseDTO = externalServiceCall {
+    suspend fun sendInfomelding(request: SfMeldingRequest, ident: String): HenvendelseDTO = externalServiceCall {
         client.post("$sfUrl/henvendelse/ny/melding") {
+            headers {
+                append("Nav-Ident", ident)
+            }
             contentType(ContentType.Application.Json)
             body = request
         }
     }
 
-    suspend fun journalforMelding(request: JournalforRequest): Unit = externalServiceCall {
+    suspend fun journalforMelding(request: JournalforRequest, ident: String): Unit = externalServiceCall {
         client.post("$sfUrl/henvendelse/journal") {
+            headers {
+                append("Nav-Ident", ident)
+            }
             contentType(ContentType.Application.Json)
             body = request
         }

@@ -5,6 +5,8 @@ import io.bkbn.kompendium.core.metadata.RequestInfo
 import io.bkbn.kompendium.core.metadata.ResponseInfo
 import io.bkbn.kompendium.core.metadata.method.PostInfo
 import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.auth.jwt.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -21,10 +23,12 @@ fun Route.configureDialogRoutes(
             notarizedPost(Api.sendInfomelding) {
                 val fnr = requireNotNull(call.parameters["fnr"])
                 val request : MeldingRequest = call.receive()
+                val ident = checkNotNull(call.principal<JWTPrincipal>()?.subject) { "Could not extract subject from token" }
                 call.respond(
                     dialogService.sendInfomelding(
                         fnr,
-                        request
+                        request,
+                        ident
                     )
                 )
             }
@@ -33,10 +37,12 @@ fun Route.configureDialogRoutes(
             notarizedPost(Api.sendSporsmal) {
                 val fnr = requireNotNull(call.parameters["fnr"])
                 val request: MeldingRequest = call.receive()
+                val ident = checkNotNull(call.principal<JWTPrincipal>()?.subject) { "Could not extract subject from token" }
                 call.respond(
                     dialogService.sendSporsmal(
                         fnr,
-                        request
+                        request,
+                        ident
                     )
                 )
             }
