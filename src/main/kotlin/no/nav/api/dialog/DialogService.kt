@@ -42,10 +42,10 @@ class DialogService(
         val kjedeId: String
     )
 
-    suspend fun sendSporsmal(fnr:String, request: MeldingRequest): Response {
+    suspend fun sendSporsmal(fnr: String, request: MeldingRequest, ident: String): Response {
         val sfMeldingRequest = lagSfMeldingRequest(fnr, request)
         val sak = safService.hentBrukersSaker(fnr).firstOrNull { it.tema?.name == request.tema }
-        val nyHenvendelse = sfService.sendSporsmal(sfMeldingRequest)
+        val nyHenvendelse = sfService.sendSporsmal(sfMeldingRequest, ident)
         val journalforRequest = JournalforRequest(
             journalforendeEnhet = request.enhet,
             fagsakId = sak?.fagsakId,
@@ -53,14 +53,14 @@ class DialogService(
             temakode = request.tema,
             kjedeId = nyHenvendelse.kjedeId
         )
-        sfService.journalforMelding(journalforRequest)
+        sfService.journalforMelding(journalforRequest, ident)
         return Response(nyHenvendelse.kjedeId)
     }
 
-    suspend fun sendInfomelding(fnr:String, request: MeldingRequest): Response {
+    suspend fun sendInfomelding(fnr: String, request: MeldingRequest, ident: String): Response {
         val sfMeldingRequest = lagSfMeldingRequest(fnr, request)
         val sak = safService.hentBrukersSaker(fnr).firstOrNull { it.tema?.name == request.tema }
-        val nyHenvendelse = sfService.sendInfomelding(sfMeldingRequest)
+        val nyHenvendelse = sfService.sendInfomelding(sfMeldingRequest, ident)
         val journalforRequest = JournalforRequest(
             journalforendeEnhet = request.enhet,
             fagsakId = sak?.fagsakId,
@@ -69,7 +69,7 @@ class DialogService(
             kjedeId = nyHenvendelse.kjedeId
         )
         sfService.lukkTraad(nyHenvendelse.kjedeId)
-        sfService.journalforMelding(journalforRequest)
+        sfService.journalforMelding(journalforRequest, ident)
         return Response(nyHenvendelse.kjedeId)
     }
     

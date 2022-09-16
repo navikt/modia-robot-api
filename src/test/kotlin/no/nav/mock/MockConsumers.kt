@@ -131,7 +131,7 @@ private val utbetalingerMock = mockOf<UtbetalingerClient> { client ->
     coEvery { client.hentUtbetalinger(any(), any(), any()) } returns utbetalinger
 }
 
-private val pdlClientMock = mockOf<PdlClient> {client ->
+private val pdlClientMock = mockOf<PdlClient> { client ->
     coEvery { client.hentPersonalia(any()) } returns KotlinxGraphQLResponse(
         data = HentPersonalia.Result(
             hentPerson = Person(
@@ -203,10 +203,10 @@ private val safClientMock = mockOf<SafClient> { client ->
     )
 }
 
-private val sfClientMock = mockOf<SFClient> {client ->
-    coEvery { client.sendSporsmal(any()) } returns SFClient.HenvendelseDTO(kjedeId = "1234")
-    coEvery { client.sendInfomelding(any()) } returns SFClient.HenvendelseDTO(kjedeId = "5678")
-    coEvery { client.journalforMelding(any()) } returns Unit
+private val sfClientMock = mockOf<SFClient> { client ->
+    coEvery { client.sendSporsmal(any(), any()) } returns SFClient.HenvendelseDTO(kjedeId = "1234")
+    coEvery { client.sendInfomelding(any(), any()) } returns SFClient.HenvendelseDTO(kjedeId = "5678")
+    coEvery { client.journalforMelding(any(), any()) } returns Unit
     coEvery { client.lukkTraad(any()) } returns Unit
 }
 
