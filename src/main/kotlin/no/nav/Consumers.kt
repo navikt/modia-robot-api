@@ -1,8 +1,8 @@
 package no.nav
 
-import no.nav.api.digdir.DigdirClient
 import no.nav.api.dialog.saf.SafClient
 import no.nav.api.dialog.sf.SFClient
+import no.nav.api.digdir.DigdirClient
 import no.nav.api.oppfolging.Nom
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient

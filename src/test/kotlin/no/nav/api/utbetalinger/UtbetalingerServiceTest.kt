@@ -14,25 +14,24 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 internal class UtbetalingerServiceTest {
-    
+
     private val client: UtbetalingerClient = mockk()
     private val service: UtbetalingerService = UtbetalingerService(client)
-    
-    
+
     @Test
     fun `skal hente ut og sortere utbetalinger for bruker`() {
         every { runBlocking { client.hentUtbetalinger(any(), any(), any()) } } returns utbetalinger
-        
+
         val utbetalinger = runBlocking {
             service.hentUtbetalinger("12345678910", LocalDate.now(), LocalDate.now())
         }
-        
+
         assertEquals(6, utbetalinger.size)
         assertEquals("Alderspensjon som skal sorteres riktig alfabetisk", utbetalinger[2].ytelse)
         assertEquals("Dagpenger som også burde bli sortert på dato", utbetalinger[3].ytelse)
         assertEquals(LocalDate(2022, 8, 1), utbetalinger[1].til)
     }
-    
+
     @Test
     fun `skal feile i service når utbetalingV1 feiler`() {
         every { runBlocking { client.hentUtbetalinger(any(), any(), any()) } } throws WebStatusException("Feil mot utbetalinger", HttpStatusCode.InternalServerError)
@@ -40,30 +39,30 @@ internal class UtbetalingerServiceTest {
             runBlocking { service.hentUtbetalinger("12345678910", LocalDate.now(), LocalDate.now()) }
         }
     }
-    
+
     @Test
     fun `skal håndtere 404`() {
         val mockEngine = MockEngine { request ->
             respond(
                 status = HttpStatusCode.NotFound,
                 headers = headersOf(
-                    HttpHeaders.ContentType, "application/json"
+                    HttpHeaders.ContentType,
+                    "application/json"
                 ),
                 content = ""
             )
         }
-        
+
         val tokenClient = mockk<BoundedMachineToMachineTokenClient>()
         every { tokenClient.createMachineToMachineToken() } returns ""
-        
+
         val utbetalingerClient = UtbetalingerClient("http://no.no", tokenClient, mockEngine)
         val utbetalinger = runBlocking {
             utbetalingerClient.hentUtbetalinger("10108000398", LocalDate.parse("2020-01-01"), LocalDate.now())
         }
-        
+
         assertEquals(0, utbetalinger.size)
     }
-    
 }
 
 fun medYtelse(type: String, fom: String, tom: String) = Ytelse(
@@ -99,7 +98,7 @@ val ytelser = listOf(
         type = "Alderspensjon som skal sorteres riktig alfabetisk",
         fom = "2022-05-02",
         tom = "2022-07-01"
-    ),
+    )
 )
 
 val utbetalinger = listOf(
@@ -124,5 +123,5 @@ val utbetalinger = listOf(
                 tom = "2025-07-01"
             )
         )
-    ),
+    )
 )

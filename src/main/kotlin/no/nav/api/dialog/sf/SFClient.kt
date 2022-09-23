@@ -7,8 +7,8 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
-import no.nav.utils.*
 import no.nav.api.dialog.DialogService.*
+import no.nav.utils.*
 
 class SFClient(
     private val sfUrl: String,
@@ -74,5 +74,4 @@ class SFClient(
     suspend fun lukkTraad(kjedeId: String): Unit = externalServiceCall {
         client.post("$sfUrl/henvendelse/meldingskjede/lukk?kjedeId=$kjedeId")
     }
-
 }

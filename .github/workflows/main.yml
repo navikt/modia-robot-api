@@ -17,6 +17,13 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Install ktlint
+        uses: nbadal/action-ktlint-setup@v1
+        with:
+          ktlint_version: '0.46.1'
+      - name: Ktlint
+        run: ktlint src/**/*.kt
+        shell: bash
       - uses: actions/cache@v1
         with:
           path: ~/.gradle

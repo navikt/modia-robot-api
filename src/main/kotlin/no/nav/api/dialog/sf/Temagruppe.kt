@@ -7,4 +7,3 @@ enum class Temagruppe {
     OVRG,
     PENS
 }
-

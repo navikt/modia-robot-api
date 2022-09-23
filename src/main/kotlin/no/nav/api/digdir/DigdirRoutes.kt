@@ -12,7 +12,7 @@ import no.nav.api.digdir.DigdirService.*
 import no.nav.plugins.securityScheme
 
 fun Route.configureDigdirRoutes(
-    digdirService: DigdirService
+    digdirService: DigdirService,
 ) {
     route("digdir/{fnr}/kontaktinformasjon") {
         notarizedGet(Api.kontaktinformasjon) {
@@ -31,6 +31,6 @@ private object Api {
         ),
         tags = setOf("Kontakt- og reservasjonsregisteret"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
+        canThrow = CommonModels.standardResponses
     )
 }

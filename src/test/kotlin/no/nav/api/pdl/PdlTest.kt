@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
-
 internal class PdlTest {
     @Test
     fun `should be able to deserialize pdl response`() = runBlocking {
@@ -23,7 +22,8 @@ internal class PdlTest {
             respond(
                 status = HttpStatusCode.OK,
                 headers = headersOf(
-                    HttpHeaders.ContentType, "application/json"
+                    HttpHeaders.ContentType,
+                    "application/json"
                 ),
                 content = """
                     {
@@ -38,7 +38,7 @@ internal class PdlTest {
                             }
                         }
                     }
-                """.trimIndent(),
+                """.trimIndent()
             )
         }
         val tokenClient = mockk<BoundedMachineToMachineTokenClient>()

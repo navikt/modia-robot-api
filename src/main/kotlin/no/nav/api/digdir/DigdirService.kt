@@ -7,10 +7,10 @@ import no.nav.personoversikt.utils.SelftestGenerator
 import kotlin.concurrent.fixedRateTimer
 import kotlin.time.Duration.Companion.minutes
 
-class DigdirService (private val digdirClient: DigdirClient) {
-    
+class DigdirService(private val digdirClient: DigdirClient) {
+
     private val reporter = SelftestGenerator.Reporter(name = "DigdirService", critical = false)
-    
+
     init {
         fixedRateTimer(name = "Ping digdir-krr-proxy", daemon = true, period = 1.minutes.inWholeMilliseconds, initialDelay = 0) {
             runBlocking {
@@ -20,7 +20,7 @@ class DigdirService (private val digdirClient: DigdirClient) {
             }
         }
     }
-    
+
     @Serializable
     data class Kontaktinformasjon(
         val epostadresse: String? = null,
@@ -30,7 +30,7 @@ class DigdirService (private val digdirClient: DigdirClient) {
         val mobiltelefonnummerOppdatert: Instant? = null,
         val mobiltelefonnummerVerifisert: Instant? = null,
     )
-    
+
     suspend fun hentKontaktinformasjon(fnr: String): Kontaktinformasjon {
         val krrData = digdirClient.hentKrrData(fnr)
         return Kontaktinformasjon(

@@ -5,19 +5,19 @@ import kotlinx.serialization.Serializable
 import no.nav.personoversikt.utils.SelftestGenerator
 
 class UtbetalingerService(
-    private val utbetalingerClient: UtbetalingerClient
+    private val utbetalingerClient: UtbetalingerClient,
 ) {
-    
+
     private val reporter = SelftestGenerator.Reporter(name = "UtbetalingService", critical = false)
         .also { it.reportOk() }
-    
+
     @Serializable
     data class Utbetalinger(
         val ytelse: String,
         val fra: LocalDate,
-        val til: LocalDate
+        val til: LocalDate,
     )
-    
+
     suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate): List<Utbetalinger> {
         val utbetalinger = utbetalingerClient.runCatching {
             hentUtbetalinger(fnr, fra, til)
@@ -25,7 +25,7 @@ class UtbetalingerService(
             .onSuccess { reporter.reportOk() }
             .onFailure { reporter.reportError(it) }
             .getOrThrow()
-        
+
         return utbetalinger
             .filter { it.utbetalingsstatus.lowercase() == "utbetalt" }
             .flatMap { it.ytelseListe }

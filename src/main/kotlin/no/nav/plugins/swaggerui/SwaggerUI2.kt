@@ -20,15 +20,18 @@ class SwaggerUI2(val config: Configuration) {
     class Configuration {
         // The primary Swagger-UI page (will redirect to target page)
         var swaggerUrl: String = "/swagger-ui"
+
         // The Root path to Swagger resources (in most cases a path to the webjar resources)
         var swaggerBaseUrl: String = "/webjars/swagger-ui"
+
         // Configuration for SwaggerUI JS initialization
         lateinit var jsConfig: JsConfig
+
         // Application context path (for example if application have the following path: http://domain.com/app, use: "/app")
         var contextPath: String = ""
     }
 
-    companion object Feature: ApplicationFeature<Application, Configuration, SwaggerUI2> {
+    companion object Feature : ApplicationFeature<Application, Configuration, SwaggerUI2> {
 
         private fun Configuration.toInternal(): InternalConfiguration = InternalConfiguration(
             swaggerUrl = URI(swaggerUrl),
@@ -41,9 +44,9 @@ class SwaggerUI2(val config: Configuration) {
             val swaggerUrl: URI,
             val swaggerBaseUrl: URI,
             val jsConfig: JsConfig,
-            val contextPath: String
+            val contextPath: String,
         ) {
-            val redirectIndexUrl: String = "${contextPath}${swaggerBaseUrl}/index.html"
+            val redirectIndexUrl: String = "${contextPath}$swaggerBaseUrl/index.html"
         }
 
         private val locator = WebJarAssetLocator()
@@ -56,7 +59,7 @@ class SwaggerUI2(val config: Configuration) {
 
             get("${config.swaggerBaseUrl}/{filename}") {
                 call.parameters["filename"]!!.let { filename ->
-                    when(filename) {
+                    when (filename) {
                         "swagger-initializer.js" ->
                             locator.getSwaggerInitializerContent(jsConfig = config.jsConfig)
                         else ->

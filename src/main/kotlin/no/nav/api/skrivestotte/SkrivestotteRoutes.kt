@@ -14,7 +14,7 @@ import no.nav.plugins.securityScheme
 import java.util.*
 
 fun Route.configureSkrivestotteRoutes(
-    skrivestotteService: SkrivestotteService
+    skrivestotteService: SkrivestotteService,
 ) {
     route("skrivestotte/") {
         notarizedGet(Api.sok) {
@@ -65,10 +65,10 @@ private object Models {
 
     open class IdParameter(
         @Param(type = ParamType.PATH)
-        val id: UUID
+        val id: UUID,
     )
     open class SokeVerdiParameter(
         @Param(type = ParamType.QUERY)
-        val sokeVerdi: String?
+        val sokeVerdi: String?,
     )
 }

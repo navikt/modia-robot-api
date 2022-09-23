@@ -14,7 +14,7 @@ class DigdirClient(
     private val digdirKrrProxyUrl: String,
     private val tokenclient: BoundedMachineToMachineTokenClient,
 ) {
-    
+
     @Serializable
     data class KrrData(
         val personident: String,
@@ -26,9 +26,9 @@ class DigdirClient(
         val epostadresseVerifisert: Instant?,
         val mobiltelefonnummer: String?,
         val mobiltelefonnummerOppdatert: Instant?,
-        val mobiltelefonnummerVerifisert: Instant?
+        val mobiltelefonnummerVerifisert: Instant?,
     )
-    
+
     private val client = HttpClient(OkHttp) {
         install(JsonFeature) {
             serializer = KotlinxSerializer(
@@ -52,7 +52,7 @@ class DigdirClient(
             )
         }
     }
-    
+
     suspend fun hentKrrData(fnr: String): KrrData = externalServiceCall {
         client.get("$digdirKrrProxyUrl/rest/v1/person") {
             headers {
@@ -61,9 +61,8 @@ class DigdirClient(
             }
         }
     }
-    
+
     suspend fun ping() = externalServiceCall {
         client.get<HttpResponse>("$digdirKrrProxyUrl/rest/ping").status
     }
-
 }

@@ -29,7 +29,7 @@ private object Api {
         ),
         tags = setOf("PDL"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
+        canThrow = CommonModels.standardResponses
     )
 }
 
@@ -54,6 +54,6 @@ data class PdlAdresse(
     ) : this(
         linje1.filterNotNull().joinToString(" "),
         linje2?.filterNotNull()?.joinToString(" "),
-        linje3?.filterNotNull()?.joinToString(" "),
+        linje3?.filterNotNull()?.joinToString(" ")
     )
 }

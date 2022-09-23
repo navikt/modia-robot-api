@@ -24,11 +24,11 @@ fun Route.configureDebugRoutes(tokenClient: MachineToMachineTokenClient) {
                 if (isProd()) {
                     call.respond(HttpStatusCode.BadRequest, "Unable to use debug endpoints in production")
                 } else {
-                    val request : TokenExchangeRequest = call.receive()
+                    val request: TokenExchangeRequest = call.receive()
                     val downstreamApi = DownstreamApi(
                         cluster = request.cluster,
                         namespace = request.namespace,
-                        application = request.application,
+                        application = request.application
                     )
                     call.respond(tokenClient.createMachineToMachineToken(downstreamApi))
                 }
@@ -46,7 +46,7 @@ data class TokenExchangeRequest(
 
 @Serializable
 data class TokenExchangeResponse(
-    val token: String
+    val token: String,
 )
 
 private object Api {
@@ -69,6 +69,6 @@ private object Api {
         ),
         tags = setOf("Debug"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
+        canThrow = CommonModels.standardResponses
     )
 }

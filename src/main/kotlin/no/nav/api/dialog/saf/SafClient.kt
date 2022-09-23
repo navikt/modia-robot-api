@@ -14,7 +14,7 @@ import java.net.URL
 class SafClient(
     private val safUrl: String,
     private val tokenclient: BoundedMachineToMachineTokenClient,
-    httpEngine: HttpClientEngine = OkHttp.create()
+    httpEngine: HttpClientEngine = OkHttp.create(),
 ) {
     private val graphqlClient = LoggingGraphQLKtorClient(
         name = "SAF",

@@ -9,13 +9,13 @@ import no.nav.modiapersonoversikt.commondomain.TemagruppeTemaMapping.hentTemagru
 class DialogService(
     private val safService: SafService,
     private val sfService: SFService,
-    private val pdlService: PdlService
+    private val pdlService: PdlService,
 ) {
     @Serializable
     data class MeldingRequest(
         val tekst: String,
         val tema: String,
-        val enhet: String
+        val enhet: String,
     )
 
     @Serializable
@@ -30,7 +30,7 @@ class DialogService(
         val enhet: String,
         val fritekst: String,
         val tema: String? = null,
-        val tildelMeg: Boolean? = null
+        val tildelMeg: Boolean? = null,
     )
 
     @Serializable
@@ -39,7 +39,7 @@ class DialogService(
         val fagsakId: String? = null,
         val fagsaksystem: String? = null,
         val temakode: String,
-        val kjedeId: String
+        val kjedeId: String,
     )
 
     suspend fun sendSporsmal(fnr: String, request: MeldingRequest, ident: String): Response {
@@ -72,7 +72,7 @@ class DialogService(
         sfService.journalforMelding(journalforRequest, ident)
         return Response(nyHenvendelse.kjedeId)
     }
-    
+
     private suspend fun lagSfMeldingRequest(fnr: String, request: MeldingRequest) = SfMeldingRequest(
         aktorId = pdlService.hentAktorid(fnr),
         temagruppe = hentTemagruppeForTema(request.tema),
@@ -81,7 +81,7 @@ class DialogService(
         tema = request.tema,
         tildelMeg = false
     )
-    
+
     suspend fun parseFritekst(fnr: String, tekst: String): String {
         val navn = pdlService.hentNavn(fnr)
         return tekst
