@@ -26,7 +26,7 @@ class SkrivestotteClient(
                 callIdExtractor = { getCallId() }
             )
         )
-    }
+    },
 ) {
 
     @Serializable
@@ -36,9 +36,9 @@ class SkrivestotteClient(
         val overskrift: String,
         val tags: List<String>,
         val innhold: Innhold,
-        val vekttall: Int = 0
+        val vekttall: Int = 0,
     )
-    
+
     @Serializable
     data class Innhold(
         val nb_NO: String? = null,
@@ -50,24 +50,26 @@ class SkrivestotteClient(
         val es_ES: String? = null,
         val pl_PL: String? = null,
         val ru_RU: String? = null,
-        val ur: String? = null
+        val ur: String? = null,
     ) {
         fun kombinert() = listOfNotNull(nb_NO, nn_NO, en_US, se_NO, de_DE, fr_FR, es_ES, pl_PL, ru_RU, ur).joinToString("\u0000")
     }
 
     private val client = HttpClient(httpEngine) {
         install(JsonFeature) {
-            serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
-                serializersModule = SerializersModule {
-                    contextual(UUIDSerializer)
-                    contextual(
-                        MapSerializer(
-                            keySerializer = UUIDSerializer,
-                            valueSerializer = Tekst.serializer()
+            serializer = KotlinxSerializer(
+                kotlinx.serialization.json.Json {
+                    serializersModule = SerializersModule {
+                        contextual(UUIDSerializer)
+                        contextual(
+                            MapSerializer(
+                                keySerializer = UUIDSerializer,
+                                valueSerializer = Tekst.serializer()
+                            )
                         )
-                    )
+                    }
                 }
-            })
+            )
         }
     }
 

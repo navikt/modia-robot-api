@@ -12,11 +12,11 @@ import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonRequest
 import no.nav.utils.externalServiceCall
 
 class TpsService(
-    private val tps: PersonV3
+    private val tps: PersonV3,
 ) {
     @Serializable
     data class Kontonummer(
-        val kontonummer: String?
+        val kontonummer: String?,
     )
     private val fantIkkeKontonummer = Kontonummer(null)
 
@@ -25,7 +25,7 @@ class TpsService(
             .withAktoer(PersonIdent().withIdent(NorskIdent().withIdent(fnr)))
             .withInformasjonsbehov(
                 Informasjonsbehov.BANKKONTO,
-                Informasjonsbehov.SPORINGSINFORMASJON,
+                Informasjonsbehov.SPORINGSINFORMASJON
             )
 
         val response = tps.hentPerson(request)

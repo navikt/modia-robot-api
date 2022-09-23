@@ -1,9 +1,9 @@
 package no.nav
 
-import no.nav.api.digdir.DigdirService
 import no.nav.api.dialog.DialogService
 import no.nav.api.dialog.saf.SafService
 import no.nav.api.dialog.sf.SFService
+import no.nav.api.digdir.DigdirService
 import no.nav.api.oppfolging.OppfolgingService
 import no.nav.api.pdl.PdlService
 import no.nav.api.skrivestotte.SkrivestotteService

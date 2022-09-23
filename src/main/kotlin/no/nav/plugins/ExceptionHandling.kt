@@ -17,7 +17,7 @@ fun Application.configureExceptionHandling() {
                 cause.status,
                 HttpErrorResponse(
                     cause = cause.toString(),
-                    message = cause.message,
+                    message = cause.message
                 )
             )
         }
@@ -27,7 +27,7 @@ fun Application.configureExceptionHandling() {
                 HttpStatusCode.InternalServerError,
                 HttpErrorResponse(
                     cause = cause.toString(),
-                    message = cause.message,
+                    message = cause.message
                 )
             )
         }
@@ -50,5 +50,5 @@ private fun AuthenticationFailedCause.prettyPrint(): String {
 @Serializable
 internal data class HttpErrorResponse(
     val message: String? = null,
-    val cause: String? = null
+    val cause: String? = null,
 )

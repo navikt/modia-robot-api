@@ -46,5 +46,4 @@ class Nom(
                 .setVisningsNavn("F_$identNr E_$identNr")
         }
     }
-
 }

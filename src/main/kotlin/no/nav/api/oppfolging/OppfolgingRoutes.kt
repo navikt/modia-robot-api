@@ -7,12 +7,11 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
 import no.nav.plugins.securityScheme
 
 fun Route.configureOppfolgingRoutes(
-    oppfolgingService: OppfolgingService
+    oppfolgingService: OppfolgingService,
 ) {
     route("oppfolging/{fnr}/veileder") {
         notarizedGet(Api.veileder) {
@@ -32,6 +31,6 @@ private object Api {
         ),
         tags = setOf("Oppfølging"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
+        canThrow = CommonModels.standardResponses
     )
 }

@@ -9,11 +9,11 @@ import java.util.*
 class LoggingInterceptor(
     val name: String,
     val config: Config = DEFAULT_CONFIG,
-    val callIdExtractor: (Request) -> String
+    val callIdExtractor: (Request) -> String,
 ) : Interceptor {
     data class Config(
         val ignoreRequestBody: Boolean = false,
-        val ignoreResponseBody: Boolean = false
+        val ignoreResponseBody: Boolean = false,
     )
     companion object {
         @JvmField

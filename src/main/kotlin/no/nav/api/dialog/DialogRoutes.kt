@@ -16,13 +16,13 @@ import no.nav.api.dialog.DialogService.*
 import no.nav.plugins.securityScheme
 
 fun Route.configureDialogRoutes(
-    dialogService: DialogService
+    dialogService: DialogService,
 ) {
     route("dialog/{fnr}") {
         route("sendinfomelding") {
             notarizedPost(Api.sendInfomelding) {
                 val fnr = requireNotNull(call.parameters["fnr"])
-                val request : MeldingRequest = call.receive()
+                val request: MeldingRequest = call.receive()
                 val ident = checkNotNull(call.principal<JWTPrincipal>()?.subject) { "Could not extract subject from token" }
                 call.respond(
                     dialogService.sendInfomelding(
@@ -56,10 +56,10 @@ private object Api {
         description = "",
         requestInfo = RequestInfo(
             description =
-                """Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
+            """Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
                    Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
                    før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
-                """.trimIndent()
+            """.trimIndent()
         ),
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
@@ -67,7 +67,7 @@ private object Api {
         ),
         tags = setOf("Dialog"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
+        canThrow = CommonModels.standardResponses
     )
 
     val sendSporsmal = PostInfo<CommonModels.FnrParameter, MeldingRequest, Response>(
@@ -75,10 +75,10 @@ private object Api {
         description = "",
         requestInfo = RequestInfo(
             description =
-                """Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
+            """Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
                    Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
                    før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
-                """.trimIndent()
+            """.trimIndent()
         ),
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
@@ -86,6 +86,6 @@ private object Api {
         ),
         tags = setOf("Dialog"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
+        canThrow = CommonModels.standardResponses
     )
 }

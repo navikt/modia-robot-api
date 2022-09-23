@@ -15,7 +15,7 @@ class LoggingGraphQLKtorClient(
     private val name: String,
     critical: Boolean,
     url: URL,
-    httpClient: HttpClient
+    httpClient: HttpClient,
 ) : GraphQLKtorClient(url, httpClient) {
     val selftestReporter = SelftestGenerator.Reporter(name, critical)
         // Report OK to get application ready (/isReady)
@@ -23,13 +23,13 @@ class LoggingGraphQLKtorClient(
 
     override suspend fun <T : Any> execute(
         request: GraphQLClientRequest<T>,
-        requestCustomizer: HeadersBuilder
+        requestCustomizer: HeadersBuilder,
     ): GraphQLClientResponse<T> {
         val callId: String = getCallId()
         val requestId = IdUtils.generateId()
         try {
             TjenestekallLogger.info(
-                "${name}-request: $callId ($requestId)",
+                "$name-request: $callId ($requestId)",
                 mapOf(
                     "request" to request
                 )
@@ -58,7 +58,7 @@ class LoggingGraphQLKtorClient(
             return response
         } catch (exception: Throwable) {
             TjenestekallLogger.error(
-                "${name}-response-error: $callId ($requestId)",
+                "$name-response-error: $callId ($requestId)",
                 mapOf("exception" to exception)
             )
             selftestReporter.reportError(exception)

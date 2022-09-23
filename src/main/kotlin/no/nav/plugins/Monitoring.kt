@@ -39,10 +39,12 @@ fun Application.configureMonitoring() {
         registry = appMicrometerRegistry
     }
 
-    val selftest = SelftestGenerator.getInstance(SelftestGenerator.Config(
-        appname = "modia-robot-api",
-        version = appImage
-    ))
+    val selftest = SelftestGenerator.getInstance(
+        SelftestGenerator.Config(
+            appname = "modia-robot-api",
+            version = appImage
+        )
+    )
     routing {
         get {
             call.respondRedirect("/swagger-ui")
@@ -84,7 +86,7 @@ private object Api {
             status = HttpStatusCode.OK,
             description = "App is alive"
         ),
-        tags = setOf("Monitoring"),
+        tags = setOf("Monitoring")
     )
     val isReady = GetInfo<Unit, String>(
         summary = "isReady health probe",
@@ -92,6 +94,6 @@ private object Api {
             status = HttpStatusCode.OK,
             description = "App is ready"
         ),
-        tags = setOf("Monitoring"),
+        tags = setOf("Monitoring")
     )
 }

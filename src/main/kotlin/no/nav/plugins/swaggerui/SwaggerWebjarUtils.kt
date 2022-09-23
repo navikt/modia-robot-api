@@ -4,8 +4,8 @@ import io.bkbn.kompendium.swagger.JsConfig
 import io.ktor.features.NotFoundException
 import io.ktor.http.*
 import io.ktor.http.content.ByteArrayContent
-import java.net.URL
 import org.webjars.WebJarAssetLocator
+import java.net.URL
 import kotlin.reflect.full.memberProperties
 
 internal fun WebJarAssetLocator.getSwaggerResource(path: String): URL =
@@ -29,12 +29,12 @@ internal fun WebJarAssetLocator.getSwaggerInitializerContent(jsConfig: JsConfig)
         }.toByteArray()
 )
 
-internal inline fun<reified T: Any> T.asMap(): Map<String, Any?> =
+internal inline fun <reified T : Any> T.asMap(): Map<String, Any?> =
     T::class.memberProperties.associate { it.name to it.get(this) }
 
 internal fun JsConfig.toJsProps(): String = asMap()
     .filterKeys { !setOf("specs", "jsInit").contains(it) }
-    .map{ "${it.key}: ${it.value.toJs()}" }
+    .map { "${it.key}: ${it.value.toJs()}" }
     .joinToString(separator = ",\n    ")
 
 internal fun JsConfig.getSpecUrlsProps(): String =

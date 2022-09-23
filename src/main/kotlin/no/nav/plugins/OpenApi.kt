@@ -60,7 +60,7 @@ fun Application.configureOpenApi() {
             specs = mapOf(
                 "Version 1" to URI("/openapi.json")
             ),
-            validatorUrl = "none",
+            validatorUrl = "none"
         )
     }
 }

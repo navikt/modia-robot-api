@@ -18,7 +18,7 @@ fun startApplication(
     disableSecurity: Boolean,
     env: Env = Env(),
     consumers: Consumers = ConsumersImpl(env),
-    services: Services = ServicesImpl(consumers)
+    services: Services = ServicesImpl(consumers),
 ) {
     embeddedServer(Netty, port = 7070, host = "0.0.0.0") {
         environment.config

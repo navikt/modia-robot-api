@@ -13,7 +13,8 @@ class SkrivestotteTest {
             respond(
                 status = HttpStatusCode.OK,
                 headers = headersOf(
-                    HttpHeaders.ContentType, "application/json"
+                    HttpHeaders.ContentType,
+                    "application/json"
                 ),
                 content = """
                             {
@@ -26,7 +27,7 @@ class SkrivestotteTest {
                                     } 
                                 }
                             }
-                        """.trimIndent(),
+                """.trimIndent()
             )
         }
 

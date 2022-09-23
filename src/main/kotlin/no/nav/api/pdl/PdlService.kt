@@ -6,17 +6,17 @@ import no.nav.utils.TjenestekallLogger
 import no.nav.utils.now
 
 class PdlService(
-    private val client: PdlClient
+    private val client: PdlClient,
 ) {
-    
+
     data class Navn(
         val fornavn: String,
         val mellomnavn: String?,
-        val etternavn: String
+        val etternavn: String,
     ) {
-        
+
         val fulltNavn = listOfNotNull(fornavn, mellomnavn, etternavn).joinToString(" ")
-        
+
         companion object {
             val UKJENT = Navn("", "", "")
         }
@@ -34,7 +34,7 @@ class PdlService(
     suspend fun hentAktorid(fnr: String): String {
         return requireNotNull(client.hentAktorid(fnr).data?.hentIdenter?.identer?.firstOrNull()?.ident)
     }
-    
+
     suspend fun hentNavn(fnr: String): Navn {
         val navn = client.hentNavn(fnr).data?.hentPerson?.navn?.firstOrNull() ?: return Navn.UKJENT
         return Navn(
@@ -58,10 +58,13 @@ class PdlService(
                     adresse.utenlandskAdresse != null -> lagAdresseFraUtenlandskadresse(adresse.utenlandskAdresse)
                     adresse.ukjentBosted != null -> lagAdresseFraUkjentbosted(adresse.ukjentBosted)
                     else -> {
-                        TjenestekallLogger.error("PdlService", mapOf(
-                            "feil" to "fant ukjent adresse format for bostedsadresse",
-                            "adresse" to adresse
-                        ))
+                        TjenestekallLogger.error(
+                            "PdlService",
+                            mapOf(
+                                "feil" to "fant ukjent adresse format for bostedsadresse",
+                                "adresse" to adresse
+                            )
+                        )
                         null
                     }
                 }
@@ -81,10 +84,13 @@ class PdlService(
                     adresse.utenlandskAdresse != null -> lagAdresseFraUtenlandskadresse(adresse.utenlandskAdresse)
                     adresse.utenlandskAdresseIFrittFormat != null -> lagAdresseFraUtenlandskadresseFrittFormat(adresse.utenlandskAdresseIFrittFormat)
                     else -> {
-                        TjenestekallLogger.error("PdlService", mapOf(
-                            "feil" to "fant ukjent adresse format for kontaktadresse",
-                            "adresse" to adresse
-                        ))
+                        TjenestekallLogger.error(
+                            "PdlService",
+                            mapOf(
+                                "feil" to "fant ukjent adresse format for kontaktadresse",
+                                "adresse" to adresse
+                            )
+                        )
                         null
                     }
                 }
@@ -102,10 +108,13 @@ class PdlService(
                     adresse.matrikkeladresse != null -> lagAdresseFraMatrikkeladresse(adresse.matrikkeladresse)
                     adresse.utenlandskAdresse != null -> lagAdresseFraUtenlandskadresse(adresse.utenlandskAdresse)
                     else -> {
-                        TjenestekallLogger.error("PdlService", mapOf(
-                            "feil" to "fant ukjent adresse format for bostedsadresse",
-                            "adresse" to adresse
-                        ))
+                        TjenestekallLogger.error(
+                            "PdlService",
+                            mapOf(
+                                "feil" to "fant ukjent adresse format for bostedsadresse",
+                                "adresse" to adresse
+                            )
+                        )
                         null
                     }
                 }
@@ -125,13 +134,13 @@ class PdlService(
     private fun lagAdresseFraUtenlandskadresse(adresse: UtenlandskAdresse) = PdlAdresse(
         linje1 = listOf(adresse.postboksNummerNavn, adresse.adressenavnNummer, adresse.bygningEtasjeLeilighet),
         linje2 = listOf(adresse.postkode, adresse.bySted, adresse.regionDistriktOmraade),
-        linje3 = listOf(adresse.landkode), // TODO hente land-kodeverk
+        linje3 = listOf(adresse.landkode) // TODO hente land-kodeverk
     )
 
     private fun lagAdresseFraUtenlandskadresseFrittFormat(adresse: UtenlandskAdresseIFrittFormat) = PdlAdresse(
         linje1 = listOf(adresse.adresselinje1),
         linje2 = listOf(adresse.adresselinje2),
-        linje3 = listOf(adresse.adresselinje3, adresse.postkode, adresse.byEllerStedsnavn, adresse.landkode), // TODO hente land-kodeverk
+        linje3 = listOf(adresse.adresselinje3, adresse.postkode, adresse.byEllerStedsnavn, adresse.landkode) // TODO hente land-kodeverk
     )
 
     private fun lagAdresseFraUkjentbosted(adresse: UkjentBosted) = PdlAdresse(
@@ -141,7 +150,7 @@ class PdlService(
     private fun lagAdresseFraCoVegadresse(coAdresse: String, adresse: PdlAdresse) = PdlAdresse(
         linje1 = listOf(coAdresse),
         linje2 = listOf(adresse.linje1),
-        linje3 = listOf(adresse.linje2),
+        linje3 = listOf(adresse.linje2)
     )
 
     private fun lagAdresseFraCoadresse(coAdresse: String) = PdlAdresse(
@@ -151,12 +160,12 @@ class PdlService(
     private fun lagAdresseFraPostboksadresse(adresse: Postboksadresse) = PdlAdresse(
         linje1 = listOf(adresse.postbokseier),
         linje2 = listOf("Postboks", adresse.postboks),
-        linje3 = listOf(adresse.postnummer), // TODO hente postnummer kodeverk
+        linje3 = listOf(adresse.postnummer) // TODO hente postnummer kodeverk
     )
 
     private fun lagAdresseFraFrittformat(adresse: PostadresseIFrittFormat) = PdlAdresse(
         linje1 = listOf(adresse.adresselinje1),
         linje2 = listOf(adresse.adresselinje2),
-        linje3 = listOf(adresse.adresselinje3, adresse.postnummer), // TODO hente postnummer kodeverk
+        linje3 = listOf(adresse.adresselinje3, adresse.postnummer) // TODO hente postnummer kodeverk
     )
 }

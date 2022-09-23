@@ -7,7 +7,7 @@ import no.nav.utils.externalServiceCall
 
 class OppfolgingService(
     private val oppfolgingClient: OppfolgingClient,
-    private val nom: NomClient
+    private val nom: NomClient,
 ) {
     @Serializable
     class Oppfolging(

@@ -15,7 +15,7 @@ import no.nav.api.utbetalinger.UtbetalingerService.*
 import no.nav.plugins.securityScheme
 
 fun Route.configureUtbetalingerRoutes(
-    utbetalingerService: UtbetalingerService
+    utbetalingerService: UtbetalingerService,
 ) {
     route("utbetalinger/{fnr}/ytelseoversikt") {
         notarizedGet(Api.utbetalinger) {
@@ -38,7 +38,7 @@ private object Api {
         ),
         tags = setOf("Utbetalinger"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
+        canThrow = CommonModels.standardResponses
     )
 }
 

@@ -6,17 +6,17 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.datetime.*
 import no.nav.Consumers
-import no.nav.api.digdir.DigdirClient
-import no.nav.api.digdir.DigdirClient.*
 import no.nav.api.dialog.saf.SafClient
 import no.nav.api.dialog.sf.SFClient
+import no.nav.api.digdir.DigdirClient
+import no.nav.api.digdir.DigdirClient.*
 import no.nav.api.generated.pdl.HentAktorid
 import no.nav.api.generated.pdl.HentNavn
-import no.nav.api.generated.pdl.hentaktorid.*
-import no.nav.api.generated.pdl.hentpersonalia.*
 import no.nav.api.generated.pdl.HentPersonalia
+import no.nav.api.generated.pdl.hentaktorid.*
 import no.nav.api.generated.pdl.hentnavn.Navn
 import no.nav.api.generated.pdl.hentnavn.Person
+import no.nav.api.generated.pdl.hentpersonalia.*
 import no.nav.api.generated.saf.HentBrukerssaker
 import no.nav.api.generated.saf.enums.Sakstype
 import no.nav.api.generated.saf.enums.Tema
@@ -143,11 +143,11 @@ private val pdlClientMock = mockOf<PdlClient> { client ->
                 oppholdsadresse = listOf(
                     Oppholdsadresse(
                         gyldigFraOgMed = LocalDateTime.now().minus(2, DateTimeUnit.HOUR),
-                        coAdressenavn = "c/o ignore",
+                        coAdressenavn = "c/o ignore"
                     ),
                     Oppholdsadresse(
                         gyldigFraOgMed = LocalDateTime.now().minus(1, DateTimeUnit.HOUR),
-                        coAdressenavn = "c/o hansen",
+                        coAdressenavn = "c/o hansen"
                     )
                 ),
                 kontaktadresse = emptyList(),
@@ -166,7 +166,7 @@ private val pdlClientMock = mockOf<PdlClient> { client ->
             )
         )
     )
-    
+
     coEvery { client.hentNavn(any()) } returns KotlinxGraphQLResponse(
         data = HentNavn.Result(
             hentPerson = Person(

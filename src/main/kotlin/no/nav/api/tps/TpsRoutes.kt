@@ -11,7 +11,7 @@ import no.nav.api.CommonModels
 import no.nav.plugins.securityScheme
 
 fun Route.configureTpsRoutes(
-    tpsService: TpsService
+    tpsService: TpsService,
 ) {
     route("tps/{fnr}/kontonummer") {
         notarizedGet(Api.kontonummer) {
@@ -31,6 +31,6 @@ private object Api {
         ),
         tags = setOf("TPS"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
+        canThrow = CommonModels.standardResponses
     )
 }
