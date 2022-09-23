@@ -69,7 +69,7 @@ class UtbetalingerClient(
     
     suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate): List<Utbetaling> = externalServiceCall {
         val request: UtbetaldataRequest = lagUtbetaldataRequest(fnr, fra, til)
-        val response = client.post<HttpResponse>("$utbetalingerUrl/v1/hent-utbetalingsinformasjon/intern") {
+        val response = client.post<HttpResponse>("$utbetalingerUrl/v2/hent-utbetalingsinformasjon/intern") {
             contentType(ContentType.Application.Json)
             body = request
         }
