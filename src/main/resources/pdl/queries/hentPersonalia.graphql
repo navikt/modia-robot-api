@@ -1,0 +1,105 @@
+fragment vegadresse on Vegadresse {
+    matrikkelId
+    husnummer
+    husbokstav
+    bruksenhetsnummer
+    adressenavn
+    kommunenummer
+    bydelsnummer
+    tilleggsnavn
+    postnummer
+}
+fragment matrikkeladresse on Matrikkeladresse {
+    matrikkelId
+    bruksenhetsnummer
+    tilleggsnavn
+    postnummer
+    kommunenummer
+}
+fragment utenlandskadresse on UtenlandskAdresse {
+    adressenavnNummer
+    bygningEtasjeLeilighet
+    postboksNummerNavn
+    postkode
+    bySted
+    regionDistriktOmraade
+    landkode
+}
+fragment utenlandskadresseIFrittFormat on UtenlandskAdresseIFrittFormat {
+    adresselinje1
+    adresselinje2
+    adresselinje3
+    postkode
+    byEllerStedsnavn
+    landkode
+}
+fragment postadresseIFrittFormat on PostadresseIFrittFormat {
+    adresselinje1
+    adresselinje2
+    adresselinje3
+    postnummer
+}
+fragment postboksadresse on Postboksadresse {
+    postbokseier
+    postboks
+    postnummer
+}
+
+query ($ident: ID!) {
+    hentPerson(ident: $ident) {
+        foedsel {
+            foedselsdato
+        }
+        oppholdsadresse {
+            gyldigFraOgMed
+            gyldigTilOgMed
+            oppholdAnnetSted
+            coAdressenavn
+            vegadresse {
+                ...vegadresse
+            }
+            matrikkeladresse {
+                ...matrikkeladresse
+            }
+            utenlandskAdresse {
+                ...utenlandskadresse
+            }
+        }
+        kontaktadresse {
+            gyldigFraOgMed
+            gyldigTilOgMed
+            coAdressenavn
+            postadresseIFrittFormat {
+                ...postadresseIFrittFormat
+            }
+            postboksadresse {
+                ...postboksadresse
+            }
+            vegadresse {
+                ...vegadresse
+            }
+            utenlandskAdresse {
+                ...utenlandskadresse
+            }
+            utenlandskAdresseIFrittFormat {
+                ...utenlandskadresseIFrittFormat
+            }
+        }
+        bostedsadresse {
+            gyldigFraOgMed
+            gyldigTilOgMed
+            vegadresse {
+                ...vegadresse
+            }
+            matrikkeladresse {
+                ...matrikkeladresse
+            }
+            utenlandskAdresse {
+                ...utenlandskadresse
+            }
+            ukjentBosted {
+                bostedskommune
+            }
+        }
+    }
+}
