@@ -48,7 +48,7 @@ class EnvImpl : Env {
     override val skrivestotteUrl: String = getRequiredConfig("SKRIVESTOTTE_URL")
     override val sfUrl: String = getRequiredConfig("SF_HENVENDELSE_URL")
     override val sfScope: DownstreamApi = getRequiredConfig("SF_HENVENDELSE_SCOPE").toDownstreamApi()
-    override val identAllowList: List<String> = getRequiredConfig("IDENT_ALLOW_LIST").split(",")
+    override val identAllowList: List<String> = getRequiredConfig("IDENT_ALLOW_LIST").uppercase().split(",")
 }
 
 private fun String.toDownstreamApi() = DownstreamApi.parse(this)

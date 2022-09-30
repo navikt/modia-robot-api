@@ -41,7 +41,7 @@ fun Application.configureSecurity(disableSecurity: Boolean, env: Env) {
             validate { credential ->
                 when {
                     credential.payload.audience == null -> null
-                    env.identAllowList.contains(credential.payload.subject) -> JWTPrincipal(credential.payload)
+                    env.identAllowList.contains(credential.payload.subject.uppercase()) -> JWTPrincipal(credential.payload)
                     else -> null
                 }
             }
