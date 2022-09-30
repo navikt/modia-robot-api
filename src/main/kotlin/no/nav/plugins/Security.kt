@@ -39,6 +39,10 @@ fun Application.configureSecurity(disableSecurity: Boolean, env: Env) {
         jwt(securityScheme.name) {
             verifier(makeJwkProvider(env.jwksUrl))
             validate { credential ->
+                val hasLowercase = credential.payload.subject.contains(Regex("[a-z]"))
+                if (hasLowercase) {
+                    log.warn("Detected subject with lowercase value: ${credential.payload.subject}")
+                }
                 when {
                     credential.payload.audience == null -> null
                     env.identAllowList.contains(credential.payload.subject.uppercase()) -> JWTPrincipal(credential.payload)
