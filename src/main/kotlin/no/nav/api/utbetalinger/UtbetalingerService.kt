@@ -29,14 +29,20 @@ class UtbetalingerService(
         return utbetalinger
             .filter { it.utbetalingsstatus.lowercase() == "utbetalt" }
             .flatMap { it.ytelseListe }
-            .map {
-                val ytelse = requireNotNull(it.ytelsestype)
-                Utbetalinger(
-                    ytelse = ytelse,
-                    fra = LocalDate.parse(it.ytelsesperiode.fom),
-                    til = LocalDate.parse(it.ytelsesperiode.tom)
-                )
+            .flatMap { ytelse ->
+                val ytelsekomponenter = ytelse.ytelseskomponentListe
+                    ?.map { it.ytelseskomponenttype }
+                    ?: listOf(requireNotNull(ytelse.ytelsestype))
+
+                ytelsekomponenter.map { ytelsetype ->
+                    Utbetalinger(
+                        ytelse = ytelsetype,
+                        fra = LocalDate.parse(ytelse.ytelsesperiode.fom),
+                        til = LocalDate.parse(ytelse.ytelsesperiode.tom)
+                    )
+                }
             }
+            .distinct()
             .sortedWith(compareByDescending<Utbetalinger> { it.til }.thenBy { it.ytelse })
     }
 }

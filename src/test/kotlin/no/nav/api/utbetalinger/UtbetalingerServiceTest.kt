@@ -26,9 +26,11 @@ internal class UtbetalingerServiceTest {
             service.hentUtbetalinger("12345678910", LocalDate.now(), LocalDate.now())
         }
 
-        assertEquals(6, utbetalinger.size)
+        assertEquals(8, utbetalinger.size)
         assertEquals("Alderspensjon som skal sorteres riktig alfabetisk", utbetalinger[2].ytelse)
         assertEquals("Dagpenger som også burde bli sortert på dato", utbetalinger[3].ytelse)
+        assertEquals("Barnetillegg", utbetalinger[6].ytelse)
+        assertEquals("Tiltakspenger", utbetalinger[7].ytelse)
         assertEquals(LocalDate(2022, 8, 1), utbetalinger[1].til)
     }
 
@@ -65,12 +67,13 @@ internal class UtbetalingerServiceTest {
     }
 }
 
-fun medYtelse(type: String, fom: String, tom: String) = Ytelse(
+fun medYtelse(type: String, fom: String, tom: String, komponentListe: List<YtelseKomponent>? = null) = Ytelse(
     ytelsestype = type,
     ytelsesperiode = Periode(
         fom = fom,
         tom = tom
-    )
+    ),
+    ytelseskomponentListe = komponentListe
 )
 
 val ytelser = listOf(
@@ -121,6 +124,20 @@ val utbetalinger = listOf(
                 type = "Barnetrygd",
                 fom = "2022-05-02",
                 tom = "2025-07-01"
+            )
+        )
+    ),
+    Utbetaling(
+        utbetalingsstatus = "utbetalt",
+        ytelseListe = listOf(
+            medYtelse(
+                type = "Tiltakspenger",
+                fom = "2020-08-01",
+                tom = "2020-09-01",
+                komponentListe = listOf(
+                    YtelseKomponent("Tiltakspenger"),
+                    YtelseKomponent("Barnetillegg")
+                )
             )
         )
     )
