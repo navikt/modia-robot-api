@@ -52,8 +52,14 @@ class UtbetalingerClient(
 
     @Serializable
     class Ytelse(
-        val ytelsestype: String?,
+        val ytelsestype: String? = null,
         val ytelsesperiode: Periode,
+        val ytelseskomponentListe: List<YtelseKomponent>? = null,
+    )
+
+    @Serializable
+    class YtelseKomponent(
+        val ytelseskomponenttype: String,
     )
 
     private val client = HttpClient(httpEngine) {
