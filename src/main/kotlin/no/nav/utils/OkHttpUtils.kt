@@ -93,7 +93,7 @@ class LoggingInterceptor(
     }
 }
 
-private inline fun Long.measure(): Long = System.currentTimeMillis() - this
+private fun Long.measure(): Long = System.currentTimeMillis() - this
 
 open class HeadersInterceptor(val headersProvider: () -> Map<String, String>) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {

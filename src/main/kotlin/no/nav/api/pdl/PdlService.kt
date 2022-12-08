@@ -21,8 +21,8 @@ class PdlService(
             val UKJENT = Navn("", "", "")
         }
     }
-    suspend fun hentPersonalia(fnr: String): PdlPersonalia {
-        val person = client.hentPersonalia(fnr).data?.hentPerson
+    suspend fun hentPersonalia(fnr: String, token: String): PdlPersonalia {
+        val person = client.hentPersonalia(fnr, token).data?.hentPerson
         return PdlPersonalia(
             alder = person?.let(::hentAlder),
             bostedsAdresse = person?.let(::hentBostedsAdresse),
@@ -31,12 +31,12 @@ class PdlService(
         )
     }
 
-    suspend fun hentAktorid(fnr: String): String {
-        return requireNotNull(client.hentAktorid(fnr).data?.hentIdenter?.identer?.firstOrNull()?.ident)
+    suspend fun hentAktorid(fnr: String, token: String): String {
+        return requireNotNull(client.hentAktorid(fnr, token).data?.hentIdenter?.identer?.firstOrNull()?.ident)
     }
 
-    suspend fun hentNavn(fnr: String): Navn {
-        val navn = client.hentNavn(fnr).data?.hentPerson?.navn?.firstOrNull() ?: return Navn.UKJENT
+    suspend fun hentNavn(fnr: String, token: String): Navn {
+        val navn = client.hentNavn(fnr, token).data?.hentPerson?.navn?.firstOrNull() ?: return Navn.UKJENT
         return Navn(
             fornavn = navn.fornavn,
             mellomnavn = navn.mellomnavn,

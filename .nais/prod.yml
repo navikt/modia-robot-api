@@ -60,8 +60,6 @@ spec:
       value: "R154727,R156418,R158345,R158346,R160569,R165950,R165951,R165952,R150818,R150819,R155645,R162552,D159483,U143410"
     - name: SECURITYTOKENSERVICE_URL
       value: "https://sts.adeo.no/SecurityTokenServiceProvider/"
-    - name: ISSO_JWKS_URL
-      value: "https://isso.adeo.no/isso/oauth2/connect/jwk_uri"
     - name: OPPFOLGING_URL
       value: "https://veilarboppfolging.intern.nav.no/veilarboppfolging/api"
     - name: OPPFOLGING_SCOPE

@@ -30,6 +30,7 @@ import no.nav.api.utbetalinger.utbetalinger
 import no.nav.common.client.nom.NomClient
 import no.nav.common.client.nom.VeilederNavn
 import no.nav.common.token_client.client.MachineToMachineTokenClient
+import no.nav.common.token_client.client.OnBehalfOfTokenClient
 import no.nav.common.types.identer.NavIdent
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
@@ -42,6 +43,7 @@ import java.util.*
 
 object MockConsumers : Consumers {
     override val tokenclient = tokenClientMock
+    override val oboTokenClient = oboTokenClientMock
     override val oppfolgingClient = oppfolgingClientMock
     override val tps: PersonV3 = personV3Mock
     override val nom: NomClient = nomClientMock
@@ -57,11 +59,15 @@ private val tokenClientMock = mockOf<MachineToMachineTokenClient> { client ->
     every { client.createMachineToMachineToken(any()) } returns UUID.randomUUID().toString()
 }
 
+private val oboTokenClientMock = mockOf<OnBehalfOfTokenClient> { client ->
+    every { client.exchangeOnBehalfOfToken(any(), any()) } returns UUID.randomUUID().toString()
+}
+
 private val oppfolgingClientMock = mockOf<OppfolgingClient> { client ->
-    coEvery { client.hentOppfolgingStatus(any()) } returns OppfolgingClient.Status(
+    coEvery { client.hentOppfolgingStatus(any(), any()) } returns OppfolgingClient.Status(
         erUnderOppfolging = true
     )
-    coEvery { client.hentOppfolgingVeileder(any()) } returns OppfolgingClient.VeilederIdent(
+    coEvery { client.hentOppfolgingVeileder(any(), any()) } returns OppfolgingClient.VeilederIdent(
         veilederIdent = "Z123456"
     )
 }
@@ -124,15 +130,15 @@ private val digdirClientMock = mockOf<DigdirClient> { client ->
         mobiltelefonnummerOppdatert = Clock.System.now(),
         mobiltelefonnummerVerifisert = Clock.System.now()
     )
-    coEvery { client.hentKrrData(any()) } returns krrData
+    coEvery { client.hentKrrData(any(), any()) } returns krrData
 }
 
 private val utbetalingerMock = mockOf<UtbetalingerClient> { client ->
-    coEvery { client.hentUtbetalinger(any(), any(), any()) } returns utbetalinger
+    coEvery { client.hentUtbetalinger(any(), any(), any(), any()) } returns utbetalinger
 }
 
 private val pdlClientMock = mockOf<PdlClient> { client ->
-    coEvery { client.hentPersonalia(any()) } returns KotlinxGraphQLResponse(
+    coEvery { client.hentPersonalia(any(), any()) } returns KotlinxGraphQLResponse(
         data = HentPersonalia.Result(
             hentPerson = Person(
                 foedsel = listOf(
@@ -155,7 +161,7 @@ private val pdlClientMock = mockOf<PdlClient> { client ->
             )
         )
     )
-    coEvery { client.hentAktorid(any()) } returns KotlinxGraphQLResponse(
+    coEvery { client.hentAktorid(any(), any()) } returns KotlinxGraphQLResponse(
         data = HentAktorid.Result(
             hentIdenter = Identliste(
                 identer = listOf(
@@ -167,7 +173,7 @@ private val pdlClientMock = mockOf<PdlClient> { client ->
         )
     )
 
-    coEvery { client.hentNavn(any()) } returns KotlinxGraphQLResponse(
+    coEvery { client.hentNavn(any(), any()) } returns KotlinxGraphQLResponse(
         data = HentNavn.Result(
             hentPerson = Person(
                 navn = listOf(
@@ -183,7 +189,7 @@ private val pdlClientMock = mockOf<PdlClient> { client ->
 }
 
 private val safClientMock = mockOf<SafClient> { client ->
-    coEvery { client.hentBrukersSaker(any()) } returns KotlinxGraphQLResponse(
+    coEvery { client.hentBrukersSaker(any(), any()) } returns KotlinxGraphQLResponse(
         data = HentBrukerssaker.Result(
             saker = listOf(
                 Sak(
@@ -204,10 +210,10 @@ private val safClientMock = mockOf<SafClient> { client ->
 }
 
 private val sfClientMock = mockOf<SFClient> { client ->
-    coEvery { client.sendSporsmal(any(), any()) } returns SFClient.HenvendelseDTO(kjedeId = "1234")
-    coEvery { client.sendInfomelding(any(), any()) } returns SFClient.HenvendelseDTO(kjedeId = "5678")
-    coEvery { client.journalforMelding(any(), any()) } returns Unit
-    coEvery { client.lukkTraad(any()) } returns Unit
+    coEvery { client.sendSporsmal(any(), any(), any()) } returns SFClient.HenvendelseDTO(kjedeId = "1234")
+    coEvery { client.sendInfomelding(any(), any(), any()) } returns SFClient.HenvendelseDTO(kjedeId = "5678")
+    coEvery { client.journalforMelding(any(), any(), any()) } returns Unit
+    coEvery { client.lukkTraad(any(), any()) } returns Unit
 }
 
 inline fun <reified T : Any> mockOf(impl: (T) -> Unit): T {
