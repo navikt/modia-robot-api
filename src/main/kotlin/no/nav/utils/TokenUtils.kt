@@ -1,6 +1,11 @@
 package no.nav.utils
 
+import com.auth0.jwt.interfaces.DecodedJWT
+import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.auth.jwt.*
 import no.nav.common.token_client.client.MachineToMachineTokenClient
+import no.nav.common.token_client.client.OnBehalfOfTokenClient
 
 class DownstreamApi(
     val cluster: String,
@@ -28,6 +33,23 @@ fun MachineToMachineTokenClient.createMachineToMachineToken(api: DownstreamApi):
 interface BoundedMachineToMachineTokenClient {
     fun createMachineToMachineToken(): String
 }
+
+interface BoundedOnBehalfOfTokenClient {
+    fun exchangeOnBehalfOfToken(accesstoken: String): String
+}
+
 fun MachineToMachineTokenClient.bindTo(api: DownstreamApi) = object : BoundedMachineToMachineTokenClient {
     override fun createMachineToMachineToken() = createMachineToMachineToken(api.tokenscope())
+}
+
+fun OnBehalfOfTokenClient.bindTo(api: DownstreamApi) = object : BoundedOnBehalfOfTokenClient {
+    override fun exchangeOnBehalfOfToken(accesstoken: String) = exchangeOnBehalfOfToken(api.tokenscope(), accesstoken)
+}
+
+fun ApplicationCall.getJWTPrincipalPayload(): DecodedJWT = checkNotNull(this.principal<JWTPrincipal>()?.payload as DecodedJWT) {
+    "Could not extract payload from JWT"
+}
+
+fun ApplicationCall.getJWTPrincipalSubject() = checkNotNull(this.principal<JWTPrincipal>()?.subject) {
+    "Could not extract subject from JWT"
 }

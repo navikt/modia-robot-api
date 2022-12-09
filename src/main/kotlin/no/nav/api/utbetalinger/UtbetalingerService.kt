@@ -18,9 +18,9 @@ class UtbetalingerService(
         val til: LocalDate,
     )
 
-    suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate): List<Utbetalinger> {
+    suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate, token: String): List<Utbetalinger> {
         val utbetalinger = utbetalingerClient.runCatching {
-            hentUtbetalinger(fnr, fra, til)
+            hentUtbetalinger(fnr, fra, til, token)
         }
             .onSuccess { reporter.reportOk() }
             .onFailure { reporter.reportError(it) }

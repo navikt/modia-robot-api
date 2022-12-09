@@ -10,14 +10,16 @@ import io.ktor.routing.*
 import no.nav.api.CommonModels
 import no.nav.api.digdir.DigdirService.*
 import no.nav.plugins.securityScheme
+import no.nav.utils.getJWTPrincipalPayload
 
 fun Route.configureDigdirRoutes(
     digdirService: DigdirService,
 ) {
     route("digdir/{fnr}/kontaktinformasjon") {
         notarizedGet(Api.kontaktinformasjon) {
+            val payload = call.getJWTPrincipalPayload()
             val ident = requireNotNull(call.parameters["fnr"])
-            call.respond(digdirService.hentKontaktinformasjon(ident))
+            call.respond(digdirService.hentKontaktinformasjon(ident, payload.token))
         }
     }
 }

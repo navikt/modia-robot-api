@@ -8,22 +8,22 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
 import no.nav.api.utbetalinger.UtbetalingerClient.*
 import no.nav.plugins.WebStatusException
-import no.nav.utils.BoundedMachineToMachineTokenClient
+import no.nav.utils.BoundedOnBehalfOfTokenClient
 import no.nav.utils.now
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 internal class UtbetalingerServiceTest {
 
-    private val client: UtbetalingerClient = mockk()
+    private val client: UtbetalingerClient = mockk<UtbetalingerClient>()
     private val service: UtbetalingerService = UtbetalingerService(client)
 
     @Test
     fun `skal hente ut og sortere utbetalinger for bruker`() {
-        every { runBlocking { client.hentUtbetalinger(any(), any(), any()) } } returns utbetalinger
+        every { runBlocking { client.hentUtbetalinger(any(), any(), any(), any()) } } returns utbetalinger
 
         val utbetalinger = runBlocking {
-            service.hentUtbetalinger("12345678910", LocalDate.now(), LocalDate.now())
+            service.hentUtbetalinger("12345678910", LocalDate.now(), LocalDate.now(), "token")
         }
 
         assertEquals(8, utbetalinger.size)
@@ -36,15 +36,15 @@ internal class UtbetalingerServiceTest {
 
     @Test
     fun `skal feile i service når utbetalingV1 feiler`() {
-        every { runBlocking { client.hentUtbetalinger(any(), any(), any()) } } throws WebStatusException("Feil mot utbetalinger", HttpStatusCode.InternalServerError)
+        every { runBlocking { client.hentUtbetalinger(any(), any(), any(), any()) } } throws WebStatusException("Feil mot utbetalinger", HttpStatusCode.InternalServerError)
         assertThrows(WebStatusException::class.java) {
-            runBlocking { service.hentUtbetalinger("12345678910", LocalDate.now(), LocalDate.now()) }
+            runBlocking { service.hentUtbetalinger("12345678910", LocalDate.now(), LocalDate.now(), "token") }
         }
     }
 
     @Test
     fun `skal håndtere 404`() {
-        val mockEngine = MockEngine { request ->
+        val mockEngine = MockEngine { _ ->
             respond(
                 status = HttpStatusCode.NotFound,
                 headers = headersOf(
@@ -55,12 +55,12 @@ internal class UtbetalingerServiceTest {
             )
         }
 
-        val tokenClient = mockk<BoundedMachineToMachineTokenClient>()
-        every { tokenClient.createMachineToMachineToken() } returns ""
+        val oboToken = mockk<BoundedOnBehalfOfTokenClient>()
+        every { oboToken.exchangeOnBehalfOfToken("token") } returns "new_token"
 
-        val utbetalingerClient = UtbetalingerClient("http://no.no", tokenClient, mockEngine)
+        val utbetalingerClient = UtbetalingerClient("http://no.no", oboToken, mockEngine)
         val utbetalinger = runBlocking {
-            utbetalingerClient.hentUtbetalinger("10108000398", LocalDate.parse("2020-01-01"), LocalDate.now())
+            utbetalingerClient.hentUtbetalinger("10108000398", LocalDate.parse("2020-01-01"), LocalDate.now(), "token")
         }
 
         assertEquals(0, utbetalinger.size)

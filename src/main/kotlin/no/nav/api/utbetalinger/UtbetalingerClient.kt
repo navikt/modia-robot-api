@@ -16,8 +16,8 @@ import no.nav.utils.*
 
 class UtbetalingerClient(
     private val utbetalingerUrl: String,
-    private val tokenclient: BoundedMachineToMachineTokenClient,
-    httpEngine: HttpClientEngine = lagHttpEngine(tokenclient),
+    private val oboTokenProvider: BoundedOnBehalfOfTokenClient,
+    httpEngine: HttpClientEngine = lagHttpEngine(),
 ) {
 
     @Serializable
@@ -73,9 +73,10 @@ class UtbetalingerClient(
         expectSuccess = false
     }
 
-    suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate): List<Utbetaling> = externalServiceCall {
+    suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate, token: String): List<Utbetaling> = externalServiceCall {
         val request: UtbetaldataRequest = lagUtbetaldataRequest(fnr, fra, til)
         val response = client.post<HttpResponse>("$utbetalingerUrl/v2/hent-utbetalingsinformasjon/intern") {
+            header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
             contentType(ContentType.Application.Json)
             body = request
         }
@@ -113,7 +114,7 @@ class UtbetalingerClient(
     )
 
     companion object {
-        fun lagHttpEngine(tokenclient: BoundedMachineToMachineTokenClient): HttpClientEngine {
+        fun lagHttpEngine(): HttpClientEngine {
             return OkHttp.create {
                 addInterceptor(XCorrelationIdInterceptor())
                 addInterceptor(
@@ -121,11 +122,6 @@ class UtbetalingerClient(
                         name = "utbetaldata-sokos",
                         callIdExtractor = { getCallId() }
                     )
-                )
-                addInterceptor(
-                    AuthorizationInterceptor {
-                        tokenclient.createMachineToMachineToken()
-                    }
                 )
                 addInterceptor(
                     HeadersInterceptor {

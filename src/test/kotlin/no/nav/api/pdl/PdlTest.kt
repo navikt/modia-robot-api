@@ -7,7 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
-import no.nav.utils.BoundedMachineToMachineTokenClient
+import no.nav.utils.BoundedOnBehalfOfTokenClient
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -41,11 +41,11 @@ internal class PdlTest {
                 """.trimIndent()
             )
         }
-        val tokenClient = mockk<BoundedMachineToMachineTokenClient>()
-        every { tokenClient.createMachineToMachineToken() } returns ""
+        val tokenClient = mockk<BoundedOnBehalfOfTokenClient>()
+        every { tokenClient.exchangeOnBehalfOfToken("token") } returns "new_token"
 
         val pdlClient = PdlClient("http://no.no", tokenClient, mockEngine)
-        val person = pdlClient.hentPersonalia("10108000398")
+        val person = pdlClient.hentPersonalia("10108000398", "token")
 
         assertEquals(1, person.data?.hentPerson?.foedsel?.size)
         assertEquals(LocalDate(2020, 6, 6), person.data?.hentPerson?.foedsel?.get(0)?.foedselsdato)

@@ -5,8 +5,6 @@ import io.bkbn.kompendium.core.metadata.RequestInfo
 import io.bkbn.kompendium.core.metadata.ResponseInfo
 import io.bkbn.kompendium.core.metadata.method.PostInfo
 import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.auth.jwt.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -14,6 +12,8 @@ import io.ktor.routing.*
 import no.nav.api.CommonModels
 import no.nav.api.dialog.DialogService.*
 import no.nav.plugins.securityScheme
+import no.nav.utils.getJWTPrincipalPayload
+import no.nav.utils.getJWTPrincipalSubject
 
 fun Route.configureDialogRoutes(
     dialogService: DialogService,
@@ -21,28 +21,32 @@ fun Route.configureDialogRoutes(
     route("dialog/{fnr}") {
         route("sendinfomelding") {
             notarizedPost(Api.sendInfomelding) {
+                val payload = call.getJWTPrincipalPayload()
                 val fnr = requireNotNull(call.parameters["fnr"])
                 val request: MeldingRequest = call.receive()
-                val ident = checkNotNull(call.principal<JWTPrincipal>()?.subject) { "Could not extract subject from token" }
+                val ident = call.getJWTPrincipalSubject()
                 call.respond(
                     dialogService.sendInfomelding(
                         fnr,
                         request,
-                        ident
+                        ident,
+                        payload.token
                     )
                 )
             }
         }
         route("sendsporsmal") {
             notarizedPost(Api.sendSporsmal) {
+                val payload = call.getJWTPrincipalPayload()
                 val fnr = requireNotNull(call.parameters["fnr"])
                 val request: MeldingRequest = call.receive()
-                val ident = checkNotNull(call.principal<JWTPrincipal>()?.subject) { "Could not extract subject from token" }
+                val ident = call.getJWTPrincipalSubject()
                 call.respond(
                     dialogService.sendSporsmal(
                         fnr,
                         request,
-                        ident
+                        ident,
+                        payload.token
                     )
                 )
             }

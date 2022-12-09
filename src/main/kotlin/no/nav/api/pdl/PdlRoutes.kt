@@ -10,12 +10,14 @@ import io.ktor.routing.*
 import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
 import no.nav.plugins.securityScheme
+import no.nav.utils.getJWTPrincipalPayload
 
 fun Route.configurePdlRoutes(pdlService: PdlService) {
     route("pdl/{fnr}") {
         notarizedGet(Api.personalia) {
+            val payload = call.getJWTPrincipalPayload()
             val fnr = requireNotNull(call.parameters["fnr"])
-            call.respond(pdlService.hentPersonalia(fnr))
+            call.respond(pdlService.hentPersonalia(fnr, payload.token))
         }
     }
 }

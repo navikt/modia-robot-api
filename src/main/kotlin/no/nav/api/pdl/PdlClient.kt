@@ -13,7 +13,7 @@ import java.net.URL
 
 class PdlClient(
     private val pdlUrl: String,
-    private val tokenclient: BoundedMachineToMachineTokenClient,
+    private val oboTokenProvider: BoundedOnBehalfOfTokenClient,
     httpEngine: HttpClientEngine = OkHttp.create(),
 ) {
     private val graphqlClient = LoggingGraphQLKtorClient(
@@ -23,23 +23,23 @@ class PdlClient(
         httpClient = HttpClient(httpEngine)
     )
 
-    private val requestConfig: HeadersBuilder = {
-        val token = tokenclient.createMachineToMachineToken()
-        header("Authorization", "Bearer $token")
+    private fun requestConfig(token: String): HeadersBuilder = {
+        val oboToken = oboTokenProvider.exchangeOnBehalfOfToken(token)
+        header("Authorization", "Bearer $oboToken")
         header("Tema", "GEN")
         header("X-Correlation-ID", getCallId())
     }
 
-    suspend fun hentPersonalia(fnr: String): GraphQLClientResponse<HentPersonalia.Result> {
+    suspend fun hentPersonalia(fnr: String, token: String): GraphQLClientResponse<HentPersonalia.Result> {
         return externalServiceCall {
             graphqlClient.execute(
                 request = HentPersonalia(HentPersonalia.Variables(fnr)),
-                requestCustomizer = requestConfig
+                requestCustomizer = requestConfig(token)
             )
         }
     }
 
-    suspend fun hentAktorid(fnr: String): GraphQLClientResponse<HentAktorid.Result> {
+    suspend fun hentAktorid(fnr: String, token: String): GraphQLClientResponse<HentAktorid.Result> {
         return externalServiceCall {
             graphqlClient.execute(
                 request = HentAktorid(
@@ -47,16 +47,16 @@ class PdlClient(
                         ident = fnr
                     )
                 ),
-                requestCustomizer = requestConfig
+                requestCustomizer = requestConfig(token)
             )
         }
     }
 
-    suspend fun hentNavn(fnr: String): GraphQLClientResponse<HentNavn.Result> {
+    suspend fun hentNavn(fnr: String, token: String): GraphQLClientResponse<HentNavn.Result> {
         return externalServiceCall {
             graphqlClient.execute(
                 request = HentNavn(HentNavn.Variables(fnr)),
-                requestCustomizer = requestConfig
+                requestCustomizer = requestConfig(token)
             )
         }
     }

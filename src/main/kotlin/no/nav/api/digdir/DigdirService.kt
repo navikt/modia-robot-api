@@ -31,8 +31,8 @@ class DigdirService(private val digdirClient: DigdirClient) {
         val mobiltelefonnummerVerifisert: Instant? = null,
     )
 
-    suspend fun hentKontaktinformasjon(fnr: String): Kontaktinformasjon {
-        val krrData = digdirClient.hentKrrData(fnr)
+    suspend fun hentKontaktinformasjon(fnr: String, token: String): Kontaktinformasjon {
+        val krrData = digdirClient.hentKrrData(fnr, token)
         return Kontaktinformasjon(
             epostadresse = krrData.epostadresse,
             epostadresseOppdatert = krrData.epostadresseOppdatert,
