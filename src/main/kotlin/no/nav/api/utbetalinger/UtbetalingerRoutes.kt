@@ -13,19 +13,19 @@ import kotlinx.datetime.LocalDate
 import no.nav.api.CommonModels
 import no.nav.api.utbetalinger.UtbetalingerService.*
 import no.nav.plugins.securityScheme
-import no.nav.utils.getJWTPrincipalPayload
+import no.nav.utils.getJWT
 
 fun Route.configureUtbetalingerRoutes(
     utbetalingerService: UtbetalingerService,
 ) {
     route("utbetalinger/{fnr}/ytelseoversikt") {
         notarizedGet(Api.utbetalinger) {
-            val payload = call.getJWTPrincipalPayload()
+            val payload = call.getJWT()
             val fnr = requireNotNull(call.parameters["fnr"])
             val fra = LocalDate.parse(call.request.queryParameters["fra"] ?: "")
             val til = LocalDate.parse(call.request.queryParameters["til"] ?: "")
 
-            call.respond(utbetalingerService.hentUtbetalinger(fnr, fra, til, payload.token))
+            call.respond(utbetalingerService.hentUtbetalinger(fnr, fra, til, payload))
         }
     }
 }

@@ -12,7 +12,7 @@ import io.ktor.routing.*
 import no.nav.api.CommonModels
 import no.nav.api.dialog.DialogService.*
 import no.nav.plugins.securityScheme
-import no.nav.utils.getJWTPrincipalPayload
+import no.nav.utils.getJWT
 import no.nav.utils.getJWTPrincipalSubject
 
 fun Route.configureDialogRoutes(
@@ -21,7 +21,7 @@ fun Route.configureDialogRoutes(
     route("dialog/{fnr}") {
         route("sendinfomelding") {
             notarizedPost(Api.sendInfomelding) {
-                val payload = call.getJWTPrincipalPayload()
+                val payload = call.getJWT()
                 val fnr = requireNotNull(call.parameters["fnr"])
                 val request: MeldingRequest = call.receive()
                 val ident = call.getJWTPrincipalSubject()
@@ -30,14 +30,14 @@ fun Route.configureDialogRoutes(
                         fnr,
                         request,
                         ident,
-                        payload.token
+                        payload
                     )
                 )
             }
         }
         route("sendsporsmal") {
             notarizedPost(Api.sendSporsmal) {
-                val payload = call.getJWTPrincipalPayload()
+                val payload = call.getJWT()
                 val fnr = requireNotNull(call.parameters["fnr"])
                 val request: MeldingRequest = call.receive()
                 val ident = call.getJWTPrincipalSubject()
@@ -46,7 +46,7 @@ fun Route.configureDialogRoutes(
                         fnr,
                         request,
                         ident,
-                        payload.token
+                        payload
                     )
                 )
             }
