@@ -31,7 +31,7 @@ interface Env {
 
 class EnvImpl : Env {
     override val soapStsUrl: String = getRequiredConfig("SECURITYTOKENSERVICE_URL")
-    override val jwksUrl: String = getRequiredConfig("ISSO_JWKS_URL")
+    override val jwksUrl: String = getRequiredConfig("AZURE_OPENID_CONFIG_JWKS_URI")
     override val tpsPersonV3Url: String = getRequiredConfig("TPS_PERSONV3_URL")
     override val oppfolgingUrl: String = getRequiredConfig("OPPFOLGING_URL")
     override val oppfolgingScope: DownstreamApi = getRequiredConfig("OPPFOLGING_SCOPE").toDownstreamApi()

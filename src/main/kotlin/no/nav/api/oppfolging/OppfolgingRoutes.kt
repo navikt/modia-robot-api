@@ -9,14 +9,16 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import no.nav.api.CommonModels
 import no.nav.plugins.securityScheme
+import no.nav.utils.getJWT
 
 fun Route.configureOppfolgingRoutes(
     oppfolgingService: OppfolgingService,
 ) {
     route("oppfolging/{fnr}/veileder") {
         notarizedGet(Api.veileder) {
+            val payload = call.getJWT()
             val fnr = requireNotNull(call.parameters["fnr"])
-            call.respond(oppfolgingService.hentOppfolging(fnr))
+            call.respond(oppfolgingService.hentOppfolging(fnr, payload))
         }
     }
 }

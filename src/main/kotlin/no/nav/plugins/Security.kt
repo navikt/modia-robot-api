@@ -10,14 +10,21 @@ import io.bkbn.kompendium.auth.configuration.JwtAuthConfiguration
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
+import io.ktor.http.*
+import io.ktor.response.*
 import no.nav.Env
 import java.net.URL
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 val securityScheme = object : JwtAuthConfiguration {
     override val name: String = "jwt"
 }
-private val mockJwt = JWT.decode(JWT.create().withSubject("Z999999").sign(Algorithm.none()))
+const val NAV_IDENT_CLAIM = "NAVident"
+private val mockJwt = JWT.decode(
+    JWT.create().withSubject(UUID.randomUUID().toString()).withClaim(NAV_IDENT_CLAIM, "Z999999").sign(Algorithm.none())
+)
+
 fun Application.configureSecurity(disableSecurity: Boolean, env: Env) {
     if (disableSecurity) {
         authentication {
@@ -45,13 +52,19 @@ fun Application.configureSecurity(disableSecurity: Boolean, env: Env) {
                 }
                 when {
                     credential.payload.audience == null -> null
-                    env.identAllowList.contains(credential.payload.subject.uppercase()) -> JWTPrincipal(credential.payload)
+                    env.identAllowList.contains(credential.getSubject()) -> JWTPrincipal(credential.payload)
                     else -> null
                 }
+            }
+            challenge { _, _ ->
+                call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")
             }
         }
     }
 }
+
+private fun JWTPayloadHolder.getSubject(): String =
+    payload.claims[NAV_IDENT_CLAIM]?.asString() ?: payload.subject.uppercase()
 
 private fun makeJwkProvider(jwksUrl: String): JwkProvider =
     JwkProviderBuilder(URL(jwksUrl))

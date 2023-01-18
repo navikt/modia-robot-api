@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class SkrivestotteTest {
     @Test
     internal fun name() = runBlocking {
-        val mockEngine = MockEngine { request ->
+        val mockEngine = MockEngine { _ ->
             respond(
                 status = HttpStatusCode.OK,
                 headers = headersOf(

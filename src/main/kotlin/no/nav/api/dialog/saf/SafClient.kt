@@ -13,7 +13,7 @@ import java.net.URL
 
 class SafClient(
     private val safUrl: String,
-    private val tokenclient: BoundedMachineToMachineTokenClient,
+    private val oboTokenProvider: BoundedOnBehalfOfTokenClient,
     httpEngine: HttpClientEngine = OkHttp.create(),
 ) {
     private val graphqlClient = LoggingGraphQLKtorClient(
@@ -23,7 +23,7 @@ class SafClient(
         httpClient = HttpClient(httpEngine)
     )
 
-    suspend fun hentBrukersSaker(fnr: String): GraphQLClientResponse<HentBrukerssaker.Result> {
+    suspend fun hentBrukersSaker(fnr: String, token: String): GraphQLClientResponse<HentBrukerssaker.Result> {
         return externalServiceCall {
             graphqlClient.execute(
                 request = HentBrukerssaker(
@@ -35,8 +35,8 @@ class SafClient(
                     )
                 ),
                 requestCustomizer = {
-                    val token = tokenclient.createMachineToMachineToken()
-                    header("Authorization", "Bearer $token")
+                    val oboToken = oboTokenProvider.exchangeOnBehalfOfToken(token)
+                    header("Authorization", "Bearer $oboToken")
                     header("X-Correlation-ID", getCallId())
                 }
             )

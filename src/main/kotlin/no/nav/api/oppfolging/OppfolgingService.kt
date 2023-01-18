@@ -22,16 +22,16 @@ class OppfolgingService(
         val etternavn: String,
     )
 
-    suspend fun hentOppfolging(fnr: String): Oppfolging = externalServiceCall {
-        val status = oppfolgingClient.hentOppfolgingStatus(fnr)
+    suspend fun hentOppfolging(fnr: String, token: String): Oppfolging = externalServiceCall {
+        val status = oppfolgingClient.hentOppfolgingStatus(fnr, token)
         when (status.erUnderOppfolging) {
             null, false -> Oppfolging(underOppfolging = false, veileder = null)
-            true -> Oppfolging(underOppfolging = true, veileder = hentVeileder(fnr))
+            true -> Oppfolging(underOppfolging = true, veileder = hentVeileder(fnr, token))
         }
     }
 
-    suspend fun hentVeileder(fnr: String): Veileder? = externalServiceCall {
-        val veileder = oppfolgingClient.hentOppfolgingVeileder(fnr)
+    suspend fun hentVeileder(fnr: String, token: String): Veileder? = externalServiceCall {
+        val veileder = oppfolgingClient.hentOppfolgingVeileder(fnr, token)
         veileder?.veilederIdent
             ?.let { nom.finnNavn(NavIdent(it)) }
             ?.let {

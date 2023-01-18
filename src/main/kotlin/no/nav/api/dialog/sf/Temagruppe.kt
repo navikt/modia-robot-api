@@ -5,5 +5,5 @@ enum class Temagruppe {
     FMLI,
     HJLPM,
     OVRG,
-    PENS
+    PENS,
 }

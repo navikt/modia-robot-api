@@ -13,6 +13,7 @@ import no.nav.utils.*
 class DigdirClient(
     private val digdirKrrProxyUrl: String,
     private val tokenclient: BoundedMachineToMachineTokenClient,
+    private val oboTokenProvider: BoundedOnBehalfOfTokenClient,
 ) {
 
     @Serializable
@@ -45,24 +46,22 @@ class DigdirClient(
                     callIdExtractor = { getCallId() }
                 )
             )
-            addInterceptor(
-                AuthorizationInterceptor {
-                    tokenclient.createMachineToMachineToken()
-                }
-            )
         }
     }
 
-    suspend fun hentKrrData(fnr: String): KrrData = externalServiceCall {
+    suspend fun hentKrrData(fnr: String, token: String): KrrData = externalServiceCall {
         client.get("$digdirKrrProxyUrl/rest/v1/person") {
             headers {
                 append("Nav-Personident", fnr)
                 append("Nav-Call-Id", getCallId())
             }
+            header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
         }
     }
 
     suspend fun ping() = externalServiceCall {
-        client.get<HttpResponse>("$digdirKrrProxyUrl/rest/ping").status
+        client.get<HttpResponse>("$digdirKrrProxyUrl/rest/ping") {
+            header("Authorization", "Bearer ${tokenclient.createMachineToMachineToken()}")
+        }.status
     }
 }

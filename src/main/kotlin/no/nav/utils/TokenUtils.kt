@@ -1,6 +1,11 @@
 package no.nav.utils
 
+import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.auth.jwt.*
+import io.ktor.http.auth.*
 import no.nav.common.token_client.client.MachineToMachineTokenClient
+import no.nav.common.token_client.client.OnBehalfOfTokenClient
 
 class DownstreamApi(
     val cluster: String,
@@ -28,6 +33,28 @@ fun MachineToMachineTokenClient.createMachineToMachineToken(api: DownstreamApi):
 interface BoundedMachineToMachineTokenClient {
     fun createMachineToMachineToken(): String
 }
+
+interface BoundedOnBehalfOfTokenClient {
+    fun exchangeOnBehalfOfToken(accesstoken: String): String
+}
+
 fun MachineToMachineTokenClient.bindTo(api: DownstreamApi) = object : BoundedMachineToMachineTokenClient {
     override fun createMachineToMachineToken() = createMachineToMachineToken(api.tokenscope())
+}
+
+fun OnBehalfOfTokenClient.bindTo(api: DownstreamApi) = object : BoundedOnBehalfOfTokenClient {
+    override fun exchangeOnBehalfOfToken(accesstoken: String) = exchangeOnBehalfOfToken(api.tokenscope(), accesstoken)
+}
+
+fun ApplicationCall.getJWT(): String {
+    val authHeader = this.request.parseAuthorizationHeader()
+    if (authHeader != null && authHeader is HttpAuthHeader.Single && authHeader.authScheme == "Bearer") {
+        return authHeader.blob
+    }
+
+    throw Exception("Missing authorization header")
+}
+
+fun ApplicationCall.getJWTPrincipalSubject() = checkNotNull(this.principal<JWTPrincipal>()?.subject) {
+    "Could not extract subject from JWT"
 }

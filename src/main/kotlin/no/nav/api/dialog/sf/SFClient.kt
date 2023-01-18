@@ -12,7 +12,7 @@ import no.nav.utils.*
 
 class SFClient(
     private val sfUrl: String,
-    private val tokenclient: BoundedMachineToMachineTokenClient,
+    private val oboTokenProvider: BoundedOnBehalfOfTokenClient,
 ) {
     private val client = HttpClient(OkHttp) {
         install(JsonFeature) {
@@ -30,48 +30,48 @@ class SFClient(
                     callIdExtractor = { getCallId() }
                 )
             )
-            addInterceptor(
-                AuthorizationInterceptor {
-                    tokenclient.createMachineToMachineToken()
-                }
-            )
         }
     }
 
     @Serializable
     data class HenvendelseDTO(val kjedeId: String)
 
-    suspend fun sendSporsmal(request: SfMeldingRequest, ident: String): HenvendelseDTO = externalServiceCall {
+    suspend fun sendSporsmal(request: SfMeldingRequest, ident: String, token: String): HenvendelseDTO = externalServiceCall {
         client.post("$sfUrl/henvendelse/ny/melding") {
             headers {
                 append("Nav-Ident", ident)
             }
+            header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
             contentType(ContentType.Application.Json)
             body = request
         }
     }
 
-    suspend fun sendInfomelding(request: SfMeldingRequest, ident: String): HenvendelseDTO = externalServiceCall {
+    suspend fun sendInfomelding(request: SfMeldingRequest, ident: String, token: String): HenvendelseDTO = externalServiceCall {
         client.post("$sfUrl/henvendelse/ny/melding") {
             headers {
                 append("Nav-Ident", ident)
             }
+            header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
             contentType(ContentType.Application.Json)
             body = request
         }
     }
 
-    suspend fun journalforMelding(request: JournalforRequest, ident: String): Unit = externalServiceCall {
+    suspend fun journalforMelding(request: JournalforRequest, ident: String, token: String): Unit = externalServiceCall {
         client.post("$sfUrl/henvendelse/journal") {
             headers {
                 append("Nav-Ident", ident)
             }
+            header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
             contentType(ContentType.Application.Json)
             body = request
         }
     }
 
-    suspend fun lukkTraad(kjedeId: String): Unit = externalServiceCall {
-        client.post("$sfUrl/henvendelse/meldingskjede/lukk?kjedeId=$kjedeId")
+    suspend fun lukkTraad(kjedeId: String, token: String): Unit = externalServiceCall {
+        client.post("$sfUrl/henvendelse/meldingskjede/lukk?kjedeId=$kjedeId") {
+            header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+        }
     }
 }
