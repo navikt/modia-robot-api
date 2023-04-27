@@ -57,12 +57,12 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core:$ktor_version")
+    implementation("io.ktor:ktor-server-core:2.3.0")
     implementation("io.ktor:ktor-auth:$ktor_version")
     implementation("io.ktor:ktor-auth-jwt:$ktor_version")
     implementation("io.ktor:ktor-metrics-micrometer:$ktor_version")
     implementation("io.ktor:ktor-serialization:$ktor_version")
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-server-netty:2.3.0")
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-okhttp:$ktor_version")
     implementation("io.ktor:ktor-client-serialization:$ktor_version")
@@ -86,9 +86,8 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:$logstash_version")
     implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphql_kotlin_version")
 
-
     testImplementation("io.mockk:mockk:1.12.4")
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    testImplementation("io.ktor:ktor-server-tests:2.3.0")
     testImplementation("io.ktor:ktor-client-mock:$ktor_version")
     testImplementation("org.junit.jupiter:junit-jupiter:$junit_version")
 }
@@ -96,7 +95,7 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 
-    testLogging {     // This is for logging and can be removed.
+    testLogging { // This is for logging and can be removed.
         events("passed", "skipped", "failed")
     }
 }
