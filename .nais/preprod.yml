@@ -66,7 +66,7 @@ spec:
     - name: SECURITYTOKENSERVICE_URL
       value: "https://sts-q1.preprod.local/SecurityTokenServiceProvider/"
     - name: OPPFOLGING_URL
-      value: "https://veilarboppfolging.intern.dev.nav.no/veilarboppfolging/api"
+      value: "https://veilarboppfolging.dev.intern.nav.no/veilarboppfolging/api"
     - name: OPPFOLGING_SCOPE
       value: "dev-fss:pto:veilarboppfolging"
     - name: TPS_PERSONV3_URL
@@ -76,7 +76,7 @@ spec:
     - name: NOM_SCOPE
       value: "dev-gcp:nom:nom-api"
     - name: PDL_URL
-      value: "https://pdl-api.intern.dev.nav.no/graphql"
+      value: "https://pdl-api.dev.intern.nav.no/graphql"
     - name: PDL_SCOPE
       value: "dev-fss:pdl:pdl-api"
     - name: SAF_URL
@@ -90,11 +90,11 @@ spec:
     - name: DIGDIR_KRR_SCOPE
       value: "dev-gcp:team-rocket:digdir-krr-proxy"
     - name: UTBETALDATA_SOKOS_URL
-      value: "https://sokos-utbetaldata.intern.dev.nav.no/utbetaldata/api"
+      value: "https://sokos-utbetaldata.dev.intern.nav.no/utbetaldata/api"
     - name: UTBETAL_SOKOS_SCOPE
       value: "dev-fss:okonomi:sokos-utbetaldata"
     - name: SF_HENVENDELSE_URL
-      value: "https://sf-henvendelse.intern.dev.nav.no/api"
+      value: "https://sf-henvendelse.dev.intern.nav.no/api"
     - name: SF_HENVENDELSE_SCOPE
       value: "dev-fss:teamcrm:sf-henvendelse"
     - name: CXF_SECURE_LOG
