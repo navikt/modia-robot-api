@@ -4,8 +4,6 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -63,41 +61,42 @@ class UtbetalingerClient(
     )
 
     private val client = HttpClient(httpEngine) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(
-                kotlinx.serialization.json.Json {
-                    ignoreUnknownKeys = true
-                }
-            )
-        }
+        installContentNegotiationAndIgnoreUnknownKeys()
         expectSuccess = false
     }
 
-    suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate, token: String): List<Utbetaling> = externalServiceCall {
-        val request: UtbetaldataRequest = lagUtbetaldataRequest(fnr, fra, til)
-        val response = client.post<HttpResponse>("$utbetalingerUrl/v2/hent-utbetalingsinformasjon/intern") {
-            header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
-            contentType(ContentType.Application.Json)
-            body = request
-        }
+    suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate, token: String): List<Utbetaling> =
+        externalServiceCall {
+            val request: UtbetaldataRequest = lagUtbetaldataRequest(fnr, fra, til)
+            val response = client.post("$utbetalingerUrl/v2/hent-utbetalingsinformasjon/intern") {
+                header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
 
-        when (response.status) {
-            HttpStatusCode.NotFound -> emptyList()
-            HttpStatusCode.OK ->
-                response
-                    .runCatching { receive<List<Utbetaling>>() }
-                    .onFailure { TjenestekallLogger.error("Feil ved deseralisering av json", mapOf("exception" to it)) }
-                    .getOrThrow()
-            else -> throw WebStatusException(
-                message = """
+            when (response.status) {
+                HttpStatusCode.NotFound -> emptyList()
+                HttpStatusCode.OK ->
+                    response
+                        .runCatching { body<List<Utbetaling>>() }
+                        .onFailure {
+                            TjenestekallLogger.error(
+                                "Feil ved deseralisering av json",
+                                mapOf("exception" to it),
+                            )
+                        }
+                        .getOrThrow()
+
+                else -> throw WebStatusException(
+                    message = """
                     Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.
                     HttpStatus: ${response.status}
-                    Body: ${response.readText()}
-                """.trimIndent(),
-                status = HttpStatusCode.InternalServerError
-            )
+                    Body: ${response.bodyAsText()}
+                    """.trimIndent(),
+                    status = HttpStatusCode.InternalServerError,
+                )
+            }
         }
-    }
 
     private fun lagUtbetaldataRequest(
         fnr: String,
@@ -108,9 +107,9 @@ class UtbetalingerClient(
         rolle = Rolle.RETTIGHETSHAVER,
         periode = Periode(
             fom = fra.toString(),
-            tom = til.toString()
+            tom = til.toString(),
         ),
-        periodetype = PeriodeType.UTBETALINGSPERIODE
+        periodetype = PeriodeType.UTBETALINGSPERIODE,
     )
 
     companion object {
@@ -120,15 +119,15 @@ class UtbetalingerClient(
                 addInterceptor(
                     LoggingInterceptor(
                         name = "utbetaldata-sokos",
-                        callIdExtractor = { getCallId() }
-                    )
+                        callIdExtractor = { getCallId() },
+                    ),
                 )
                 addInterceptor(
                     HeadersInterceptor {
                         mapOf(
-                            "nav-call-id" to getCallId()
+                            "nav-call-id" to getCallId(),
                         )
-                    }
+                    },
                 )
             }
         }

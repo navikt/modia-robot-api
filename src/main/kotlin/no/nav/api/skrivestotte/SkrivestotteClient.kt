@@ -1,14 +1,16 @@
 package no.nav.api.skrivestotte
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
 import no.nav.utils.*
@@ -23,8 +25,8 @@ class SkrivestotteClient(
         addInterceptor(
             LoggingInterceptor(
                 name = "skrivestotte",
-                callIdExtractor = { getCallId() }
-            )
+                callIdExtractor = { getCallId() },
+            ),
         )
     },
 ) {
@@ -52,28 +54,30 @@ class SkrivestotteClient(
         val ru_RU: String? = null,
         val ur: String? = null,
     ) {
-        fun kombinert() = listOfNotNull(nb_NO, nn_NO, en_US, se_NO, de_DE, fr_FR, es_ES, pl_PL, ru_RU, ur).joinToString("\u0000")
+        fun kombinert() =
+            listOfNotNull(nb_NO, nn_NO, en_US, se_NO, de_DE, fr_FR, es_ES, pl_PL, ru_RU, ur).joinToString("\u0000")
     }
 
     private val client = HttpClient(httpEngine) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(
-                kotlinx.serialization.json.Json {
+        install(ContentNegotiation) {
+            json(
+                Json {
                     serializersModule = SerializersModule {
                         contextual(UUIDSerializer)
                         contextual(
                             MapSerializer(
                                 keySerializer = UUIDSerializer,
-                                valueSerializer = Tekst.serializer()
-                            )
+                                valueSerializer = Tekst.serializer(),
+                            ),
                         )
                     }
-                }
+                    ignoreUnknownKeys = true
+                },
             )
         }
     }
 
     suspend fun hentTekster(): Tekster = externalServiceCall {
-        client.get("$skrivestotteUrl/skrivestotte")
+        client.get("$skrivestotteUrl/skrivestotte").body()
     }
 }

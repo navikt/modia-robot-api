@@ -20,14 +20,15 @@ val graphql_kotlin_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.7.0"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.0"
+    kotlin("jvm") version "1.8.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("com.expediagroup.graphql") version "5.5.0"
+    id("com.expediagroup.graphql") version "6.4.0"
 }
 
 group = "no.nav"
 version = "0.0.1"
+
 application {
     mainClass.set("no.nav.ApplicationKt")
 
@@ -57,24 +58,21 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core:2.3.0")
-    implementation("io.ktor:ktor-auth:$ktor_version")
-    implementation("io.ktor:ktor-auth-jwt:$ktor_version")
-    implementation("io.ktor:ktor-metrics-micrometer:$ktor_version")
+    implementation("io.ktor:ktor-server:$ktor_version")
+    implementation("io.ktor:ktor-server-core:$ktor_version")
+    implementation("io.ktor:ktor-server-auth:$ktor_version")
+    implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
     implementation("io.ktor:ktor-serialization:$ktor_version")
-    implementation("io.ktor:ktor-server-netty:2.3.0")
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-okhttp:$ktor_version")
-    implementation("io.ktor:ktor-client-serialization:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version")
     implementation("io.bkbn:kompendium-core:$kompendium_version")
-    implementation("io.bkbn:kompendium-auth:$kompendium_version")
-    implementation("io.bkbn:kompendium-swagger-ui:$kompendium_version")
-    implementation("org.webjars:webjars-locator-core:0.50")
     implementation("no.nav.tjenestespesifikasjoner:person-v3-tjenestespesifikasjon:$tjenestespec_version")
     implementation("no.nav.tjenestespesifikasjoner:utbetaling-tjenestespesifikasjon:$tjenestespec_version")
-    implementation("no.nav.personoversikt:kotlin-utils:$modia_common_utils_version")
-
+    implementation("com.github.navikt.modia-common-utils:kotlin-utils:$modia_common_utils_version")
+    implementation("com.github.navikt.modia-common-utils:ktor-utils:$modia_common_utils_version")
     implementation("no.nav.common:token-client:$nav_common_version")
     implementation("no.nav.common:cxf:$nav_common_version")
     implementation("no.nav.common:client:$nav_common_version")
@@ -85,6 +83,9 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstash_version")
     implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphql_kotlin_version")
+    implementation("io.ktor:ktor-client-okhttp-jvm:2.3.0")
+    implementation("io.ktor:ktor-server-core-jvm:2.3.0")
+    implementation("io.ktor:ktor-server-swagger-jvm:2.3.0")
 
     testImplementation("io.mockk:mockk:1.12.4")
     testImplementation("io.ktor:ktor-server-tests:2.3.0")
@@ -136,22 +137,22 @@ val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
         GraphQLScalar(
             "Long",
             "no.nav.api.pdl.converters.PdlLong",
-            "no.nav.api.pdl.converters.LongScalarConverter"
-        )
+            "no.nav.api.pdl.converters.LongScalarConverter",
+        ),
     )
     customScalars.add(
         GraphQLScalar(
             "Date",
             "kotlinx.datetime.LocalDate",
-            "no.nav.api.pdl.converters.DateScalarConverter"
-        )
+            "no.nav.api.pdl.converters.DateScalarConverter",
+        ),
     )
     customScalars.add(
         GraphQLScalar(
             "DateTime",
             "kotlinx.datetime.LocalDateTime",
-            "no.nav.api.pdl.converters.DateTimeScalarConverter"
-        )
+            "no.nav.api.pdl.converters.DateTimeScalarConverter",
+        ),
     )
     dependsOn("downloadPDLSchema")
 }

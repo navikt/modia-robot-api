@@ -20,7 +20,7 @@ class SafClient(
         name = "SAF",
         critical = false,
         url = URL(safUrl),
-        httpClient = HttpClient(httpEngine)
+        httpClient = HttpClient(httpEngine),
     )
 
     suspend fun hentBrukersSaker(fnr: String, token: String): GraphQLClientResponse<HentBrukerssaker.Result> {
@@ -30,15 +30,15 @@ class SafClient(
                     HentBrukerssaker.Variables(
                         BrukerIdInput(
                             id = fnr,
-                            type = BrukerIdType.FNR
-                        )
-                    )
+                            type = BrukerIdType.FNR,
+                        ),
+                    ),
                 ),
                 requestCustomizer = {
                     val oboToken = oboTokenProvider.exchangeOnBehalfOfToken(token)
                     header("Authorization", "Bearer $oboToken")
                     header("X-Correlation-ID", getCallId())
-                }
+                },
             )
         }
     }

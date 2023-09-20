@@ -25,7 +25,7 @@ object UUIDSerializer : KSerializer<UUID> {
 abstract class EnumSerializer<T : Enum<T>>(clazz: KClass<T>, private val defaultValue: T) : KSerializer<T> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
         serialName = requireNotNull(clazz.qualifiedName),
-        kind = PrimitiveKind.STRING
+        kind = PrimitiveKind.STRING,
     )
     private val deserializeLUT = clazz.java.enumConstants.associateBy { it.serialName }
     private val serializeLUT = deserializeLUT.swapKeyValue()

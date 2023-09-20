@@ -1,6 +1,6 @@
 package no.nav
 
-import io.bkbn.kompendium.auth.Notarized.notarizedAuthenticate
+import io.ktor.server.auth.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.routing.*
@@ -29,7 +29,7 @@ fun startApplication(
         configureExceptionHandling()
 
         routing {
-            notarizedAuthenticate(securityScheme) {
+            authenticate(SECURITY_SCHEME_NAME) {
                 route("api") {
                     configureDebugRoutes(consumers.tokenclient)
                     configureOppfolgingRoutes(services.oppfolgingService)

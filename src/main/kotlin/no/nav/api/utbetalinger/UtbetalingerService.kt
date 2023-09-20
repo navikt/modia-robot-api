@@ -2,7 +2,7 @@ package no.nav.api.utbetalinger
 
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
-import no.nav.personoversikt.utils.SelftestGenerator
+import no.nav.personoversikt.common.utils.SelftestGenerator
 
 class UtbetalingerService(
     private val utbetalingerClient: UtbetalingerClient,

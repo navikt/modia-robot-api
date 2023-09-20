@@ -1,6 +1,6 @@
 package no.nav
 
-import no.nav.personoversikt.utils.EnvUtils.getRequiredConfig
+import no.nav.personoversikt.common.utils.EnvUtils.getRequiredConfig
 import no.nav.utils.DownstreamApi
 import no.nav.utils.parse
 

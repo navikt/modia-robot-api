@@ -2,8 +2,8 @@ package no.nav.api.skrivestotte
 
 import kotlinx.coroutines.runBlocking
 import no.nav.api.skrivestotte.SkrivestotteClient.*
-import no.nav.personoversikt.utils.Retry
-import no.nav.personoversikt.utils.SelftestGenerator
+import no.nav.personoversikt.common.utils.Retry
+import no.nav.personoversikt.common.utils.SelftestGenerator
 import java.util.*
 import kotlin.concurrent.fixedRateTimer
 import kotlin.time.Duration.Companion.hours
