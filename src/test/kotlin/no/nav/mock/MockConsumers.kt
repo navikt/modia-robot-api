@@ -65,10 +65,10 @@ private val oboTokenClientMock = mockOf<OnBehalfOfTokenClient> { client ->
 
 private val oppfolgingClientMock = mockOf<OppfolgingClient> { client ->
     coEvery { client.hentOppfolgingStatus(any(), any()) } returns OppfolgingClient.Status(
-        erUnderOppfolging = true
+        erUnderOppfolging = true,
     )
     coEvery { client.hentOppfolgingVeileder(any(), any()) } returns OppfolgingClient.VeilederIdent(
-        veilederIdent = "Z123456"
+        veilederIdent = "Z123456",
     )
 }
 
@@ -76,9 +76,9 @@ private val personV3Mock = mockOf<PersonV3> { tps ->
     coEvery { tps.hentPerson(any()) } returns HentPersonResponse().withPerson(
         Bruker().withBankkonto(
             BankkontoNorge().withBankkonto(
-                Bankkontonummer().withBankkontonummer("123456789123456")
-            )
-        )
+                Bankkontonummer().withBankkontonummer("123456789123456"),
+            ),
+        ),
     )
 }
 
@@ -98,9 +98,9 @@ private val skrivestotteClientMock = mockOf<SkrivestotteClient> { client ->
         tags = listOf("nøs", "kontonummer", "retur"),
         innhold = Innhold(
             nb_NO = "Dette er en tekst",
-            nn_NO = "Dette er ein tekst"
+            nn_NO = "Dette er ein tekst",
         ),
-        vekttall = 0
+        vekttall = 0,
     )
     val tekster = mapOf(
         hardkodetUUID to tekst,
@@ -108,10 +108,10 @@ private val skrivestotteClientMock = mockOf<SkrivestotteClient> { client ->
             id = UUID.randomUUID(),
             innhold = Innhold(
                 nb_NO = "Dette er også en tekst",
-                en_US = "This is also a text"
+                en_US = "This is also a text",
             ),
-            tags = emptyList()
-        )
+            tags = emptyList(),
+        ),
     )
 
     coEvery { client.hentTekster() } returns tekster
@@ -128,7 +128,7 @@ private val digdirClientMock = mockOf<DigdirClient> { client ->
         epostadresseVerifisert = Clock.System.now(),
         mobiltelefonnummer = "90909090",
         mobiltelefonnummerOppdatert = Clock.System.now(),
-        mobiltelefonnummerVerifisert = Clock.System.now()
+        mobiltelefonnummerVerifisert = Clock.System.now(),
     )
     coEvery { client.hentKrrData(any(), any()) } returns krrData
 }
@@ -143,34 +143,34 @@ private val pdlClientMock = mockOf<PdlClient> { client ->
             hentPerson = Person(
                 foedsel = listOf(
                     Foedsel(
-                        foedselsdato = LocalDate.now().minus(10, DateTimeUnit.YEAR)
-                    )
+                        foedselsdato = LocalDate.now().minus(10, DateTimeUnit.YEAR),
+                    ),
                 ),
                 oppholdsadresse = listOf(
                     Oppholdsadresse(
                         gyldigFraOgMed = LocalDateTime.now().minus(2, DateTimeUnit.HOUR),
-                        coAdressenavn = "c/o ignore"
+                        coAdressenavn = "c/o ignore",
                     ),
                     Oppholdsadresse(
                         gyldigFraOgMed = LocalDateTime.now().minus(1, DateTimeUnit.HOUR),
-                        coAdressenavn = "c/o hansen"
-                    )
+                        coAdressenavn = "c/o hansen",
+                    ),
                 ),
                 kontaktadresse = emptyList(),
-                bostedsadresse = emptyList()
-            )
-        )
+                bostedsadresse = emptyList(),
+            ),
+        ),
     )
     coEvery { client.hentAktorid(any(), any()) } returns KotlinxGraphQLResponse(
         data = HentAktorid.Result(
             hentIdenter = Identliste(
                 identer = listOf(
                     IdentInformasjon(
-                        ident = "10108000398"
-                    )
-                )
-            )
-        )
+                        ident = "10108000398",
+                    ),
+                ),
+            ),
+        ),
     )
 
     coEvery { client.hentNavn(any(), any()) } returns KotlinxGraphQLResponse(
@@ -180,11 +180,11 @@ private val pdlClientMock = mockOf<PdlClient> { client ->
                     Navn(
                         fornavn = "Aremark",
                         mellomnavn = null,
-                        etternavn = "Testfamilien"
-                    )
-                )
-            )
-        )
+                        etternavn = "Testfamilien",
+                    ),
+                ),
+            ),
+        ),
     )
 }
 
@@ -196,16 +196,16 @@ private val safClientMock = mockOf<SafClient> { client ->
                     fagsakId = null,
                     fagsaksystem = null,
                     sakstype = Sakstype.GENERELL_SAK,
-                    tema = Tema.DAG
+                    tema = Tema.DAG,
                 ),
                 Sak(
                     fagsakId = "abba1231",
                     fagsaksystem = "AO01",
                     sakstype = Sakstype.FAGSAK,
-                    tema = Tema.DAG
-                )
-            )
-        )
+                    tema = Tema.DAG,
+                ),
+            ),
+        ),
     )
 }
 

@@ -20,7 +20,7 @@ class PdlClient(
         name = "PDL",
         critical = false,
         url = URL(pdlUrl),
-        httpClient = HttpClient(httpEngine)
+        httpClient = HttpClient(httpEngine),
     )
 
     private fun requestConfig(token: String): HeadersBuilder = {
@@ -34,7 +34,7 @@ class PdlClient(
         return externalServiceCall {
             graphqlClient.execute(
                 request = HentPersonalia(HentPersonalia.Variables(fnr)),
-                requestCustomizer = requestConfig(token)
+                requestCustomizer = requestConfig(token),
             )
         }
     }
@@ -44,10 +44,10 @@ class PdlClient(
             graphqlClient.execute(
                 request = HentAktorid(
                     HentAktorid.Variables(
-                        ident = fnr
-                    )
+                        ident = fnr,
+                    ),
                 ),
-                requestCustomizer = requestConfig(token)
+                requestCustomizer = requestConfig(token),
             )
         }
     }
@@ -56,7 +56,7 @@ class PdlClient(
         return externalServiceCall {
             graphqlClient.execute(
                 request = HentNavn(HentNavn.Variables(fnr)),
-                requestCustomizer = requestConfig(token)
+                requestCustomizer = requestConfig(token),
             )
         }
     }

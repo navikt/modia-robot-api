@@ -1,13 +1,14 @@
 package no.nav.api.digdir
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.HttpResponse
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import no.nav.utils.*
 
 class DigdirClient(
@@ -31,20 +32,14 @@ class DigdirClient(
     )
 
     private val client = HttpClient(OkHttp) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(
-                kotlinx.serialization.json.Json {
-                    ignoreUnknownKeys = true
-                }
-            )
-        }
+        installContentNegotiationAndIgnoreUnknownKeys()
         engine {
             addInterceptor(XCorrelationIdInterceptor())
             addInterceptor(
                 LoggingInterceptor(
                     name = "digdir-krr-proxy",
-                    callIdExtractor = { getCallId() }
-                )
+                    callIdExtractor = { getCallId() },
+                ),
             )
         }
     }
@@ -56,11 +51,11 @@ class DigdirClient(
                 append("Nav-Call-Id", getCallId())
             }
             header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
-        }
+        }.body()
     }
 
     suspend fun ping() = externalServiceCall {
-        client.get<HttpResponse>("$digdirKrrProxyUrl/rest/ping") {
+        client.get("$digdirKrrProxyUrl/rest/ping") {
             header("Authorization", "Bearer ${tokenclient.createMachineToMachineToken()}")
         }.status
     }

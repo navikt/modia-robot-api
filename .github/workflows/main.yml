@@ -22,7 +22,7 @@ jobs:
       - name: Install ktlint
         uses: nbadal/action-ktlint-setup@v1
         with:
-          ktlint_version: '0.47.1'
+          ktlint_version: '1.0.0'
       - name: Ktlint
         run: ktlint src/**/*.kt
         shell: bash

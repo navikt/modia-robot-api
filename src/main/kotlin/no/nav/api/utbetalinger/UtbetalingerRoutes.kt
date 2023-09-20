@@ -1,25 +1,26 @@
 package no.nav.api.utbetalinger
 
-import io.bkbn.kompendium.annotations.Param
-import io.bkbn.kompendium.annotations.ParamType
-import io.bkbn.kompendium.core.Notarized.notarizedGet
-import io.bkbn.kompendium.core.metadata.ResponseInfo
-import io.bkbn.kompendium.core.metadata.method.GetInfo
-import io.ktor.application.*
+import io.bkbn.kompendium.core.metadata.GetInfo
+import io.bkbn.kompendium.core.plugin.NotarizedRoute
+import io.bkbn.kompendium.json.schema.definition.TypeDefinition
+import io.bkbn.kompendium.oas.payload.Parameter
+import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.datetime.LocalDate
 import no.nav.api.CommonModels
 import no.nav.api.utbetalinger.UtbetalingerService.*
-import no.nav.plugins.securityScheme
 import no.nav.utils.getJWT
+import kotlin.reflect.typeOf
 
 fun Route.configureUtbetalingerRoutes(
     utbetalingerService: UtbetalingerService,
 ) {
     route("utbetalinger/{fnr}/ytelseoversikt") {
-        notarizedGet(Api.utbetalinger) {
+        install(NotarizedRoute()) { get = Api.utbetalinger }
+        get {
             val payload = call.getJWT()
             val fnr = requireNotNull(call.parameters["fnr"])
             val fra = LocalDate.parse(call.request.queryParameters["fra"] ?: "")
@@ -31,25 +32,29 @@ fun Route.configureUtbetalingerRoutes(
 }
 
 private object Api {
-    val utbetalinger = GetInfo<Models.UrlParameters, List<Utbetalinger>>(
-        summary = "Brukers utbetalinger",
-        description = "Hentes fra utbetaldata",
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Brukers utbetalinger"
-        ),
-        tags = setOf("Utbetalinger"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses
-    )
+    val utbetalinger = GetInfo.builder {
+        summary("Brukers utbetalinger")
+        description("Hentes fra utbetaldata")
+        request { parameters(CommonModels.fnrParameter, Models.fraParam, Models.tilParam) }
+        response {
+            responseCode(HttpStatusCode.OK)
+            responseType(typeOf<List<Utbetalinger>>())
+            description("Brukers utbetalinger")
+        }
+        tags("Utbetalinger")
+        canRespond(CommonModels.standardResponses)
+    }
 }
 
 private object Models {
-    class UrlParameters(
-        fnr: String,
-        @Param(type = ParamType.QUERY)
-        val fra: LocalDate,
-        @Param(type = ParamType.QUERY)
-        val til: LocalDate,
-    ) : CommonModels.FnrParameter(fnr)
+    val fraParam = Parameter(
+        name = "fra",
+        `in` = Parameter.Location.query,
+        schema = TypeDefinition.STRING,
+    )
+    val tilParam = Parameter(
+        name = "til",
+        `in` = Parameter.Location.query,
+        schema = TypeDefinition.STRING,
+    )
 }

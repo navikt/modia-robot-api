@@ -3,7 +3,7 @@ package no.nav.api.digdir
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import no.nav.personoversikt.utils.SelftestGenerator
+import no.nav.personoversikt.common.utils.SelftestGenerator
 import kotlin.concurrent.fixedRateTimer
 import kotlin.time.Duration.Companion.minutes
 

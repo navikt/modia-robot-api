@@ -1,6 +1,6 @@
 package no.nav.utils
 
-import no.nav.personoversikt.utils.EnvUtils
+import no.nav.personoversikt.common.utils.EnvUtils
 
 val appImage: String = EnvUtils.getConfig("NAIS_APP_IMAGE") ?: "N/A"
 

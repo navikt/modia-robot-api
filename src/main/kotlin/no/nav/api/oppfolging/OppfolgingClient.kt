@@ -3,10 +3,7 @@ package no.nav.api.oppfolging
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.HttpResponse
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
 import no.nav.utils.*
@@ -22,23 +19,21 @@ class OppfolgingClient(
     class VeilederIdent(val veilederIdent: String?)
 
     private val client = HttpClient(OkHttp) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer()
-        }
+        installContentNegotiationAndIgnoreUnknownKeys()
         engine {
             addInterceptor(XCorrelationIdInterceptor())
             addInterceptor(
                 LoggingInterceptor(
                     name = "veilarboppfolging",
-                    callIdExtractor = { getCallId() }
-                )
+                    callIdExtractor = { getCallId() },
+                ),
             )
             addInterceptor(
                 HeadersInterceptor {
                     mapOf(
-                        "Nav-Consumer-Id" to navConsumerId
+                        "Nav-Consumer-Id" to navConsumerId,
                     )
-                }
+                },
             )
         }
     }
@@ -46,16 +41,16 @@ class OppfolgingClient(
     suspend fun hentOppfolgingStatus(fnr: String, token: String): Status = externalServiceCall {
         client.get("$oppfolgingUrl/v2/oppfolging?fnr=$fnr") {
             header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
-        }
+        }.body()
     }
 
     suspend fun hentOppfolgingVeileder(fnr: String, token: String): VeilederIdent? = externalServiceCall {
-        val response = client.get<HttpResponse>("$oppfolgingUrl/v2/veileder?fnr=$fnr") {
+        val response = client.get("$oppfolgingUrl/v2/veileder?fnr=$fnr") {
             header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
         }
         when (response.status) {
             HttpStatusCode.NoContent -> null
-            HttpStatusCode.OK -> response.receive()
+            HttpStatusCode.OK -> response.body()
             else -> error("Ukjent status code: ${response.status}")
         }
     }
