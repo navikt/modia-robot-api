@@ -8,6 +8,7 @@ interface Env {
     companion object {
         operator fun invoke(): Env = EnvImpl()
     }
+
     val soapStsUrl: String
     val jwksUrl: String
     val tpsPersonV3Url: String

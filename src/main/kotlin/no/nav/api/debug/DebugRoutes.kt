@@ -26,11 +26,12 @@ fun Route.configureDebugRoutes(tokenClient: MachineToMachineTokenClient) {
                     call.respond(HttpStatusCode.BadRequest, "Unable to use debug endpoints in production")
                 } else {
                     val request: TokenExchangeRequest = call.receive()
-                    val downstreamApi = DownstreamApi(
-                        cluster = request.cluster,
-                        namespace = request.namespace,
-                        application = request.application,
-                    )
+                    val downstreamApi =
+                        DownstreamApi(
+                            cluster = request.cluster,
+                            namespace = request.namespace,
+                            application = request.application,
+                        )
                     call.respond(tokenClient.createMachineToMachineToken(downstreamApi))
                 }
             }
@@ -51,32 +52,33 @@ data class TokenExchangeResponse(
 )
 
 private object Api {
-    val post = PostInfo.builder {
-        summary("Hente ut downstream-api token")
-        description("")
-        request {
-            requestType(typeOf<TokenExchangeRequest>())
-            description("Beskrivelse av applikasjonen man ønsker token til")
-            examples(
-                Pair(
-                    "example",
-                    TokenExchangeRequest(
-                        cluster = "dev-fss",
-                        namespace = "teamname",
-                        application = "app-api",
+    val post =
+        PostInfo.builder {
+            summary("Hente ut downstream-api token")
+            description("")
+            request {
+                requestType(typeOf<TokenExchangeRequest>())
+                description("Beskrivelse av applikasjonen man ønsker token til")
+                examples(
+                    Pair(
+                        "example",
+                        TokenExchangeRequest(
+                            cluster = "dev-fss",
+                            namespace = "teamname",
+                            application = "app-api",
+                        ),
                     ),
-                ),
-            )
-        }
-        response {
-            responseCode(HttpStatusCode.OK)
-            responseType(typeOf<TokenExchangeResponse>())
-            description("Token for bruk mot gitt applikasjon")
-        }
-        tags("Debug")
-        canRespond(CommonModels.standardResponses)
+                )
+            }
+            response {
+                responseCode(HttpStatusCode.OK)
+                responseType(typeOf<TokenExchangeResponse>())
+                description("Token for bruk mot gitt applikasjon")
+            }
+            tags("Debug")
+            canRespond(CommonModels.standardResponses)
 //        canRespond {
 //            CommonModels.standardResponses
 //        }
-    }
+        }
 }

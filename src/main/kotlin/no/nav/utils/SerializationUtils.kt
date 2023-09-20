@@ -17,16 +17,20 @@ object UUIDSerializer : KSerializer<UUID> {
         return UUID.fromString(decoder.decodeString())
     }
 
-    override fun serialize(encoder: Encoder, value: UUID) {
+    override fun serialize(
+        encoder: Encoder,
+        value: UUID,
+    ) {
         encoder.encodeString(value.toString())
     }
 }
 
 abstract class EnumSerializer<T : Enum<T>>(clazz: KClass<T>, private val defaultValue: T) : KSerializer<T> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
-        serialName = requireNotNull(clazz.qualifiedName),
-        kind = PrimitiveKind.STRING,
-    )
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor(
+            serialName = requireNotNull(clazz.qualifiedName),
+            kind = PrimitiveKind.STRING,
+        )
     private val deserializeLUT = clazz.java.enumConstants.associateBy { it.serialName }
     private val serializeLUT = deserializeLUT.swapKeyValue()
 
@@ -34,7 +38,10 @@ abstract class EnumSerializer<T : Enum<T>>(clazz: KClass<T>, private val default
         return deserializeLUT[decoder.decodeString()] ?: defaultValue
     }
 
-    override fun serialize(encoder: Encoder, value: T) {
+    override fun serialize(
+        encoder: Encoder,
+        value: T,
+    ) {
         encoder.encodeString(serializeLUT.getValue(value))
     }
 

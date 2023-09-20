@@ -15,9 +15,7 @@ import no.nav.api.utbetalinger.UtbetalingerService.*
 import no.nav.utils.getJWT
 import kotlin.reflect.typeOf
 
-fun Route.configureUtbetalingerRoutes(
-    utbetalingerService: UtbetalingerService,
-) {
+fun Route.configureUtbetalingerRoutes(utbetalingerService: UtbetalingerService) {
     route("utbetalinger/{fnr}/ytelseoversikt") {
         install(NotarizedRoute()) { get = Api.utbetalinger }
         get {
@@ -32,29 +30,32 @@ fun Route.configureUtbetalingerRoutes(
 }
 
 private object Api {
-    val utbetalinger = GetInfo.builder {
-        summary("Brukers utbetalinger")
-        description("Hentes fra utbetaldata")
-        request { parameters(CommonModels.fnrParameter, Models.fraParam, Models.tilParam) }
-        response {
-            responseCode(HttpStatusCode.OK)
-            responseType(typeOf<List<Utbetalinger>>())
-            description("Brukers utbetalinger")
+    val utbetalinger =
+        GetInfo.builder {
+            summary("Brukers utbetalinger")
+            description("Hentes fra utbetaldata")
+            request { parameters(CommonModels.fnrParameter, Models.fraParam, Models.tilParam) }
+            response {
+                responseCode(HttpStatusCode.OK)
+                responseType(typeOf<List<Utbetalinger>>())
+                description("Brukers utbetalinger")
+            }
+            tags("Utbetalinger")
+            canRespond(CommonModels.standardResponses)
         }
-        tags("Utbetalinger")
-        canRespond(CommonModels.standardResponses)
-    }
 }
 
 private object Models {
-    val fraParam = Parameter(
-        name = "fra",
-        `in` = Parameter.Location.query,
-        schema = TypeDefinition.STRING,
-    )
-    val tilParam = Parameter(
-        name = "til",
-        `in` = Parameter.Location.query,
-        schema = TypeDefinition.STRING,
-    )
+    val fraParam =
+        Parameter(
+            name = "fra",
+            `in` = Parameter.Location.query,
+            schema = TypeDefinition.STRING,
+        )
+    val tilParam =
+        Parameter(
+            name = "til",
+            `in` = Parameter.Location.query,
+            schema = TypeDefinition.STRING,
+        )
 }

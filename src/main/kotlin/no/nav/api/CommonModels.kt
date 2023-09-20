@@ -7,26 +7,30 @@ import io.ktor.http.*
 import kotlin.reflect.typeOf
 
 object CommonModels {
-    val fnrParameter = Parameter(
-        name = "fnr",
-        `in` = Parameter.Location.path,
-        schema = TypeDefinition.STRING,
-    )
+    val fnrParameter =
+        Parameter(
+            name = "fnr",
+            `in` = Parameter.Location.path,
+            schema = TypeDefinition.STRING,
+        )
 
-    private val noContentResponse = ResponseInfo.builder {
-        responseCode(HttpStatusCode.NoContent)
-        description("Ingen informasjon funnet")
-        responseType(typeOf<Unit>())
-    }
+    private val noContentResponse =
+        ResponseInfo.builder {
+            responseCode(HttpStatusCode.NoContent)
+            description("Ingen informasjon funnet")
+            responseType(typeOf<Unit>())
+        }
 
-    private val internalServerErrorResponse = ResponseInfo.builder {
-        responseCode(HttpStatusCode.InternalServerError)
-        description("Ingen informasjon funnet")
-        responseType(typeOf<Unit>())
-    }
+    private val internalServerErrorResponse =
+        ResponseInfo.builder {
+            responseCode(HttpStatusCode.InternalServerError)
+            description("Ingen informasjon funnet")
+            responseType(typeOf<Unit>())
+        }
 
-    val standardResponses = listOf(
-        noContentResponse,
-        internalServerErrorResponse,
-    )
+    val standardResponses =
+        listOf(
+            noContentResponse,
+            internalServerErrorResponse,
+        )
 }

@@ -23,25 +23,30 @@ import kotlin.reflect.typeOf
  * Hence a custom serializer is used here
  */
 @OptIn(ExperimentalSerializationApi::class)
-private val specSerializer = Json {
-    serializersModule = KompendiumSerializersModule.module
-    encodeDefaults = true
-    explicitNulls = false
-}
+private val specSerializer =
+    Json {
+        serializersModule = KompendiumSerializersModule.module
+        encodeDefaults = true
+        explicitNulls = false
+    }
 
 fun Application.configureOpenApi() {
     install(NotarizedApplication()) {
-        spec = OpenApiSpec(
-            info = Info(
-                "modia-robot-api",
-                version = "1.0.0",
-            ),
-            components = Components(
-                securitySchemes = mutableMapOf(
-                    SECURITY_SCHEME_NAME to BearerAuth(),
-                ),
-            ),
-        )
+        spec =
+            OpenApiSpec(
+                info =
+                    Info(
+                        "modia-robot-api",
+                        version = "1.0.0",
+                    ),
+                components =
+                    Components(
+                        securitySchemes =
+                            mutableMapOf(
+                                SECURITY_SCHEME_NAME to BearerAuth(),
+                            ),
+                    ),
+            )
 
         openApiJson = {
             route("/openapi.json") {
@@ -55,11 +60,12 @@ fun Application.configureOpenApi() {
             }
         }
 
-        customTypes = mapOf(
-            typeOf<kotlinx.datetime.Instant>() to TypeDefinition(type = "string", format = "date-time"),
-            typeOf<kotlinx.datetime.LocalDate>() to TypeDefinition(type = "string", format = "date"),
-            typeOf<kotlinx.datetime.LocalDateTime>() to TypeDefinition(type = "string", format = "date-time"),
-        )
+        customTypes =
+            mapOf(
+                typeOf<kotlinx.datetime.Instant>() to TypeDefinition(type = "string", format = "date-time"),
+                typeOf<kotlinx.datetime.LocalDate>() to TypeDefinition(type = "string", format = "date"),
+                typeOf<kotlinx.datetime.LocalDateTime>() to TypeDefinition(type = "string", format = "date-time"),
+            )
     }
 
     routing {

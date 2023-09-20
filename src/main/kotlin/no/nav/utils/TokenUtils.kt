@@ -40,13 +40,15 @@ interface BoundedOnBehalfOfTokenClient {
     fun exchangeOnBehalfOfToken(accesstoken: String): String
 }
 
-fun MachineToMachineTokenClient.bindTo(api: DownstreamApi) = object : BoundedMachineToMachineTokenClient {
-    override fun createMachineToMachineToken() = createMachineToMachineToken(api.tokenscope())
-}
+fun MachineToMachineTokenClient.bindTo(api: DownstreamApi) =
+    object : BoundedMachineToMachineTokenClient {
+        override fun createMachineToMachineToken() = createMachineToMachineToken(api.tokenscope())
+    }
 
-fun OnBehalfOfTokenClient.bindTo(api: DownstreamApi) = object : BoundedOnBehalfOfTokenClient {
-    override fun exchangeOnBehalfOfToken(accesstoken: String) = exchangeOnBehalfOfToken(api.tokenscope(), accesstoken)
-}
+fun OnBehalfOfTokenClient.bindTo(api: DownstreamApi) =
+    object : BoundedOnBehalfOfTokenClient {
+        override fun exchangeOnBehalfOfToken(accesstoken: String) = exchangeOnBehalfOfToken(api.tokenscope(), accesstoken)
+    }
 
 fun ApplicationCall.getJWT(): String {
     val authHeader = this.request.parseAuthorizationHeader()
@@ -57,6 +59,7 @@ fun ApplicationCall.getJWT(): String {
     throw Exception("Missing authorization header")
 }
 
-fun ApplicationCall.getJWTPrincipalSubject() = checkNotNull(this.principal<JWTPrincipal>()?.subject) {
-    "Could not extract subject from JWT"
-}
+fun ApplicationCall.getJWTPrincipalSubject() =
+    checkNotNull(this.principal<JWTPrincipal>()?.subject) {
+        "Could not extract subject from JWT"
+    }

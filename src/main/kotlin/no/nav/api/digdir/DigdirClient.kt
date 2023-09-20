@@ -8,7 +8,6 @@ import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import no.nav.utils.*
 
 class DigdirClient(
@@ -16,7 +15,6 @@ class DigdirClient(
     private val tokenclient: BoundedMachineToMachineTokenClient,
     private val oboTokenProvider: BoundedOnBehalfOfTokenClient,
 ) {
-
     @Serializable
     data class KrrData(
         val personident: String,
@@ -31,32 +29,38 @@ class DigdirClient(
         val mobiltelefonnummerVerifisert: Instant?,
     )
 
-    private val client = HttpClient(OkHttp) {
-        installContentNegotiationAndIgnoreUnknownKeys()
-        engine {
-            addInterceptor(XCorrelationIdInterceptor())
-            addInterceptor(
-                LoggingInterceptor(
-                    name = "digdir-krr-proxy",
-                    callIdExtractor = { getCallId() },
-                ),
-            )
-        }
-    }
-
-    suspend fun hentKrrData(fnr: String, token: String): KrrData = externalServiceCall {
-        client.get("$digdirKrrProxyUrl/rest/v1/person") {
-            headers {
-                append("Nav-Personident", fnr)
-                append("Nav-Call-Id", getCallId())
+    private val client =
+        HttpClient(OkHttp) {
+            installContentNegotiationAndIgnoreUnknownKeys()
+            engine {
+                addInterceptor(XCorrelationIdInterceptor())
+                addInterceptor(
+                    LoggingInterceptor(
+                        name = "digdir-krr-proxy",
+                        callIdExtractor = { getCallId() },
+                    ),
+                )
             }
-            header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
-        }.body()
-    }
+        }
 
-    suspend fun ping() = externalServiceCall {
-        client.get("$digdirKrrProxyUrl/rest/ping") {
-            header("Authorization", "Bearer ${tokenclient.createMachineToMachineToken()}")
-        }.status
-    }
+    suspend fun hentKrrData(
+        fnr: String,
+        token: String,
+    ): KrrData =
+        externalServiceCall {
+            client.get("$digdirKrrProxyUrl/rest/v1/person") {
+                headers {
+                    append("Nav-Personident", fnr)
+                    append("Nav-Call-Id", getCallId())
+                }
+                header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+            }.body()
+        }
+
+    suspend fun ping() =
+        externalServiceCall {
+            client.get("$digdirKrrProxyUrl/rest/ping") {
+                header("Authorization", "Bearer ${tokenclient.createMachineToMachineToken()}")
+            }.status
+        }
 }

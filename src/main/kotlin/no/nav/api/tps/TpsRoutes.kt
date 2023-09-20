@@ -10,9 +10,7 @@ import io.ktor.server.routing.*
 import no.nav.api.CommonModels
 import kotlin.reflect.typeOf
 
-fun Route.configureTpsRoutes(
-    tpsService: TpsService,
-) {
+fun Route.configureTpsRoutes(tpsService: TpsService) {
     route("tps/{fnr}/kontonummer") {
         install(NotarizedRoute()) {
             get = Api.kontonummer
@@ -25,16 +23,17 @@ fun Route.configureTpsRoutes(
 }
 
 private object Api {
-    val kontonummer = GetInfo.builder {
-        summary("Brukers kontonummer")
-        description("Hentes fra TPS")
-        request { parameters(CommonModels.fnrParameter) }
-        response {
-            responseType(typeOf<TpsService.Kontonummer>())
-            responseCode(HttpStatusCode.OK)
-            description("Brukers kontonummer om det eksisterer i TPS")
+    val kontonummer =
+        GetInfo.builder {
+            summary("Brukers kontonummer")
+            description("Hentes fra TPS")
+            request { parameters(CommonModels.fnrParameter) }
+            response {
+                responseType(typeOf<TpsService.Kontonummer>())
+                responseCode(HttpStatusCode.OK)
+                description("Brukers kontonummer om det eksisterer i TPS")
+            }
+            tags("TPS")
+            canRespond(CommonModels.standardResponses)
         }
-        tags("TPS")
-        canRespond(CommonModels.standardResponses)
-    }
 }

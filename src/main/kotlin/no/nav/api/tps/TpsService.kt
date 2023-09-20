@@ -18,27 +18,30 @@ class TpsService(
     data class Kontonummer(
         val kontonummer: String?,
     )
+
     private val fantIkkeKontonummer = Kontonummer(null)
 
-    suspend fun hentKontonummer(fnr: String): Kontonummer = externalServiceCall {
-        val request = HentPersonRequest()
-            .withAktoer(PersonIdent().withIdent(NorskIdent().withIdent(fnr)))
-            .withInformasjonsbehov(
-                Informasjonsbehov.BANKKONTO,
-                Informasjonsbehov.SPORINGSINFORMASJON
-            )
+    suspend fun hentKontonummer(fnr: String): Kontonummer =
+        externalServiceCall {
+            val request =
+                HentPersonRequest()
+                    .withAktoer(PersonIdent().withIdent(NorskIdent().withIdent(fnr)))
+                    .withInformasjonsbehov(
+                        Informasjonsbehov.BANKKONTO,
+                        Informasjonsbehov.SPORINGSINFORMASJON,
+                    )
 
-        val response = tps.hentPerson(request)
-        val person = response.person
+            val response = tps.hentPerson(request)
+            val person = response.person
 
-        if (person !is Bruker) {
-            fantIkkeKontonummer
-        } else {
-            when (val bankkonto = person.bankkonto) {
-                is BankkontoNorge -> Kontonummer(bankkonto.bankkonto.bankkontonummer)
-                is BankkontoUtland -> Kontonummer(bankkonto.bankkontoUtland.bankkontonummer)
-                else -> fantIkkeKontonummer
+            if (person !is Bruker) {
+                fantIkkeKontonummer
+            } else {
+                when (val bankkonto = person.bankkonto) {
+                    is BankkontoNorge -> Kontonummer(bankkonto.bankkonto.bankkontonummer)
+                    is BankkontoUtland -> Kontonummer(bankkonto.bankkontoUtland.bankkontonummer)
+                    else -> fantIkkeKontonummer
+                }
             }
         }
-    }
 }

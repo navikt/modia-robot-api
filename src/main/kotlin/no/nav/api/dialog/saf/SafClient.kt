@@ -16,24 +16,29 @@ class SafClient(
     private val oboTokenProvider: BoundedOnBehalfOfTokenClient,
     httpEngine: HttpClientEngine = OkHttp.create(),
 ) {
-    private val graphqlClient = LoggingGraphQLKtorClient(
-        name = "SAF",
-        critical = false,
-        url = URL(safUrl),
-        httpClient = HttpClient(httpEngine),
-    )
+    private val graphqlClient =
+        LoggingGraphQLKtorClient(
+            name = "SAF",
+            critical = false,
+            url = URL(safUrl),
+            httpClient = HttpClient(httpEngine),
+        )
 
-    suspend fun hentBrukersSaker(fnr: String, token: String): GraphQLClientResponse<HentBrukerssaker.Result> {
+    suspend fun hentBrukersSaker(
+        fnr: String,
+        token: String,
+    ): GraphQLClientResponse<HentBrukerssaker.Result> {
         return externalServiceCall {
             graphqlClient.execute(
-                request = HentBrukerssaker(
-                    HentBrukerssaker.Variables(
-                        BrukerIdInput(
-                            id = fnr,
-                            type = BrukerIdType.FNR,
+                request =
+                    HentBrukerssaker(
+                        HentBrukerssaker.Variables(
+                            BrukerIdInput(
+                                id = fnr,
+                                type = BrukerIdType.FNR,
+                            ),
                         ),
                     ),
-                ),
                 requestCustomizer = {
                     val oboToken = oboTokenProvider.exchangeOnBehalfOfToken(token)
                     header("Authorization", "Bearer $oboToken")
