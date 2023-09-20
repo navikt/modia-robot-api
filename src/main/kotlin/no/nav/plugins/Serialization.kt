@@ -14,9 +14,10 @@ fun Application.configureSerialization() {
             Json {
                 ignoreUnknownKeys = true
                 explicitNulls = true
-                serializersModule = SerializersModule {
-                    contextual(UUIDSerializer)
-                }
+                serializersModule =
+                    SerializersModule {
+                        contextual(UUIDSerializer)
+                    }
             },
         )
     }

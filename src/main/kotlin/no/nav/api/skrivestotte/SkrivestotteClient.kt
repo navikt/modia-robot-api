@@ -20,17 +20,17 @@ typealias Tekster = Map<UUID, SkrivestotteClient.Tekst>
 
 class SkrivestotteClient(
     val skrivestotteUrl: String,
-    httpEngine: HttpClientEngine = OkHttp.create {
-        addInterceptor(XCorrelationIdInterceptor())
-        addInterceptor(
-            LoggingInterceptor(
-                name = "skrivestotte",
-                callIdExtractor = { getCallId() },
-            ),
-        )
-    },
+    httpEngine: HttpClientEngine =
+        OkHttp.create {
+            addInterceptor(XCorrelationIdInterceptor())
+            addInterceptor(
+                LoggingInterceptor(
+                    name = "skrivestotte",
+                    callIdExtractor = { getCallId() },
+                ),
+            )
+        },
 ) {
-
     @Serializable
     data class Tekst(
         @Contextual
@@ -54,30 +54,32 @@ class SkrivestotteClient(
         val ru_RU: String? = null,
         val ur: String? = null,
     ) {
-        fun kombinert() =
-            listOfNotNull(nb_NO, nn_NO, en_US, se_NO, de_DE, fr_FR, es_ES, pl_PL, ru_RU, ur).joinToString("\u0000")
+        fun kombinert() = listOfNotNull(nb_NO, nn_NO, en_US, se_NO, de_DE, fr_FR, es_ES, pl_PL, ru_RU, ur).joinToString("\u0000")
     }
 
-    private val client = HttpClient(httpEngine) {
-        install(ContentNegotiation) {
-            json(
-                Json {
-                    serializersModule = SerializersModule {
-                        contextual(UUIDSerializer)
-                        contextual(
-                            MapSerializer(
-                                keySerializer = UUIDSerializer,
-                                valueSerializer = Tekst.serializer(),
-                            ),
-                        )
-                    }
-                    ignoreUnknownKeys = true
-                },
-            )
+    private val client =
+        HttpClient(httpEngine) {
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        serializersModule =
+                            SerializersModule {
+                                contextual(UUIDSerializer)
+                                contextual(
+                                    MapSerializer(
+                                        keySerializer = UUIDSerializer,
+                                        valueSerializer = Tekst.serializer(),
+                                    ),
+                                )
+                            }
+                        ignoreUnknownKeys = true
+                    },
+                )
+            }
         }
-    }
 
-    suspend fun hentTekster(): Tekster = externalServiceCall {
-        client.get("$skrivestotteUrl/skrivestotte").body()
-    }
+    suspend fun hentTekster(): Tekster =
+        externalServiceCall {
+            client.get("$skrivestotteUrl/skrivestotte").body()
+        }
 }

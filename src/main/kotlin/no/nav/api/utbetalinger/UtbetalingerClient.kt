@@ -17,7 +17,6 @@ class UtbetalingerClient(
     private val oboTokenProvider: BoundedOnBehalfOfTokenClient,
     httpEngine: HttpClientEngine = lagHttpEngine(),
 ) {
-
     @Serializable
     data class UtbetaldataRequest(
         val ident: String,
@@ -28,7 +27,8 @@ class UtbetalingerClient(
 
     @Serializable
     enum class Rolle {
-        RETTIGHETSHAVER, UTBETALT_TIL
+        RETTIGHETSHAVER,
+        UTBETALT_TIL,
     }
 
     @Serializable
@@ -39,7 +39,8 @@ class UtbetalingerClient(
 
     @Serializable
     enum class PeriodeType {
-        UTBETALINGSPERIODE, YTELSESPERIODE
+        UTBETALINGSPERIODE,
+        YTELSESPERIODE,
     }
 
     @Serializable
@@ -60,19 +61,26 @@ class UtbetalingerClient(
         val ytelseskomponenttype: String,
     )
 
-    private val client = HttpClient(httpEngine) {
-        installContentNegotiationAndIgnoreUnknownKeys()
-        expectSuccess = false
-    }
+    private val client =
+        HttpClient(httpEngine) {
+            installContentNegotiationAndIgnoreUnknownKeys()
+            expectSuccess = false
+        }
 
-    suspend fun hentUtbetalinger(fnr: String, fra: LocalDate, til: LocalDate, token: String): List<Utbetaling> =
+    suspend fun hentUtbetalinger(
+        fnr: String,
+        fra: LocalDate,
+        til: LocalDate,
+        token: String,
+    ): List<Utbetaling> =
         externalServiceCall {
             val request: UtbetaldataRequest = lagUtbetaldataRequest(fnr, fra, til)
-            val response = client.post("$utbetalingerUrl/v2/hent-utbetalingsinformasjon/intern") {
-                header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
-                contentType(ContentType.Application.Json)
-                setBody(request)
-            }
+            val response =
+                client.post("$utbetalingerUrl/v2/hent-utbetalingsinformasjon/intern") {
+                    header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+                    contentType(ContentType.Application.Json)
+                    setBody(request)
+                }
 
             when (response.status) {
                 HttpStatusCode.NotFound -> emptyList()
@@ -88,11 +96,12 @@ class UtbetalingerClient(
                         .getOrThrow()
 
                 else -> throw WebStatusException(
-                    message = """
-                    Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.
-                    HttpStatus: ${response.status}
-                    Body: ${response.bodyAsText()}
-                    """.trimIndent(),
+                    message =
+                        """
+                        Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.
+                        HttpStatus: ${response.status}
+                        Body: ${response.bodyAsText()}
+                        """.trimIndent(),
                     status = HttpStatusCode.InternalServerError,
                 )
             }
@@ -105,10 +114,11 @@ class UtbetalingerClient(
     ) = UtbetaldataRequest(
         ident = fnr,
         rolle = Rolle.RETTIGHETSHAVER,
-        periode = Periode(
-            fom = fra.toString(),
-            tom = til.toString(),
-        ),
+        periode =
+            Periode(
+                fom = fra.toString(),
+                tom = til.toString(),
+            ),
         periodetype = PeriodeType.UTBETALINGSPERIODE,
     )
 

@@ -6,6 +6,7 @@ import kotlin.time.Duration
 import org.joda.time.LocalDate as JodaLocalDate
 
 fun LocalDateTime.Companion.now(clock: Clock = Clock.System): LocalDateTime = clock.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
 fun LocalDate.Companion.now(clock: Clock = Clock.System): LocalDate = LocalDateTime.now(clock).date
 
 fun LocalDateTime.minus(duration: Duration): LocalDateTime {
@@ -13,7 +14,11 @@ fun LocalDateTime.minus(duration: Duration): LocalDateTime {
     val instant = this.toInstant(timeZone)
     return instant.minus(duration).toLocalDateTime(timeZone)
 }
-fun LocalDateTime.minus(value: Int, unit: DateTimeUnit.TimeBased): LocalDateTime {
+
+fun LocalDateTime.minus(
+    value: Int,
+    unit: DateTimeUnit.TimeBased,
+): LocalDateTime {
     val timeZone = TimeZone.currentSystemDefault()
     val instant = this.toInstant(timeZone)
     return instant.minus(value, unit).toLocalDateTime(timeZone)

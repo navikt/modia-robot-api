@@ -18,17 +18,22 @@ import java.util.concurrent.TimeUnit
 
 const val SECURITY_SCHEME_NAME = "auth-jwt"
 const val NAV_IDENT_CLAIM = "NAVident"
-private val mockJwt = JWT.decode(
-    JWT.create().withSubject(UUID.randomUUID().toString()).withClaim(NAV_IDENT_CLAIM, "Z999999").sign(Algorithm.none()),
-)
+private val mockJwt =
+    JWT.decode(
+        JWT.create().withSubject(UUID.randomUUID().toString()).withClaim(NAV_IDENT_CLAIM, "Z999999").sign(Algorithm.none()),
+    )
 
-fun Application.configureSecurity(disableSecurity: Boolean, env: Env) {
+fun Application.configureSecurity(
+    disableSecurity: Boolean,
+    env: Env,
+) {
     if (disableSecurity) {
         authentication {
             jwt(SECURITY_SCHEME_NAME) {
                 verifier {
                     object : JWTVerifier {
                         override fun verify(token: String?): DecodedJWT = mockJwt
+
                         override fun verify(jwt: DecodedJWT?): DecodedJWT = mockJwt
                     }
                 }
@@ -60,8 +65,7 @@ fun Application.configureSecurity(disableSecurity: Boolean, env: Env) {
     }
 }
 
-private fun JWTPayloadHolder.getSubject(): String =
-    payload.claims[NAV_IDENT_CLAIM]?.asString() ?: payload.subject.uppercase()
+private fun JWTPayloadHolder.getSubject(): String = payload.claims[NAV_IDENT_CLAIM]?.asString() ?: payload.subject.uppercase()
 
 private fun makeJwkProvider(jwksUrl: String): JwkProvider =
     JwkProviderBuilder(URL(jwksUrl))

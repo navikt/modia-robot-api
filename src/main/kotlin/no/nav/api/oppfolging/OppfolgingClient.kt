@@ -18,40 +18,50 @@ class OppfolgingClient(
     @Serializable
     class VeilederIdent(val veilederIdent: String?)
 
-    private val client = HttpClient(OkHttp) {
-        installContentNegotiationAndIgnoreUnknownKeys()
-        engine {
-            addInterceptor(XCorrelationIdInterceptor())
-            addInterceptor(
-                LoggingInterceptor(
-                    name = "veilarboppfolging",
-                    callIdExtractor = { getCallId() },
-                ),
-            )
-            addInterceptor(
-                HeadersInterceptor {
-                    mapOf(
-                        "Nav-Consumer-Id" to navConsumerId,
-                    )
-                },
-            )
+    private val client =
+        HttpClient(OkHttp) {
+            installContentNegotiationAndIgnoreUnknownKeys()
+            engine {
+                addInterceptor(XCorrelationIdInterceptor())
+                addInterceptor(
+                    LoggingInterceptor(
+                        name = "veilarboppfolging",
+                        callIdExtractor = { getCallId() },
+                    ),
+                )
+                addInterceptor(
+                    HeadersInterceptor {
+                        mapOf(
+                            "Nav-Consumer-Id" to navConsumerId,
+                        )
+                    },
+                )
+            }
         }
-    }
 
-    suspend fun hentOppfolgingStatus(fnr: String, token: String): Status = externalServiceCall {
-        client.get("$oppfolgingUrl/v2/oppfolging?fnr=$fnr") {
-            header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
-        }.body()
-    }
+    suspend fun hentOppfolgingStatus(
+        fnr: String,
+        token: String,
+    ): Status =
+        externalServiceCall {
+            client.get("$oppfolgingUrl/v2/oppfolging?fnr=$fnr") {
+                header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+            }.body()
+        }
 
-    suspend fun hentOppfolgingVeileder(fnr: String, token: String): VeilederIdent? = externalServiceCall {
-        val response = client.get("$oppfolgingUrl/v2/veileder?fnr=$fnr") {
-            header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+    suspend fun hentOppfolgingVeileder(
+        fnr: String,
+        token: String,
+    ): VeilederIdent? =
+        externalServiceCall {
+            val response =
+                client.get("$oppfolgingUrl/v2/veileder?fnr=$fnr") {
+                    header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+                }
+            when (response.status) {
+                HttpStatusCode.NoContent -> null
+                HttpStatusCode.OK -> response.body()
+                else -> error("Ukjent status code: ${response.status}")
+            }
         }
-        when (response.status) {
-            HttpStatusCode.NoContent -> null
-            HttpStatusCode.OK -> response.body()
-            else -> error("Ukjent status code: ${response.status}")
-        }
-    }
 }

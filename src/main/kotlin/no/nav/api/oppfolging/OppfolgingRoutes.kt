@@ -11,12 +11,10 @@ import no.nav.api.CommonModels
 import no.nav.utils.getJWT
 import kotlin.reflect.typeOf
 
-fun Route.configureOppfolgingRoutes(
-    oppfolgingService: OppfolgingService,
-) {
+fun Route.configureOppfolgingRoutes(oppfolgingService: OppfolgingService) {
     route("oppfolging/{fnr}/veileder") {
         install(NotarizedRoute()) {
-           get = Api.veileder
+            get = Api.veileder
         }
         get {
             val payload = call.getJWT()
@@ -27,18 +25,19 @@ fun Route.configureOppfolgingRoutes(
 }
 
 private object Api {
-    val veileder = GetInfo.builder {
-        summary("Brukers oppfølgingsveileder")
-        description("Hentes fra veilarboppfølging")
-        request {
-            parameters(CommonModels.fnrParameter)
+    val veileder =
+        GetInfo.builder {
+            summary("Brukers oppfølgingsveileder")
+            description("Hentes fra veilarboppfølging")
+            request {
+                parameters(CommonModels.fnrParameter)
+            }
+            response {
+                responseType(typeOf<OppfolgingService.Oppfolging>())
+                responseCode(HttpStatusCode.OK)
+                description("Navn og ident til brukers veileder")
+            }
+            tags("Oppfølging")
+            canRespond(CommonModels.standardResponses)
         }
-        response {
-            responseType(typeOf<OppfolgingService.Oppfolging>())
-            responseCode(HttpStatusCode.OK)
-            description("Navn og ident til brukers veileder")
-        }
-        tags("Oppfølging")
-        canRespond(CommonModels.standardResponses)
-    }
 }

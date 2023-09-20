@@ -8,6 +8,6 @@ fun main() {
     startApplication(
         disableSecurity = true,
         env = MockEnv,
-        consumers = MockConsumers
+        consumers = MockConsumers,
     )
 }

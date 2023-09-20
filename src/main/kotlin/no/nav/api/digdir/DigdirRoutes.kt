@@ -12,9 +12,7 @@ import no.nav.api.digdir.DigdirService.*
 import no.nav.utils.getJWT
 import kotlin.reflect.typeOf
 
-fun Route.configureDigdirRoutes(
-    digdirService: DigdirService,
-) {
+fun Route.configureDigdirRoutes(digdirService: DigdirService) {
     route("digdir/{fnr}/kontaktinformasjon") {
         install(NotarizedRoute()) {
             get = Api.kontaktinformasjon
@@ -27,18 +25,19 @@ fun Route.configureDigdirRoutes(
     }
 }
 private object Api {
-    val kontaktinformasjon = GetInfo.builder {
-        summary("Brukers epost og mobiltelefonnummer")
-        description("Hentes fra digdir-proxy")
-        request {
-            parameters(CommonModels.fnrParameter)
+    val kontaktinformasjon =
+        GetInfo.builder {
+            summary("Brukers epost og mobiltelefonnummer")
+            description("Hentes fra digdir-proxy")
+            request {
+                parameters(CommonModels.fnrParameter)
+            }
+            response {
+                responseCode(HttpStatusCode.OK)
+                responseType(typeOf<Kontaktinformasjon>())
+                description("Brukers epost og mobiltelefonnummer")
+            }
+            tags("Brukers epost og mobiltelefonnummer")
+            canRespond(CommonModels.standardResponses)
         }
-        response {
-            responseCode(HttpStatusCode.OK)
-            responseType(typeOf<Kontaktinformasjon>())
-            description("Brukers epost og mobiltelefonnummer")
-        }
-        tags("Brukers epost og mobiltelefonnummer")
-        canRespond(CommonModels.standardResponses)
-    }
 }

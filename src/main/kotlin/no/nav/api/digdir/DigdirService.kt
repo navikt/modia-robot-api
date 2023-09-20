@@ -8,7 +8,6 @@ import kotlin.concurrent.fixedRateTimer
 import kotlin.time.Duration.Companion.minutes
 
 class DigdirService(private val digdirClient: DigdirClient) {
-
     private val reporter = SelftestGenerator.Reporter(name = "DigdirService", critical = false)
 
     init {
@@ -31,7 +30,10 @@ class DigdirService(private val digdirClient: DigdirClient) {
         val mobiltelefonnummerVerifisert: Instant? = null,
     )
 
-    suspend fun hentKontaktinformasjon(fnr: String, token: String): Kontaktinformasjon {
+    suspend fun hentKontaktinformasjon(
+        fnr: String,
+        token: String,
+    ): Kontaktinformasjon {
         val krrData = digdirClient.hentKrrData(fnr, token)
         return Kontaktinformasjon(
             epostadresse = krrData.epostadresse,
@@ -39,7 +41,7 @@ class DigdirService(private val digdirClient: DigdirClient) {
             epostadresseVerifisert = krrData.epostadresseVerifisert,
             mobiltelefonnummer = krrData.mobiltelefonnummer,
             mobiltelefonnummerOppdatert = krrData.mobiltelefonnummerOppdatert,
-            mobiltelefonnummerVerifisert = krrData.mobiltelefonnummerVerifisert
+            mobiltelefonnummerVerifisert = krrData.mobiltelefonnummerVerifisert,
         )
     }
 }

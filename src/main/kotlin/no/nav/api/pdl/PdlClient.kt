@@ -16,21 +16,26 @@ class PdlClient(
     private val oboTokenProvider: BoundedOnBehalfOfTokenClient,
     httpEngine: HttpClientEngine = OkHttp.create(),
 ) {
-    private val graphqlClient = LoggingGraphQLKtorClient(
-        name = "PDL",
-        critical = false,
-        url = URL(pdlUrl),
-        httpClient = HttpClient(httpEngine),
-    )
+    private val graphqlClient =
+        LoggingGraphQLKtorClient(
+            name = "PDL",
+            critical = false,
+            url = URL(pdlUrl),
+            httpClient = HttpClient(httpEngine),
+        )
 
-    private fun requestConfig(token: String): HeadersBuilder = {
-        val oboToken = oboTokenProvider.exchangeOnBehalfOfToken(token)
-        header("Authorization", "Bearer $oboToken")
-        header("Tema", "GEN")
-        header("X-Correlation-ID", getCallId())
-    }
+    private fun requestConfig(token: String): HeadersBuilder =
+        {
+            val oboToken = oboTokenProvider.exchangeOnBehalfOfToken(token)
+            header("Authorization", "Bearer $oboToken")
+            header("Tema", "GEN")
+            header("X-Correlation-ID", getCallId())
+        }
 
-    suspend fun hentPersonalia(fnr: String, token: String): GraphQLClientResponse<HentPersonalia.Result> {
+    suspend fun hentPersonalia(
+        fnr: String,
+        token: String,
+    ): GraphQLClientResponse<HentPersonalia.Result> {
         return externalServiceCall {
             graphqlClient.execute(
                 request = HentPersonalia(HentPersonalia.Variables(fnr)),
@@ -39,20 +44,27 @@ class PdlClient(
         }
     }
 
-    suspend fun hentAktorid(fnr: String, token: String): GraphQLClientResponse<HentAktorid.Result> {
+    suspend fun hentAktorid(
+        fnr: String,
+        token: String,
+    ): GraphQLClientResponse<HentAktorid.Result> {
         return externalServiceCall {
             graphqlClient.execute(
-                request = HentAktorid(
-                    HentAktorid.Variables(
-                        ident = fnr,
+                request =
+                    HentAktorid(
+                        HentAktorid.Variables(
+                            ident = fnr,
+                        ),
                     ),
-                ),
                 requestCustomizer = requestConfig(token),
             )
         }
     }
 
-    suspend fun hentNavn(fnr: String, token: String): GraphQLClientResponse<HentNavn.Result> {
+    suspend fun hentNavn(
+        fnr: String,
+        token: String,
+    ): GraphQLClientResponse<HentNavn.Result> {
         return externalServiceCall {
             graphqlClient.execute(
                 request = HentNavn(HentNavn.Variables(fnr)),

@@ -27,6 +27,7 @@ class LoggingInterceptor(
     }
 
     private val log = LoggerFactory.getLogger(LoggingInterceptor::class.java)
+
     private fun Request.peekContent(config: Config): String? {
         if (config.ignoreRequestBody) return "IGNORED"
         val copy = this.newBuilder().build()
@@ -61,18 +62,19 @@ class LoggingInterceptor(
         )
 
         val timer: Long = System.currentTimeMillis()
-        val response: Response = runCatching { chain.proceed(request) }
-            .onFailure { exception ->
-                log.error("$name-response-error (ID: $callId / $requestId)", exception)
-                TjenestekallLogger.error(
-                    "$name-response-error: $callId ($requestId))",
-                    mapOf(
-                        "exception" to exception,
-                        "time" to timer.measure(),
-                    ),
-                )
-            }
-            .getOrThrow()
+        val response: Response =
+            runCatching { chain.proceed(request) }
+                .onFailure { exception ->
+                    log.error("$name-response-error (ID: $callId / $requestId)", exception)
+                    TjenestekallLogger.error(
+                        "$name-response-error: $callId ($requestId))",
+                        mapOf(
+                            "exception" to exception,
+                            "time" to timer.measure(),
+                        ),
+                    )
+                }
+                .getOrThrow()
 
         val responseBody = response.peekContent(config)
 
@@ -103,8 +105,9 @@ private fun Long.measure(): Long = System.currentTimeMillis() - this
 
 open class HeadersInterceptor(val headersProvider: () -> Map<String, String>) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val builder = chain.request()
-            .newBuilder()
+        val builder =
+            chain.request()
+                .newBuilder()
         headersProvider()
             .forEach { (name, value) -> builder.addHeader(name, value) }
 
@@ -127,6 +130,7 @@ class BasicAuthorizationInterceptor(private val username: String, private val pa
 fun getCallId(): String = MDC.get("CallId") ?: UUID.randomUUID().toString()
 
 val navConsumerId = "srvmodiarobotapi"
+
 fun <T : HttpClientEngineConfig> HttpClientConfig<T>.installContentNegotiationAndIgnoreUnknownKeys() {
     install(ContentNegotiation) {
         json(

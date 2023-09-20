@@ -34,12 +34,13 @@ fun Application.configureMonitoring() {
 
     install(Metrics.Plugin)
 
-    val selftest = SelftestGenerator.getInstance(
-        SelftestGenerator.Config(
-            appname = "modia-robot-api",
-            version = appImage,
-        ),
-    )
+    val selftest =
+        SelftestGenerator.getInstance(
+            SelftestGenerator.Config(
+                appname = "modia-robot-api",
+                version = appImage,
+            ),
+        )
     routing {
         get {
             call.respondRedirect("/swagger-ui")

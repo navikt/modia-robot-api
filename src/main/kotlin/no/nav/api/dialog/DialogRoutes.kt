@@ -13,9 +13,7 @@ import no.nav.utils.getJWT
 import no.nav.utils.getJWTPrincipalSubject
 import kotlin.reflect.typeOf
 
-fun Route.configureDialogRoutes(
-    dialogService: DialogService,
-) {
+fun Route.configureDialogRoutes(dialogService: DialogService) {
     route("dialog/{fnr}") {
         route("sendinfomelding") {
             install(NotarizedRoute()) {
@@ -59,51 +57,55 @@ fun Route.configureDialogRoutes(
 }
 
 private object Api {
-    val sendInfoMelding = PostInfo.builder {
-        summary("Sender infomelding til bruker")
-        description("")
-        request {
-            requestType(typeOf<MeldingRequest>())
-            parameters {
-                CommonModels.fnrParameter
+    val sendInfoMelding =
+        PostInfo.builder {
+            summary("Sender infomelding til bruker")
+            description("")
+            request {
+                requestType(typeOf<MeldingRequest>())
+                parameters {
+                    CommonModels.fnrParameter
+                }
+                description(
+                    """
+                    Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
+                    Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
+                    før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
+                    """.trimIndent(),
+                )
             }
-            description(
-                """Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
-                   Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
-                   før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
-                """.trimIndent(),
-            )
+            response {
+                responseType(typeOf<Response>())
+                responseCode(HttpStatusCode.OK)
+                description("Referanse til meldingen som ble sendt til bruker")
+            }
+            tags("Dialog")
+            canRespond(CommonModels.standardResponses)
         }
-        response {
-            responseType(typeOf<Response>())
-            responseCode(HttpStatusCode.OK)
-            description("Referanse til meldingen som ble sendt til bruker")
-        }
-        tags("Dialog")
-        canRespond(CommonModels.standardResponses)
-    }
 
-    val sendSporsmal = PostInfo.builder {
-        summary("Sender spørsmål til bruker")
-        description("")
-        request {
-            requestType(typeOf<MeldingRequest>())
-            parameters {
-                CommonModels.fnrParameter
+    val sendSporsmal =
+        PostInfo.builder {
+            summary("Sender spørsmål til bruker")
+            description("")
+            request {
+                requestType(typeOf<MeldingRequest>())
+                parameters {
+                    CommonModels.fnrParameter
+                }
+                description(
+                    """
+                    Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
+                    Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
+                    før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
+                    """.trimIndent(),
+                )
             }
-            description(
-                """Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
-                   Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
-                   før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
-                """.trimIndent(),
-            )
+            response {
+                responseType(typeOf<Response>())
+                responseCode(HttpStatusCode.OK)
+                description("Referanse til meldingen som ble sendt til bruker")
+            }
+            tags("Dialog")
+            canRespond(CommonModels.standardResponses)
         }
-        response {
-            responseType(typeOf<Response>())
-            responseCode(HttpStatusCode.OK)
-            description("Referanse til meldingen som ble sendt til bruker")
-        }
-        tags("Dialog")
-        canRespond(CommonModels.standardResponses)
-    }
 }

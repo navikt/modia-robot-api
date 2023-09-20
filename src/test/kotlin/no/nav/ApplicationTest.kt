@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 class ApplicationTest {
     @Test
     internal fun testRoot() {
-        testApplication() {
+        testApplication {
             application {
                 configureOpenApi()
                 configureMonitoring()

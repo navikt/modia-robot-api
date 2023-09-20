@@ -13,9 +13,7 @@ import no.nav.api.CommonModels
 import java.util.*
 import kotlin.reflect.typeOf
 
-fun Route.configureSkrivestotteRoutes(
-    skrivestotteService: SkrivestotteService,
-) {
+fun Route.configureSkrivestotteRoutes(skrivestotteService: SkrivestotteService) {
     route("skrivestotte/") {
         install(NotarizedRoute()) {
             get = Api.sok
@@ -42,46 +40,50 @@ fun Route.configureSkrivestotteRoutes(
 }
 
 private object Api {
-    val sok = GetInfo.builder {
-        summary("Tekster fra skrivestøtte")
-        description("Hentes fra modiapersonoversikt-skrivestotte")
-        request {
-            parameters(Models.sokeVerdiParameter)
+    val sok =
+        GetInfo.builder {
+            summary("Tekster fra skrivestøtte")
+            description("Hentes fra modiapersonoversikt-skrivestotte")
+            request {
+                parameters(Models.sokeVerdiParameter)
+            }
+            response {
+                responseType(typeOf<SkrivestotteClient.Tekst>())
+                responseCode(HttpStatusCode.OK)
+                description("Tekst som matcher søket")
+            }
+            tags("Skrivestøtte")
+            canRespond(CommonModels.standardResponses)
         }
-        response {
-            responseType(typeOf<SkrivestotteClient.Tekst>())
-            responseCode(HttpStatusCode.OK)
-            description("Tekst som matcher søket")
-        }
-        tags("Skrivestøtte")
-        canRespond(CommonModels.standardResponses)
-    }
-    val sokPaId = GetInfo.builder {
-        summary("Tekst fra skrivestøtte gitt ID")
-        description("Hentes fra modiapersonoversikt-skrivestotte")
-        request { parameters(Models.idParameter) }
-        tags("Skrivestøtte")
+    val sokPaId =
+        GetInfo.builder {
+            summary("Tekst fra skrivestøtte gitt ID")
+            description("Hentes fra modiapersonoversikt-skrivestotte")
+            request { parameters(Models.idParameter) }
+            tags("Skrivestøtte")
 
-        response {
-            responseType(typeOf<SkrivestotteClient.Tekst>())
-            responseCode(HttpStatusCode.OK)
-            description("Tekst som matcher søket på ID")
+            response {
+                responseType(typeOf<SkrivestotteClient.Tekst>())
+                responseCode(HttpStatusCode.OK)
+                description("Tekst som matcher søket på ID")
+            }
+            tags("Skrivestøtte")
+            canRespond(CommonModels.standardResponses)
         }
-        tags("Skrivestøtte")
-        canRespond(CommonModels.standardResponses)
-    }
 }
 
 private object Models {
-    val idParameter = Parameter(
-        name = "id",
-        `in` = Parameter.Location.path,
-        schema = TypeDefinition.STRING,
-    )
+    val idParameter =
+        Parameter(
+            name = "id",
+            `in` = Parameter.Location.path,
+            schema = TypeDefinition.STRING,
+        )
 
-    val sokeVerdiParameter = Parameter(
-        name = "sokeVerdi",
-        `in` = Parameter.Location.query,
-        schema = TypeDefinition.STRING,
-    )
+    val sokeVerdiParameter =
+        Parameter(
+            name = "sokeVerdi",
+            `in` = Parameter.Location.query,
+            schema = TypeDefinition.STRING,
+        )
 }
