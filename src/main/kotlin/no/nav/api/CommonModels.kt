@@ -1,30 +1,36 @@
 package no.nav.api
 
-import io.bkbn.kompendium.annotations.Param
-import io.bkbn.kompendium.annotations.ParamType
-import io.bkbn.kompendium.core.metadata.ExceptionInfo
+import io.bkbn.kompendium.core.metadata.ResponseInfo
+import io.bkbn.kompendium.json.schema.definition.TypeDefinition
+import io.bkbn.kompendium.oas.payload.Parameter
 import io.ktor.http.*
 import kotlin.reflect.typeOf
 
 object CommonModels {
-    open class FnrParameter(
-        @Param(type = ParamType.PATH)
-        val fnr: String,
-    )
+    val fnrParameter =
+        Parameter(
+            name = "fnr",
+            `in` = Parameter.Location.path,
+            schema = TypeDefinition.STRING,
+        )
 
-    val noContent = ExceptionInfo<Unit>(
-        responseType = typeOf<Unit>(),
-        status = HttpStatusCode.NoContent,
-        description = "Ingen informasjon funnet"
-    )
-    val internalServerError = ExceptionInfo<Unit>(
-        responseType = typeOf<Unit>(),
-        status = HttpStatusCode.InternalServerError,
-        description = "Det skjedde en feil ved henting av data"
-    )
+    private val noContentResponse =
+        ResponseInfo.builder {
+            responseCode(HttpStatusCode.NoContent)
+            description("Ingen informasjon funnet")
+            responseType(typeOf<Unit>())
+        }
 
-    val standardResponses = setOf(
-        noContent,
-        internalServerError
-    )
+    private val internalServerErrorResponse =
+        ResponseInfo.builder {
+            responseCode(HttpStatusCode.InternalServerError)
+            description("Ingen informasjon funnet")
+            responseType(typeOf<Unit>())
+        }
+
+    val standardResponses =
+        listOf(
+            noContentResponse,
+            internalServerErrorResponse,
+        )
 }

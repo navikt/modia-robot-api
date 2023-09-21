@@ -1,17 +1,15 @@
 package no.nav.plugins
 
-import io.bkbn.kompendium.core.Notarized.notarizedGet
-import io.bkbn.kompendium.core.metadata.ResponseInfo
-import io.bkbn.kompendium.core.metadata.method.GetInfo
-import io.ktor.application.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.metrics.micrometer.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.micrometer.prometheus.*
-import no.nav.personoversikt.utils.SelftestGenerator
+import io.ktor.server.application.*
+import io.ktor.server.plugins.*
+import io.ktor.server.plugins.callid.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import no.nav.personoversikt.common.ktor.utils.Metrics
+import no.nav.personoversikt.common.utils.SelftestGenerator
 import no.nav.utils.appImage
 import no.nav.utils.masked
 import org.slf4j.event.*
@@ -33,25 +31,23 @@ fun Application.configureMonitoring() {
             callId.isNotEmpty()
         }
     }
-    val appMicrometerRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
-    install(MicrometerMetrics) {
-        registry = appMicrometerRegistry
-    }
+    install(Metrics.Plugin)
 
-    val selftest = SelftestGenerator.getInstance(
-        SelftestGenerator.Config(
-            appname = "modia-robot-api",
-            version = appImage
+    val selftest =
+        SelftestGenerator.getInstance(
+            SelftestGenerator.Config(
+                appname = "modia-robot-api",
+                version = appImage,
+            ),
         )
-    )
     routing {
         get {
             call.respondRedirect("/swagger-ui")
         }
         route("internal") {
             route("isAlive") {
-                notarizedGet(Api.isAlive) {
+                get {
                     if (selftest.isAlive()) {
                         call.respondText("Alive")
                     } else {
@@ -60,7 +56,7 @@ fun Application.configureMonitoring() {
                 }
             }
             route("isReady") {
-                notarizedGet(Api.isReady) {
+                get {
                     if (selftest.isReady()) {
                         call.respondText("Ready")
                     } else {
@@ -69,31 +65,9 @@ fun Application.configureMonitoring() {
                 }
             }
 
-            get("metrics") {
-                call.respond(appMicrometerRegistry.scrape())
-            }
-
             get("selftest") {
                 call.respondText(selftest.scrape())
             }
         }
     }
-}
-private object Api {
-    val isAlive = GetInfo<Unit, String>(
-        summary = "isAlive health probe",
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "App is alive"
-        ),
-        tags = setOf("Monitoring")
-    )
-    val isReady = GetInfo<Unit, String>(
-        summary = "isReady health probe",
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "App is ready"
-        ),
-        tags = setOf("Monitoring")
-    )
 }

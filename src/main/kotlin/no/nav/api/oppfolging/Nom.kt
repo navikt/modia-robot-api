@@ -13,27 +13,31 @@ class Nom(
     private val nomUrl: String,
     private val tokenclient: BoundedMachineToMachineTokenClient,
 ) {
-    private val httpClient = OkHttpClient
-        .Builder()
-        .addInterceptor(XCorrelationIdInterceptor())
-        .addInterceptor(
-            LoggingInterceptor(
-                name = "nom",
-                callIdExtractor = { getCallId() }
+    private val httpClient =
+        OkHttpClient
+            .Builder()
+            .addInterceptor(XCorrelationIdInterceptor())
+            .addInterceptor(
+                LoggingInterceptor(
+                    name = "nom",
+                    callIdExtractor = { getCallId() },
+                ),
             )
-        )
-        .build()
+            .build()
 
-    val client: NomClient = if (isNotProd()) {
-        DevMock
-    } else {
-        val tokenSupplier = { tokenclient.createMachineToMachineToken() }
-        CachedNomClient(NomClientImpl(nomUrl, tokenSupplier, httpClient))
-    }
+    val client: NomClient =
+        if (isNotProd()) {
+            DevMock
+        } else {
+            val tokenSupplier = { tokenclient.createMachineToMachineToken() }
+            CachedNomClient(NomClientImpl(nomUrl, tokenSupplier, httpClient))
+        }
 
     object DevMock : NomClient {
         override fun finnNavn(navIdent: NavIdent): VeilederNavn = lagVeilederNavn(navIdent)
+
         override fun finnNavn(identer: List<NavIdent>): List<VeilederNavn> = identer.map(::lagVeilederNavn)
+
         override fun checkHealth(): HealthCheckResult = HealthCheckResult.healthy()
 
         private fun lagVeilederNavn(navIdent: NavIdent): VeilederNavn {

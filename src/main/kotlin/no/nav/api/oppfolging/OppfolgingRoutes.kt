@@ -1,21 +1,22 @@
 package no.nav.api.oppfolging
 
-import io.bkbn.kompendium.core.Notarized.notarizedGet
-import io.bkbn.kompendium.core.metadata.ResponseInfo
-import io.bkbn.kompendium.core.metadata.method.GetInfo
-import io.ktor.application.*
+import io.bkbn.kompendium.core.metadata.GetInfo
+import io.bkbn.kompendium.core.plugin.NotarizedRoute
+import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import no.nav.api.CommonModels
-import no.nav.plugins.securityScheme
 import no.nav.utils.getJWT
+import kotlin.reflect.typeOf
 
-fun Route.configureOppfolgingRoutes(
-    oppfolgingService: OppfolgingService,
-) {
+fun Route.configureOppfolgingRoutes(oppfolgingService: OppfolgingService) {
     route("oppfolging/{fnr}/veileder") {
-        notarizedGet(Api.veileder) {
+        install(NotarizedRoute()) {
+            get = Api.veileder
+        }
+        get {
             val payload = call.getJWT()
             val fnr = requireNotNull(call.parameters["fnr"])
             call.respond(oppfolgingService.hentOppfolging(fnr, payload))
@@ -24,15 +25,19 @@ fun Route.configureOppfolgingRoutes(
 }
 
 private object Api {
-    val veileder = GetInfo<CommonModels.FnrParameter, OppfolgingService.Oppfolging>(
-        summary = "Brukers oppfølgingsveileder",
-        description = "Hentes fra veilarboppfølging",
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Navn og ident til brukers veileder"
-        ),
-        tags = setOf("Oppfølging"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses
-    )
+    val veileder =
+        GetInfo.builder {
+            summary("Brukers oppfølgingsveileder")
+            description("Hentes fra veilarboppfølging")
+            request {
+                parameters(CommonModels.fnrParameter)
+            }
+            response {
+                responseType(typeOf<OppfolgingService.Oppfolging>())
+                responseCode(HttpStatusCode.OK)
+                description("Navn og ident til brukers veileder")
+            }
+            tags("Oppfølging")
+            canRespond(CommonModels.standardResponses)
+        }
 }

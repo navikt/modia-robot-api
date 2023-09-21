@@ -1,3 +1,10 @@
-[*.kt]
-ktlint_disabled_rules=no-wildcard-imports,filename
+[/src/**.kt]
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_filename=disabled
 ij_kotlin_allow_trailing_comma=true
+
+[/build/**.kt]
+ktlint_standard=disabled
+
+[*.kts]
+ktlint_standard_property-naming=disabled
