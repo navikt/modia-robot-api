@@ -11,12 +11,26 @@ class DialogService(
     private val sfService: SFService,
     private val pdlService: PdlService,
 ) {
+    abstract class Melding {
+        abstract val tekst: String
+        abstract val tema: String
+        abstract val enhet: String
+    }
+
     @Serializable
     data class MeldingRequest(
-        val tekst: String,
-        val tema: String,
-        val enhet: String,
-    )
+        override val tekst: String,
+        override val tema: String,
+        override val enhet: String,
+    ) : Melding()
+
+    @Serializable
+    data class MeldingRequestV2(
+        val fnr: String,
+        override val tekst: String,
+        override val tema: String,
+        override val enhet: String,
+    ) : Melding()
 
     @Serializable
     data class Response(
@@ -44,7 +58,7 @@ class DialogService(
 
     suspend fun sendSporsmal(
         fnr: String,
-        request: MeldingRequest,
+        request: Melding,
         ident: String,
         token: String,
     ): Response {
@@ -65,7 +79,7 @@ class DialogService(
 
     suspend fun sendInfomelding(
         fnr: String,
-        request: MeldingRequest,
+        request: Melding,
         ident: String,
         token: String,
     ): Response {
@@ -87,7 +101,7 @@ class DialogService(
 
     private suspend fun lagSfMeldingRequest(
         fnr: String,
-        request: MeldingRequest,
+        request: Melding,
         token: String,
     ) = SfMeldingRequest(
         aktorId = pdlService.hentAktorid(fnr, token),
