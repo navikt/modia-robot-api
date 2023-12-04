@@ -34,10 +34,10 @@ private object ApiV2 {
         ),
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
-            description = "Brukers epost og mobiltelefonnummer"
+            description = "Brukers epost og mobiltelefonnummer",
         ),
         tags = setOf("Kontakt- og reservasjonsregisteret"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses
+        canThrow = CommonModels.standardResponses,
     )
 }

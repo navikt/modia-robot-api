@@ -31,10 +31,10 @@ private object ApiV2 {
         ),
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
-            description = "Brukers pdl data"
+            description = "Brukers pdl data",
         ),
         tags = setOf("PDL"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses
+        canThrow = CommonModels.standardResponses,
     )
 }

@@ -29,13 +29,13 @@ private object ApiV2 {
         description = "Hentes fra TPS",
         responseInfo = ResponseInfo(
             status = HttpStatusCode.OK,
-            description = "Brukers kontonummer om det eksisterer i TPS"
+            description = "Brukers kontonummer om det eksisterer i TPS",
         ),
         requestInfo = RequestInfo(
             description = "Brukers fnr",
         ),
         tags = setOf("TPS"),
         securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses
+        canThrow = CommonModels.standardResponses,
     )
 }
