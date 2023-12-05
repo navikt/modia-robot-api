@@ -24,17 +24,17 @@ fun Route.configurePdlRoutesV2(pdlService: PdlService) {
 }
 
 private object ApiV2 {
-    val personalia = PostInfo.builder {
-        summary("Generelle personopplysninger")
-        description("Hentes fra PDL")
-        request { requestType(typeOf<FnrRequest>()) }
-        response {
-            responseCode(HttpStatusCode.OK)
-            responseType(typeOf<PdlPersonalia>())
-            description("Brukers pdl data")
+    val personalia =
+        PostInfo.builder {
+            summary("Generelle personopplysninger")
+            description("Hentes fra PDL")
+            request { requestType(typeOf<FnrRequest>()) }
+            response {
+                responseCode(HttpStatusCode.OK)
+                responseType(typeOf<PdlPersonalia>())
+                description("Brukers pdl data")
+            }
+            tags("PDL")
+            canRespond(CommonModels.standardResponses)
         }
-        tags("PDL")
-        canRespond(CommonModels.standardResponses)
-    }
 }
-
