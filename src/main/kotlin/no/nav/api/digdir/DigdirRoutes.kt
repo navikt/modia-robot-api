@@ -24,6 +24,7 @@ fun Route.configureDigdirRoutes(digdirService: DigdirService) {
         }
     }
 }
+
 private object Api {
     val kontaktinformasjon =
         GetInfo.builder {

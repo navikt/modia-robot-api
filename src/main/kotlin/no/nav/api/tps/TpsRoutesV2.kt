@@ -12,9 +12,7 @@ import io.ktor.routing.*
 import no.nav.api.CommonModels
 import no.nav.plugins.securityScheme
 
-fun Route.configureTpsRoutesV2(
-    tpsService: TpsService,
-) {
+fun Route.configureTpsRoutesV2(tpsService: TpsService) {
     route("tps/kontonummer") {
         notarizedPost(ApiV2.kontonummer) {
             val fnr = requireNotNull(call.receive<String>())
@@ -24,18 +22,21 @@ fun Route.configureTpsRoutesV2(
 }
 
 private object ApiV2 {
-    val kontonummer = PostInfo<Unit, String, TpsService.Kontonummer>(
-        summary = "Brukers kontonummer",
-        description = "Hentes fra TPS",
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Brukers kontonummer om det eksisterer i TPS",
-        ),
-        requestInfo = RequestInfo(
-            description = "Brukers fnr",
-        ),
-        tags = setOf("TPS"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
-    )
+    val kontonummer =
+        PostInfo<Unit, String, TpsService.Kontonummer>(
+            summary = "Brukers kontonummer",
+            description = "Hentes fra TPS",
+            responseInfo =
+                ResponseInfo(
+                    status = HttpStatusCode.OK,
+                    description = "Brukers kontonummer om det eksisterer i TPS",
+                ),
+            requestInfo =
+                RequestInfo(
+                    description = "Brukers fnr",
+                ),
+            tags = setOf("TPS"),
+            securitySchemes = setOf(securityScheme.name),
+            canThrow = CommonModels.standardResponses,
+        )
 }

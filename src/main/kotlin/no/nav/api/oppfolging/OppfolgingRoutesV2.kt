@@ -13,9 +13,7 @@ import no.nav.api.CommonModels
 import no.nav.plugins.securityScheme
 import no.nav.utils.getJWT
 
-fun Route.configureOppfolgingRoutesV2(
-    oppfolgingService: OppfolgingService,
-) {
+fun Route.configureOppfolgingRoutesV2(oppfolgingService: OppfolgingService) {
     route("oppfolging/veileder") {
         notarizedPost(ApiV2.veileder) {
             val payload = call.getJWT()
@@ -26,18 +24,21 @@ fun Route.configureOppfolgingRoutesV2(
 }
 
 private object ApiV2 {
-    val veileder = PostInfo<Unit, String, OppfolgingService.Oppfolging>(
-        summary = "Brukers oppfølgingsveileder",
-        description = "Hentes fra veilarboppfølging",
-        requestInfo = RequestInfo(
-            description = "Brukers fnr",
-        ),
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Navn og ident til brukers veileder",
-        ),
-        tags = setOf("Oppfølging"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
-    )
+    val veileder =
+        PostInfo<Unit, String, OppfolgingService.Oppfolging>(
+            summary = "Brukers oppfølgingsveileder",
+            description = "Hentes fra veilarboppfølging",
+            requestInfo =
+                RequestInfo(
+                    description = "Brukers fnr",
+                ),
+            responseInfo =
+                ResponseInfo(
+                    status = HttpStatusCode.OK,
+                    description = "Navn og ident til brukers veileder",
+                ),
+            tags = setOf("Oppfølging"),
+            securitySchemes = setOf(securityScheme.name),
+            canThrow = CommonModels.standardResponses,
+        )
 }

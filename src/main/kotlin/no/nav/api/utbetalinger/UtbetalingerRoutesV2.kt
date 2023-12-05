@@ -15,9 +15,7 @@ import no.nav.api.utbetalinger.UtbetalingerService.*
 import no.nav.plugins.securityScheme
 import no.nav.utils.getJWT
 
-fun Route.configureUtbetalingerRoutesV2(
-    utbetalingerService: UtbetalingerService,
-) {
+fun Route.configureUtbetalingerRoutesV2(utbetalingerService: UtbetalingerService) {
     route("utbetalinger/ytelseoversikt") {
         notarizedPost(ApiV2.utbetalinger) {
             val payload = call.getJWT()
@@ -31,18 +29,21 @@ fun Route.configureUtbetalingerRoutesV2(
 }
 
 private object ApiV2 {
-    val utbetalinger = PostInfo<Unit, String, List<Utbetalinger>>(
-        summary = "Brukers utbetalinger",
-        description = "Hentes fra utbetaldata",
-        requestInfo = RequestInfo(
-            description = "Brukers fnr",
-        ),
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Brukers utbetalinger",
-        ),
-        tags = setOf("Utbetalinger"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
-    )
+    val utbetalinger =
+        PostInfo<Unit, String, List<Utbetalinger>>(
+            summary = "Brukers utbetalinger",
+            description = "Hentes fra utbetaldata",
+            requestInfo =
+                RequestInfo(
+                    description = "Brukers fnr",
+                ),
+            responseInfo =
+                ResponseInfo(
+                    status = HttpStatusCode.OK,
+                    description = "Brukers utbetalinger",
+                ),
+            tags = setOf("Utbetalinger"),
+            securitySchemes = setOf(securityScheme.name),
+            canThrow = CommonModels.standardResponses,
+        )
 }

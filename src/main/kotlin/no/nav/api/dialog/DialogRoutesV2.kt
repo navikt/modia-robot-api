@@ -15,9 +15,7 @@ import no.nav.plugins.securityScheme
 import no.nav.utils.getJWT
 import no.nav.utils.getJWTPrincipalSubject
 
-fun Route.configureDialogRoutesV2(
-    dialogService: DialogService,
-) {
+fun Route.configureDialogRoutesV2(dialogService: DialogService) {
     route("dialog") {
         route("sendinfomelding") {
             notarizedPost(ApiV2.sendInfomelding) {
@@ -53,41 +51,49 @@ fun Route.configureDialogRoutesV2(
 }
 
 private object ApiV2 {
-    val sendInfomelding = PostInfo<CommonModels.FnrParameter, MeldingRequest, Response>(
-        summary = "Sender infomelding til bruker",
-        description = "",
-        requestInfo = RequestInfo(
-            description =
-            """Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
-                   Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
-                   før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
-            """.trimIndent(),
-        ),
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Referanse til meldingen som ble sendt til bruker",
-        ),
-        tags = setOf("Dialog"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
-    )
+    val sendInfomelding =
+        PostInfo<CommonModels.FnrParameter, MeldingRequest, Response>(
+            summary = "Sender infomelding til bruker",
+            description = "",
+            requestInfo =
+                RequestInfo(
+                    description =
+                        """
+                        Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
+                        Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
+                        før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
+                        """.trimIndent(),
+                ),
+            responseInfo =
+                ResponseInfo(
+                    status = HttpStatusCode.OK,
+                    description = "Referanse til meldingen som ble sendt til bruker",
+                ),
+            tags = setOf("Dialog"),
+            securitySchemes = setOf(securityScheme.name),
+            canThrow = CommonModels.standardResponses,
+        )
 
-    val sendSporsmal = PostInfo<CommonModels.FnrParameter, MeldingRequest, Response>(
-        summary = "Sender spørsmål til bruker",
-        description = "",
-        requestInfo = RequestInfo(
-            description =
-            """Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
-                   Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
-                   før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
-            """.trimIndent(),
-        ),
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Referanse til meldingen som ble sendt til bruker",
-        ),
-        tags = setOf("Dialog"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
-    )
+    val sendSporsmal =
+        PostInfo<CommonModels.FnrParameter, MeldingRequest, Response>(
+            summary = "Sender spørsmål til bruker",
+            description = "",
+            requestInfo =
+                RequestInfo(
+                    description =
+                        """
+                        Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
+                        Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
+                        før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
+                        """.trimIndent(),
+                ),
+            responseInfo =
+                ResponseInfo(
+                    status = HttpStatusCode.OK,
+                    description = "Referanse til meldingen som ble sendt til bruker",
+                ),
+            tags = setOf("Dialog"),
+            securitySchemes = setOf(securityScheme.name),
+            canThrow = CommonModels.standardResponses,
+        )
 }

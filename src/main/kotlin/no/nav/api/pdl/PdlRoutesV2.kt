@@ -22,19 +22,23 @@ fun Route.configurePdlRoutesV2(pdlService: PdlService) {
         }
     }
 }
+
 private object ApiV2 {
-    val personalia = PostInfo<Unit, String, PdlPersonalia>(
-        summary = "Generelle personopplysninger",
-        description = "Hentes fra PDL",
-        requestInfo = RequestInfo(
-            description = "Brukers fnr",
-        ),
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Brukers pdl data",
-        ),
-        tags = setOf("PDL"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
-    )
+    val personalia =
+        PostInfo<Unit, String, PdlPersonalia>(
+            summary = "Generelle personopplysninger",
+            description = "Hentes fra PDL",
+            requestInfo =
+                RequestInfo(
+                    description = "Brukers fnr",
+                ),
+            responseInfo =
+                ResponseInfo(
+                    status = HttpStatusCode.OK,
+                    description = "Brukers pdl data",
+                ),
+            tags = setOf("PDL"),
+            securitySchemes = setOf(securityScheme.name),
+            canThrow = CommonModels.standardResponses,
+        )
 }

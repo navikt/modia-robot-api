@@ -14,9 +14,7 @@ import no.nav.api.digdir.DigdirService.*
 import no.nav.plugins.securityScheme
 import no.nav.utils.getJWT
 
-fun Route.configureDigdirRoutesV2(
-    digdirService: DigdirService,
-) {
+fun Route.configureDigdirRoutesV2(digdirService: DigdirService) {
     route("digdir/kontaktinformasjon") {
         notarizedPost(ApiV2.kontaktinformasjon) {
             val payload = call.getJWT()
@@ -25,19 +23,23 @@ fun Route.configureDigdirRoutesV2(
         }
     }
 }
+
 private object ApiV2 {
-    val kontaktinformasjon = PostInfo<Unit, String, Kontaktinformasjon>(
-        summary = "Brukers epost og mobiltelefonnummer",
-        description = "Hentes fra digdir-proxy",
-        requestInfo = RequestInfo(
-            description = "Brukers fnr",
-        ),
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Brukers epost og mobiltelefonnummer",
-        ),
-        tags = setOf("Kontakt- og reservasjonsregisteret"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses,
-    )
+    val kontaktinformasjon =
+        PostInfo<Unit, String, Kontaktinformasjon>(
+            summary = "Brukers epost og mobiltelefonnummer",
+            description = "Hentes fra digdir-proxy",
+            requestInfo =
+                RequestInfo(
+                    description = "Brukers fnr",
+                ),
+            responseInfo =
+                ResponseInfo(
+                    status = HttpStatusCode.OK,
+                    description = "Brukers epost og mobiltelefonnummer",
+                ),
+            tags = setOf("Kontakt- og reservasjonsregisteret"),
+            securitySchemes = setOf(securityScheme.name),
+            canThrow = CommonModels.standardResponses,
+        )
 }
