@@ -1,25 +1,25 @@
 package no.nav.api.utbetalinger
 
-import io.bkbn.kompendium.core.Notarized.notarizedPost
-import io.bkbn.kompendium.core.metadata.RequestInfo
-import io.bkbn.kompendium.core.metadata.ResponseInfo
-import io.bkbn.kompendium.core.metadata.method.PostInfo
-import io.ktor.application.*
+import io.bkbn.kompendium.core.metadata.PostInfo
+import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.datetime.LocalDate
 import no.nav.api.CommonModels
 import no.nav.api.utbetalinger.UtbetalingerService.*
-import no.nav.plugins.securityScheme
+import no.nav.models.FnrRequest
+import no.nav.models.deserializeFnr
 import no.nav.utils.getJWT
+import kotlin.reflect.typeOf
 
 fun Route.configureUtbetalingerRoutesV2(utbetalingerService: UtbetalingerService) {
     route("utbetalinger/ytelseoversikt") {
-        notarizedPost(ApiV2.utbetalinger) {
+        install(NotarizedRoute()) { post = ApiV2.utbetalinger }
+        post {
             val payload = call.getJWT()
-            val fnr = requireNotNull(call.receive<String>())
+            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
             val fra = LocalDate.parse(call.request.queryParameters["fra"] ?: "")
             val til = LocalDate.parse(call.request.queryParameters["til"] ?: "")
 
@@ -30,20 +30,19 @@ fun Route.configureUtbetalingerRoutesV2(utbetalingerService: UtbetalingerService
 
 private object ApiV2 {
     val utbetalinger =
-        PostInfo<Unit, String, List<Utbetalinger>>(
-            summary = "Brukers utbetalinger",
-            description = "Hentes fra utbetaldata",
-            requestInfo =
-                RequestInfo(
-                    description = "Brukers fnr",
-                ),
-            responseInfo =
-                ResponseInfo(
-                    status = HttpStatusCode.OK,
-                    description = "Brukers utbetalinger",
-                ),
-            tags = setOf("Utbetalinger"),
-            securitySchemes = setOf(securityScheme.name),
-            canThrow = CommonModels.standardResponses,
-        )
+        PostInfo.builder {
+            summary("Brukers utbetalinger")
+            description("Hentes fra utbetaldata")
+            request {
+                parameters(Models.fraParam, Models.tilParam)
+                requestType(typeOf<FnrRequest>())
+            }
+            response {
+                responseCode(HttpStatusCode.OK)
+                responseType(typeOf<List<Utbetalinger>>())
+                description("Brukers utbetalinger")
+            }
+            tags("Utbetalinger")
+            canRespond(CommonModels.standardResponses)
+        }
 }

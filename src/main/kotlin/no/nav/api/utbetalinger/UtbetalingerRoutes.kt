@@ -45,7 +45,7 @@ private object Api {
         }
 }
 
-private object Models {
+internal object Models {
     val fraParam =
         Parameter(
             name = "fra",

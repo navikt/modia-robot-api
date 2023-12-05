@@ -1,21 +1,23 @@
 package no.nav.api.tps
 
-import io.bkbn.kompendium.core.Notarized.notarizedPost
-import io.bkbn.kompendium.core.metadata.RequestInfo
-import io.bkbn.kompendium.core.metadata.ResponseInfo
-import io.bkbn.kompendium.core.metadata.method.PostInfo
-import io.ktor.application.*
+import io.bkbn.kompendium.core.metadata.PostInfo
+import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import no.nav.api.CommonModels
-import no.nav.plugins.securityScheme
+import no.nav.models.FnrRequest
+import no.nav.models.deserializeFnr
+import kotlin.reflect.typeOf
 
 fun Route.configureTpsRoutesV2(tpsService: TpsService) {
     route("tps/kontonummer") {
-        notarizedPost(ApiV2.kontonummer) {
-            val fnr = requireNotNull(call.receive<String>())
+        install(NotarizedRoute()) {
+            post = ApiV2.kontonummer
+        }
+        post {
+            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
             call.respond(tpsService.hentKontonummer(fnr))
         }
     }
@@ -23,20 +25,16 @@ fun Route.configureTpsRoutesV2(tpsService: TpsService) {
 
 private object ApiV2 {
     val kontonummer =
-        PostInfo<Unit, String, TpsService.Kontonummer>(
-            summary = "Brukers kontonummer",
-            description = "Hentes fra TPS",
-            responseInfo =
-                ResponseInfo(
-                    status = HttpStatusCode.OK,
-                    description = "Brukers kontonummer om det eksisterer i TPS",
-                ),
-            requestInfo =
-                RequestInfo(
-                    description = "Brukers fnr",
-                ),
-            tags = setOf("TPS"),
-            securitySchemes = setOf(securityScheme.name),
-            canThrow = CommonModels.standardResponses,
-        )
+        PostInfo.builder {
+            summary("Brukers kontonummer")
+            description("Hentes fra TPS")
+            request { requestType(typeOf<FnrRequest>()) }
+            response {
+                responseType(typeOf<TpsService.Kontonummer>())
+                responseCode(HttpStatusCode.OK)
+                description("Brukers kontonummer om det eksisterer i TPS")
+            }
+            tags("TPS")
+            canRespond(CommonModels.standardResponses)
+        }
 }

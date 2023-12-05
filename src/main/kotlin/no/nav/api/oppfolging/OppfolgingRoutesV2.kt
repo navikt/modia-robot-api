@@ -1,23 +1,25 @@
 package no.nav.api.oppfolging
 
-import io.bkbn.kompendium.core.Notarized.notarizedPost
-import io.bkbn.kompendium.core.metadata.RequestInfo
-import io.bkbn.kompendium.core.metadata.ResponseInfo
-import io.bkbn.kompendium.core.metadata.method.PostInfo
-import io.ktor.application.*
+import io.bkbn.kompendium.core.metadata.PostInfo
+import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import no.nav.api.CommonModels
-import no.nav.plugins.securityScheme
+import no.nav.models.FnrRequest
+import no.nav.models.deserializeFnr
 import no.nav.utils.getJWT
+import kotlin.reflect.typeOf
 
 fun Route.configureOppfolgingRoutesV2(oppfolgingService: OppfolgingService) {
     route("oppfolging/veileder") {
-        notarizedPost(ApiV2.veileder) {
+        install(NotarizedRoute()) {
+            post = ApiV2.veileder
+        }
+        post {
             val payload = call.getJWT()
-            val fnr = requireNotNull(call.receive<String>())
+            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
             call.respond(oppfolgingService.hentOppfolging(fnr, payload))
         }
     }
@@ -25,20 +27,18 @@ fun Route.configureOppfolgingRoutesV2(oppfolgingService: OppfolgingService) {
 
 private object ApiV2 {
     val veileder =
-        PostInfo<Unit, String, OppfolgingService.Oppfolging>(
-            summary = "Brukers oppfølgingsveileder",
-            description = "Hentes fra veilarboppfølging",
-            requestInfo =
-                RequestInfo(
-                    description = "Brukers fnr",
-                ),
-            responseInfo =
-                ResponseInfo(
-                    status = HttpStatusCode.OK,
-                    description = "Navn og ident til brukers veileder",
-                ),
-            tags = setOf("Oppfølging"),
-            securitySchemes = setOf(securityScheme.name),
-            canThrow = CommonModels.standardResponses,
-        )
+        PostInfo.builder {
+            summary("Brukers oppfølgingsveileder")
+            description("Hentes fra veilarboppfølging")
+            request {
+                requestType(typeOf<FnrRequest>())
+            }
+            response {
+                responseType(typeOf<OppfolgingService.Oppfolging>())
+                responseCode(HttpStatusCode.OK)
+                description("Navn og ident til brukers veileder")
+            }
+            tags("Oppfølging")
+            canRespond(CommonModels.standardResponses)
+        }
 }
