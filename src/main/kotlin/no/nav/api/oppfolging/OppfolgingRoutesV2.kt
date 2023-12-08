@@ -32,6 +32,7 @@ private object ApiV2 {
             description("Hentes fra veilarboppfølging")
             request {
                 requestType(typeOf<FnrRequest>())
+                description("Brukers ident")
             }
             response {
                 responseType(typeOf<OppfolgingService.Oppfolging>())

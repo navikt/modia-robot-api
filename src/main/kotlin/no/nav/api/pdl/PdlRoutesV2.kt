@@ -28,7 +28,10 @@ private object ApiV2 {
         PostInfo.builder {
             summary("Generelle personopplysninger")
             description("Hentes fra PDL")
-            request { requestType(typeOf<FnrRequest>()) }
+            request {
+                requestType(typeOf<FnrRequest>())
+                description("Brukers ident")
+            }
             response {
                 responseCode(HttpStatusCode.OK)
                 responseType(typeOf<PdlPersonalia>())

@@ -33,6 +33,7 @@ private object ApiV2 {
             description("Hentes fra digdir-proxy")
             request {
                 requestType(typeOf<FnrRequest>())
+                description("Brukers ident")
             }
             response {
                 responseCode(HttpStatusCode.OK)

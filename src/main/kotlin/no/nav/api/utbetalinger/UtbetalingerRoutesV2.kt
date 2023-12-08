@@ -36,6 +36,7 @@ private object ApiV2 {
             request {
                 parameters(Models.fraParam, Models.tilParam)
                 requestType(typeOf<FnrRequest>())
+                description("Brukers ident")
             }
             response {
                 responseCode(HttpStatusCode.OK)

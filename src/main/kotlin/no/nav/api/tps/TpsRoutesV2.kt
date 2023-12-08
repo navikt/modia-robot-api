@@ -28,7 +28,10 @@ private object ApiV2 {
         PostInfo.builder {
             summary("Brukers kontonummer")
             description("Hentes fra TPS")
-            request { requestType(typeOf<FnrRequest>()) }
+            request {
+                requestType(typeOf<FnrRequest>())
+                description("Brukers ident")
+            }
             response {
                 responseType(typeOf<TpsService.Kontonummer>())
                 responseCode(HttpStatusCode.OK)
