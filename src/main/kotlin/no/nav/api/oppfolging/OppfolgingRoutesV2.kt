@@ -13,7 +13,7 @@ import no.nav.utils.getJWT
 import kotlin.reflect.typeOf
 
 fun Route.configureOppfolgingRoutesV2(oppfolgingService: OppfolgingService) {
-    route("oppfolging/veileder") {
+    route("v2/oppfolging/veileder") {
         install(NotarizedRoute()) {
             post = ApiV2.veileder
         }

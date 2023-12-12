@@ -14,7 +14,7 @@ import no.nav.utils.getJWTPrincipalSubject
 import kotlin.reflect.typeOf
 
 fun Route.configureDialogRoutesV2(dialogService: DialogService) {
-    route("dialog") {
+    route("v2/dialog") {
         route("sendinfomelding") {
             install(NotarizedRoute()) {
                 post = ApiV2.sendInfoMelding

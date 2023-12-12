@@ -13,7 +13,7 @@ import no.nav.utils.getJWT
 import kotlin.reflect.typeOf
 
 fun Route.configurePdlRoutesV2(pdlService: PdlService) {
-    route("pdl") {
+    route("v2/pdl") {
         install(NotarizedRoute()) { post = ApiV2.personalia }
         post {
             val payload = call.getJWT()

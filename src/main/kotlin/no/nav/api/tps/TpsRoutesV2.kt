@@ -12,7 +12,7 @@ import no.nav.models.deserializeFnr
 import kotlin.reflect.typeOf
 
 fun Route.configureTpsRoutesV2(tpsService: TpsService) {
-    route("tps/kontonummer") {
+    route("v2/tps/kontonummer") {
         install(NotarizedRoute()) {
             post = ApiV2.kontonummer
         }

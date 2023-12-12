@@ -14,7 +14,7 @@ import no.nav.utils.getJWT
 import kotlin.reflect.typeOf
 
 fun Route.configureDigdirRoutesV2(digdirService: DigdirService) {
-    route("digdir/kontaktinformasjon") {
+    route("v2/digdir/kontaktinformasjon") {
         install(NotarizedRoute()) {
             post = ApiV2.kontaktinformasjon
         }

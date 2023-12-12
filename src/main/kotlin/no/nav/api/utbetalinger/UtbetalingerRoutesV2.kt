@@ -15,7 +15,7 @@ import no.nav.utils.getJWT
 import kotlin.reflect.typeOf
 
 fun Route.configureUtbetalingerRoutesV2(utbetalingerService: UtbetalingerService) {
-    route("utbetalinger/ytelseoversikt") {
+    route("v2/utbetalinger/ytelseoversikt") {
         install(NotarizedRoute()) { post = ApiV2.utbetalinger }
         post {
             val payload = call.getJWT()
