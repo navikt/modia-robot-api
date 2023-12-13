@@ -1,38 +1,42 @@
 package no.nav.api.pdl
 
-import io.bkbn.kompendium.core.Notarized.notarizedGet
-import io.bkbn.kompendium.core.metadata.ResponseInfo
-import io.bkbn.kompendium.core.metadata.method.GetInfo
-import io.ktor.application.*
+import io.bkbn.kompendium.core.metadata.GetInfo
+import io.bkbn.kompendium.core.plugin.NotarizedRoute
+import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
-import no.nav.plugins.securityScheme
 import no.nav.utils.getJWT
+import kotlin.reflect.typeOf
 
 fun Route.configurePdlRoutes(pdlService: PdlService) {
     route("pdl/{fnr}") {
-        notarizedGet(Api.personalia) {
+        install(NotarizedRoute()) { get = Api.personalia }
+        get {
             val payload = call.getJWT()
             val fnr = requireNotNull(call.parameters["fnr"])
             call.respond(pdlService.hentPersonalia(fnr, payload))
         }
     }
 }
+
 private object Api {
-    val personalia = GetInfo<CommonModels.FnrParameter, PdlPersonalia>(
-        summary = "Generelle personopplysninger",
-        description = "Hentes fra PDL",
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Brukers pdl data"
-        ),
-        tags = setOf("PDL"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses
-    )
+    val personalia =
+        GetInfo.builder {
+            summary("Generelle personopplysninger")
+            description("Hentes fra PDL")
+            request { parameters(CommonModels.fnrParameter) }
+            response {
+                responseCode(HttpStatusCode.OK)
+                responseType(typeOf<PdlPersonalia>())
+                description("Brukers pdl data")
+            }
+            tags("PDL")
+            canRespond(CommonModels.standardResponses)
+        }
 }
 
 @Serializable
@@ -56,6 +60,6 @@ data class PdlAdresse(
     ) : this(
         linje1.filterNotNull().joinToString(" "),
         linje2?.filterNotNull()?.joinToString(" "),
-        linje3?.filterNotNull()?.joinToString(" ")
+        linje3?.filterNotNull()?.joinToString(" "),
     )
 }

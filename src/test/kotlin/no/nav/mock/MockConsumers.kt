@@ -55,166 +55,203 @@ object MockConsumers : Consumers {
     override val sfClient = sfClientMock
 }
 
-private val tokenClientMock = mockOf<MachineToMachineTokenClient> { client ->
-    every { client.createMachineToMachineToken(any()) } returns UUID.randomUUID().toString()
-}
+private val tokenClientMock =
+    mockOf<MachineToMachineTokenClient> { client ->
+        every { client.createMachineToMachineToken(any()) } returns UUID.randomUUID().toString()
+    }
 
-private val oboTokenClientMock = mockOf<OnBehalfOfTokenClient> { client ->
-    every { client.exchangeOnBehalfOfToken(any(), any()) } returns UUID.randomUUID().toString()
-}
+private val oboTokenClientMock =
+    mockOf<OnBehalfOfTokenClient> { client ->
+        every { client.exchangeOnBehalfOfToken(any(), any()) } returns UUID.randomUUID().toString()
+    }
 
-private val oppfolgingClientMock = mockOf<OppfolgingClient> { client ->
-    coEvery { client.hentOppfolgingStatus(any(), any()) } returns OppfolgingClient.Status(
-        erUnderOppfolging = true
-    )
-    coEvery { client.hentOppfolgingVeileder(any(), any()) } returns OppfolgingClient.VeilederIdent(
-        veilederIdent = "Z123456"
-    )
-}
-
-private val personV3Mock = mockOf<PersonV3> { tps ->
-    coEvery { tps.hentPerson(any()) } returns HentPersonResponse().withPerson(
-        Bruker().withBankkonto(
-            BankkontoNorge().withBankkonto(
-                Bankkontonummer().withBankkontonummer("123456789123456")
+private val oppfolgingClientMock =
+    mockOf<OppfolgingClient> { client ->
+        coEvery { client.hentOppfolgingStatus(any(), any()) } returns
+            OppfolgingClient.Status(
+                erUnderOppfolging = true,
             )
-        )
-    )
-}
+        coEvery { client.hentOppfolgingVeileder(any(), any()) } returns
+            OppfolgingClient.VeilederIdent(
+                veilederIdent = "Z123456",
+            )
+    }
 
-private val nomClientMock = mockOf<NomClient> { client ->
-    coEvery { client.finnNavn(any<NavIdent>()) } returns VeilederNavn()
-        .setNavIdent(NavIdent("Z999999"))
-        .setFornavn("Fornavn")
-        .setEtternavn("Etternavn")
-        .setVisningsNavn("Fornavn Etternavn")
-}
-
-private val skrivestotteClientMock = mockOf<SkrivestotteClient> { client ->
-    val hardkodetUUID = UUID.fromString("0a4df913-3651-4667-aac7-ea9a86f1d916")
-    val tekst = Tekst(
-        id = hardkodetUUID,
-        overskrift = "TestTekst",
-        tags = listOf("nøs", "kontonummer", "retur"),
-        innhold = Innhold(
-            nb_NO = "Dette er en tekst",
-            nn_NO = "Dette er ein tekst"
-        ),
-        vekttall = 0
-    )
-    val tekster = mapOf(
-        hardkodetUUID to tekst,
-        UUID.randomUUID() to tekst.copy(
-            id = UUID.randomUUID(),
-            innhold = Innhold(
-                nb_NO = "Dette er også en tekst",
-                en_US = "This is also a text"
-            ),
-            tags = emptyList()
-        )
-    )
-
-    coEvery { client.hentTekster() } returns tekster
-}
-
-private val digdirClientMock = mockOf<DigdirClient> { client ->
-    val krrData = KrrData(
-        personident = "12345678910",
-        aktiv = true,
-        kanVarsles = true,
-        reservert = false,
-        epostadresse = "test@nav.no",
-        epostadresseOppdatert = Instant.parse("2019-03-06T15:29:41Z"),
-        epostadresseVerifisert = Clock.System.now(),
-        mobiltelefonnummer = "90909090",
-        mobiltelefonnummerOppdatert = Clock.System.now(),
-        mobiltelefonnummerVerifisert = Clock.System.now()
-    )
-    coEvery { client.hentKrrData(any(), any()) } returns krrData
-}
-
-private val utbetalingerMock = mockOf<UtbetalingerClient> { client ->
-    coEvery { client.hentUtbetalinger(any(), any(), any(), any()) } returns utbetalinger
-}
-
-private val pdlClientMock = mockOf<PdlClient> { client ->
-    coEvery { client.hentPersonalia(any(), any()) } returns KotlinxGraphQLResponse(
-        data = HentPersonalia.Result(
-            hentPerson = Person(
-                foedsel = listOf(
-                    Foedsel(
-                        foedselsdato = LocalDate.now().minus(10, DateTimeUnit.YEAR)
-                    )
-                ),
-                oppholdsadresse = listOf(
-                    Oppholdsadresse(
-                        gyldigFraOgMed = LocalDateTime.now().minus(2, DateTimeUnit.HOUR),
-                        coAdressenavn = "c/o ignore"
+private val personV3Mock =
+    mockOf<PersonV3> { tps ->
+        coEvery { tps.hentPerson(any()) } returns
+            HentPersonResponse().withPerson(
+                Bruker().withBankkonto(
+                    BankkontoNorge().withBankkonto(
+                        Bankkontonummer().withBankkontonummer("123456789123456"),
                     ),
-                    Oppholdsadresse(
-                        gyldigFraOgMed = LocalDateTime.now().minus(1, DateTimeUnit.HOUR),
-                        coAdressenavn = "c/o hansen"
-                    )
                 ),
-                kontaktadresse = emptyList(),
-                bostedsadresse = emptyList()
             )
-        )
-    )
-    coEvery { client.hentAktorid(any(), any()) } returns KotlinxGraphQLResponse(
-        data = HentAktorid.Result(
-            hentIdenter = Identliste(
-                identer = listOf(
-                    IdentInformasjon(
-                        ident = "10108000398"
-                    )
-                )
-            )
-        )
-    )
+    }
 
-    coEvery { client.hentNavn(any(), any()) } returns KotlinxGraphQLResponse(
-        data = HentNavn.Result(
-            hentPerson = Person(
-                navn = listOf(
-                    Navn(
-                        fornavn = "Aremark",
-                        mellomnavn = null,
-                        etternavn = "Testfamilien"
-                    )
-                )
-            )
-        )
-    )
-}
+private val nomClientMock =
+    mockOf<NomClient> { client ->
+        coEvery { client.finnNavn(any<NavIdent>()) } returns
+            VeilederNavn()
+                .setNavIdent(NavIdent("Z999999"))
+                .setFornavn("Fornavn")
+                .setEtternavn("Etternavn")
+                .setVisningsNavn("Fornavn Etternavn")
+    }
 
-private val safClientMock = mockOf<SafClient> { client ->
-    coEvery { client.hentBrukersSaker(any(), any()) } returns KotlinxGraphQLResponse(
-        data = HentBrukerssaker.Result(
-            saker = listOf(
-                Sak(
-                    fagsakId = null,
-                    fagsaksystem = null,
-                    sakstype = Sakstype.GENERELL_SAK,
-                    tema = Tema.DAG
-                ),
-                Sak(
-                    fagsakId = "abba1231",
-                    fagsaksystem = "AO01",
-                    sakstype = Sakstype.FAGSAK,
-                    tema = Tema.DAG
-                )
+private val skrivestotteClientMock =
+    mockOf<SkrivestotteClient> { client ->
+        val hardkodetUUID = UUID.fromString("0a4df913-3651-4667-aac7-ea9a86f1d916")
+        val tekst =
+            Tekst(
+                id = hardkodetUUID,
+                overskrift = "TestTekst",
+                tags = listOf("nøs", "kontonummer", "retur"),
+                innhold =
+                    Innhold(
+                        nb_NO = "Dette er en tekst",
+                        nn_NO = "Dette er ein tekst",
+                    ),
+                vekttall = 0,
             )
-        )
-    )
-}
+        val tekster =
+            mapOf(
+                hardkodetUUID to tekst,
+                UUID.randomUUID() to
+                    tekst.copy(
+                        id = UUID.randomUUID(),
+                        innhold =
+                            Innhold(
+                                nb_NO = "Dette er også en tekst",
+                                en_US = "This is also a text",
+                            ),
+                        tags = emptyList(),
+                    ),
+            )
 
-private val sfClientMock = mockOf<SFClient> { client ->
-    coEvery { client.sendSporsmal(any(), any(), any()) } returns SFClient.HenvendelseDTO(kjedeId = "1234")
-    coEvery { client.sendInfomelding(any(), any(), any()) } returns SFClient.HenvendelseDTO(kjedeId = "5678")
-    coEvery { client.journalforMelding(any(), any(), any()) } returns Unit
-    coEvery { client.lukkTraad(any(), any()) } returns Unit
-}
+        coEvery { client.hentTekster() } returns tekster
+    }
+
+private val digdirClientMock =
+    mockOf<DigdirClient> { client ->
+        val krrData =
+            KrrData(
+                personident = "12345678910",
+                aktiv = true,
+                kanVarsles = true,
+                reservert = false,
+                epostadresse = "test@nav.no",
+                epostadresseOppdatert = Instant.parse("2019-03-06T15:29:41Z"),
+                epostadresseVerifisert = Clock.System.now(),
+                mobiltelefonnummer = "90909090",
+                mobiltelefonnummerOppdatert = Clock.System.now(),
+                mobiltelefonnummerVerifisert = Clock.System.now(),
+            )
+        coEvery { client.hentKrrData(any(), any()) } returns krrData
+    }
+
+private val utbetalingerMock =
+    mockOf<UtbetalingerClient> { client ->
+        coEvery { client.hentUtbetalinger(any(), any(), any(), any()) } returns utbetalinger
+    }
+
+private val pdlClientMock =
+    mockOf<PdlClient> { client ->
+        coEvery { client.hentPersonalia(any(), any()) } returns
+            KotlinxGraphQLResponse(
+                data =
+                    HentPersonalia.Result(
+                        hentPerson =
+                            Person(
+                                foedsel =
+                                    listOf(
+                                        Foedsel(
+                                            foedselsdato = LocalDate.now().minus(10, DateTimeUnit.YEAR),
+                                        ),
+                                    ),
+                                oppholdsadresse =
+                                    listOf(
+                                        Oppholdsadresse(
+                                            gyldigFraOgMed = LocalDateTime.now().minus(2, DateTimeUnit.HOUR),
+                                            coAdressenavn = "c/o ignore",
+                                        ),
+                                        Oppholdsadresse(
+                                            gyldigFraOgMed = LocalDateTime.now().minus(1, DateTimeUnit.HOUR),
+                                            coAdressenavn = "c/o hansen",
+                                        ),
+                                    ),
+                                kontaktadresse = emptyList(),
+                                bostedsadresse = emptyList(),
+                            ),
+                    ),
+            )
+        coEvery { client.hentAktorid(any(), any()) } returns
+            KotlinxGraphQLResponse(
+                data =
+                    HentAktorid.Result(
+                        hentIdenter =
+                            Identliste(
+                                identer =
+                                    listOf(
+                                        IdentInformasjon(
+                                            ident = "10108000398",
+                                        ),
+                                    ),
+                            ),
+                    ),
+            )
+
+        coEvery { client.hentNavn(any(), any()) } returns
+            KotlinxGraphQLResponse(
+                data =
+                    HentNavn.Result(
+                        hentPerson =
+                            Person(
+                                navn =
+                                    listOf(
+                                        Navn(
+                                            fornavn = "Aremark",
+                                            mellomnavn = null,
+                                            etternavn = "Testfamilien",
+                                        ),
+                                    ),
+                            ),
+                    ),
+            )
+    }
+
+private val safClientMock =
+    mockOf<SafClient> { client ->
+        coEvery { client.hentBrukersSaker(any(), any()) } returns
+            KotlinxGraphQLResponse(
+                data =
+                    HentBrukerssaker.Result(
+                        saker =
+                            listOf(
+                                Sak(
+                                    fagsakId = null,
+                                    fagsaksystem = null,
+                                    sakstype = Sakstype.GENERELL_SAK,
+                                    tema = Tema.DAG,
+                                ),
+                                Sak(
+                                    fagsakId = "abba1231",
+                                    fagsaksystem = "AO01",
+                                    sakstype = Sakstype.FAGSAK,
+                                    tema = Tema.DAG,
+                                ),
+                            ),
+                    ),
+            )
+    }
+
+private val sfClientMock =
+    mockOf<SFClient> { client ->
+        coEvery { client.sendSporsmal(any(), any(), any()) } returns SFClient.HenvendelseDTO(kjedeId = "1234")
+        coEvery { client.sendInfomelding(any(), any(), any()) } returns SFClient.HenvendelseDTO(kjedeId = "5678")
+        coEvery { client.journalforMelding(any(), any(), any()) } returns Unit
+        coEvery { client.lukkTraad(any(), any()) } returns Unit
+    }
 
 inline fun <reified T : Any> mockOf(impl: (T) -> Unit): T {
     return mockk<T>().apply(impl)

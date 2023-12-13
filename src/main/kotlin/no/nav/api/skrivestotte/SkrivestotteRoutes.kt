@@ -1,29 +1,33 @@
 package no.nav.api.skrivestotte
 
-import io.bkbn.kompendium.annotations.Param
-import io.bkbn.kompendium.annotations.ParamType
-import io.bkbn.kompendium.core.Notarized.notarizedGet
-import io.bkbn.kompendium.core.metadata.ResponseInfo
-import io.bkbn.kompendium.core.metadata.method.GetInfo
-import io.ktor.application.*
+import io.bkbn.kompendium.core.metadata.GetInfo
+import io.bkbn.kompendium.core.plugin.NotarizedRoute
+import io.bkbn.kompendium.json.schema.definition.TypeDefinition
+import io.bkbn.kompendium.oas.payload.Parameter
+import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import no.nav.api.CommonModels
-import no.nav.plugins.securityScheme
 import java.util.*
+import kotlin.reflect.typeOf
 
-fun Route.configureSkrivestotteRoutes(
-    skrivestotteService: SkrivestotteService,
-) {
+fun Route.configureSkrivestotteRoutes(skrivestotteService: SkrivestotteService) {
     route("skrivestotte/") {
-        notarizedGet(Api.sok) {
+        install(NotarizedRoute()) {
+            get = Api.sok
+        }
+        get {
             val sokeVerdi = call.request.queryParameters["sokeVerdi"]
             call.respond(skrivestotteService.hentTeksterFraSok(sokeVerdi))
         }
     }
     route("skrivestotte/{id}") {
-        notarizedGet(Api.sokPaId) {
+        install(NotarizedRoute()) {
+            get = Api.sokPaId
+        }
+        get {
             val id = requireNotNull(call.parameters["id"])
             val tekst = skrivestotteService.hentTekstFraId(UUID.fromString(id))
             if (tekst != null) {
@@ -36,39 +40,50 @@ fun Route.configureSkrivestotteRoutes(
 }
 
 private object Api {
-    val sok = GetInfo<Models.SokeVerdiParameter, List<SkrivestotteClient.Tekst>>(
-        summary = "Tekster fra skrivestøtte",
-        description = "Hentes fra modiapersonoversikt-skrivestotte",
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Tekster som matcher søket"
-        ),
-        tags = setOf("Skrivestøtte"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses
-    )
+    val sok =
+        GetInfo.builder {
+            summary("Tekster fra skrivestøtte")
+            description("Hentes fra modiapersonoversikt-skrivestotte")
+            request {
+                parameters(Models.sokeVerdiParameter)
+            }
+            response {
+                responseType(typeOf<SkrivestotteClient.Tekst>())
+                responseCode(HttpStatusCode.OK)
+                description("Tekst som matcher søket")
+            }
+            tags("Skrivestøtte")
+            canRespond(CommonModels.standardResponses)
+        }
+    val sokPaId =
+        GetInfo.builder {
+            summary("Tekst fra skrivestøtte gitt ID")
+            description("Hentes fra modiapersonoversikt-skrivestotte")
+            request { parameters(Models.idParameter) }
+            tags("Skrivestøtte")
 
-    val sokPaId = GetInfo<Models.IdParameter, SkrivestotteClient.Tekst>(
-        summary = "Tekst fra skrivestøtte gitt ID",
-        description = "Hentes fra modiapersonoversikt-skrivestotte",
-        responseInfo = ResponseInfo(
-            status = HttpStatusCode.OK,
-            description = "Tekst som matcher søket på ID"
-        ),
-        tags = setOf("Skrivestøtte"),
-        securitySchemes = setOf(securityScheme.name),
-        canThrow = CommonModels.standardResponses
-    )
+            response {
+                responseType(typeOf<SkrivestotteClient.Tekst>())
+                responseCode(HttpStatusCode.OK)
+                description("Tekst som matcher søket på ID")
+            }
+            tags("Skrivestøtte")
+            canRespond(CommonModels.standardResponses)
+        }
 }
 
 private object Models {
+    val idParameter =
+        Parameter(
+            name = "id",
+            `in` = Parameter.Location.path,
+            schema = TypeDefinition.STRING,
+        )
 
-    open class IdParameter(
-        @Param(type = ParamType.PATH)
-        val id: UUID,
-    )
-    open class SokeVerdiParameter(
-        @Param(type = ParamType.QUERY)
-        val sokeVerdi: String?,
-    )
+    val sokeVerdiParameter =
+        Parameter(
+            name = "sokeVerdi",
+            `in` = Parameter.Location.query,
+            schema = TypeDefinition.STRING,
+        )
 }

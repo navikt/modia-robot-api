@@ -21,11 +21,13 @@ interface Services {
     val dialogService: DialogService
     val utbetalingerService: UtbetalingerService
 }
+
 class ServicesImpl(consumers: Consumers) : Services {
-    override val oppfolgingService = OppfolgingService(
-        consumers.oppfolgingClient,
-        consumers.nom
-    )
+    override val oppfolgingService =
+        OppfolgingService(
+            consumers.oppfolgingClient,
+            consumers.nom,
+        )
     override val tpsService = TpsService(consumers.tps)
     override val skrivestotteService = SkrivestotteService(consumers.skrivestotteClient)
     override val digdirService = DigdirService(consumers.digdirClient)

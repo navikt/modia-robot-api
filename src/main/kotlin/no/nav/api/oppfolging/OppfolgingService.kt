@@ -22,24 +22,32 @@ class OppfolgingService(
         val etternavn: String,
     )
 
-    suspend fun hentOppfolging(fnr: String, token: String): Oppfolging = externalServiceCall {
-        val status = oppfolgingClient.hentOppfolgingStatus(fnr, token)
-        when (status.erUnderOppfolging) {
-            null, false -> Oppfolging(underOppfolging = false, veileder = null)
-            true -> Oppfolging(underOppfolging = true, veileder = hentVeileder(fnr, token))
-        }
-    }
-
-    suspend fun hentVeileder(fnr: String, token: String): Veileder? = externalServiceCall {
-        val veileder = oppfolgingClient.hentOppfolgingVeileder(fnr, token)
-        veileder?.veilederIdent
-            ?.let { nom.finnNavn(NavIdent(it)) }
-            ?.let {
-                Veileder(
-                    ident = it.navIdent.get(),
-                    fornavn = it.fornavn,
-                    etternavn = it.etternavn
-                )
+    suspend fun hentOppfolging(
+        fnr: String,
+        token: String,
+    ): Oppfolging =
+        externalServiceCall {
+            val status = oppfolgingClient.hentOppfolgingStatus(fnr, token)
+            when (status.erUnderOppfolging) {
+                null, false -> Oppfolging(underOppfolging = false, veileder = null)
+                true -> Oppfolging(underOppfolging = true, veileder = hentVeileder(fnr, token))
             }
-    }
+        }
+
+    suspend fun hentVeileder(
+        fnr: String,
+        token: String,
+    ): Veileder? =
+        externalServiceCall {
+            val veileder = oppfolgingClient.hentOppfolgingVeileder(fnr, token)
+            veileder?.veilederIdent
+                ?.let { nom.finnNavn(NavIdent(it)) }
+                ?.let {
+                    Veileder(
+                        ident = it.navIdent.get(),
+                        fornavn = it.fornavn,
+                        etternavn = it.etternavn,
+                    )
+                }
+        }
 }

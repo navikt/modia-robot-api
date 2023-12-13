@@ -1,39 +1,39 @@
 package no.nav.plugins
 
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.response.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.response.*
 import kotlinx.serialization.Serializable
 
 class WebStatusException(message: String, val status: HttpStatusCode) : Exception(message)
 
 fun Application.configureExceptionHandling() {
     install(StatusPages) {
-        exception<WebStatusException> { cause ->
-            log.warn("WebStatusException:${cause.status.value}", cause)
+        exception<WebStatusException> { call, cause ->
+            this@configureExceptionHandling.log.warn("WebStatusException:${cause.status.value}", cause)
             call.respond(
                 cause.status,
                 HttpErrorResponse(
                     cause = cause.toString(),
-                    message = cause.message
-                )
+                    message = cause.message,
+                ),
             )
         }
-        exception<Throwable> { cause ->
-            log.error("Unhandled exception", cause)
+        exception<Throwable> { call, cause ->
+            this@configureExceptionHandling.log.error("Unhandled exception", cause)
             call.respond(
                 HttpStatusCode.InternalServerError,
                 HttpErrorResponse(
                     cause = cause.toString(),
-                    message = cause.message
-                )
+                    message = cause.message,
+                ),
             )
         }
         status(HttpStatusCode.Unauthorized) { statusCode ->
             val message = call.authentication.allFailures.joinToString("\n") { it.prettyPrint() }
-            log.error(message)
+            this@configureExceptionHandling.log.error(message)
             call.respond(statusCode, message)
         }
     }

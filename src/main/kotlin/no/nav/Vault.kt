@@ -17,5 +17,9 @@ object Vault {
     }
 
     fun readVaultfile(file: Path): String = file.readText()
-    fun fromVaultfile(file: Path, block: (String) -> Unit) = block(readVaultfile(file))
+
+    fun fromVaultfile(
+        file: Path,
+        block: (String) -> Unit,
+    ) = block(readVaultfile(file))
 }
