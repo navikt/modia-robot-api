@@ -12,7 +12,9 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: modiapersonoversikt-api-q1
+        - application: rpa-medlemskap-og-avgift
+          namespace: team-rpa
+          cluster: dev-fss
   liveness:
     path: /internal/isAlive
     initialDelay: 20
