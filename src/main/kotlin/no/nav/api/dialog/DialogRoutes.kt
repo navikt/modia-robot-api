@@ -14,19 +14,18 @@ import no.nav.utils.getJWTPrincipalSubject
 import kotlin.reflect.typeOf
 
 fun Route.configureDialogRoutes(dialogService: DialogService) {
-    route("dialog/{fnr}") {
+    route("dialog") {
         route("sendinfomelding") {
             install(NotarizedRoute()) {
-                post = Api.sendInfoMelding
+                post = ApiV2.sendInfoMelding
             }
             post {
                 val payload = call.getJWT()
-                val fnr = requireNotNull(call.parameters["fnr"])
-                val request: MeldingRequest = call.receive()
+                val request: MeldingRequestV2 = call.receive()
                 val ident = call.getJWTPrincipalSubject()
                 call.respond(
                     dialogService.sendInfomelding(
-                        fnr,
+                        request.fnr,
                         request,
                         ident,
                         payload,
@@ -36,16 +35,15 @@ fun Route.configureDialogRoutes(dialogService: DialogService) {
         }
         route("sendsporsmal") {
             install(NotarizedRoute()) {
-                post = Api.sendSporsmal
+                post = ApiV2.sendSporsmal
             }
             post {
                 val payload = call.getJWT()
-                val fnr = requireNotNull(call.parameters["fnr"])
-                val request: MeldingRequest = call.receive()
+                val request: MeldingRequestV2 = call.receive()
                 val ident = call.getJWTPrincipalSubject()
                 call.respond(
                     dialogService.sendSporsmal(
-                        fnr,
+                        request.fnr,
                         request,
                         ident,
                         payload,
@@ -56,16 +54,13 @@ fun Route.configureDialogRoutes(dialogService: DialogService) {
     }
 }
 
-private object Api {
+private object ApiV2 {
     val sendInfoMelding =
         PostInfo.builder {
             summary("Sender infomelding til bruker")
             description("")
             request {
-                requestType(typeOf<MeldingRequest>())
-                parameters {
-                    CommonModels.fnrParameter
-                }
+                requestType(typeOf<MeldingRequestV2>())
                 description(
                     """
                     Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
@@ -88,10 +83,7 @@ private object Api {
             summary("Sender spørsmål til bruker")
             description("")
             request {
-                requestType(typeOf<MeldingRequest>())
-                parameters {
-                    CommonModels.fnrParameter
-                }
+                requestType(typeOf<MeldingRequestV2>())
                 description(
                     """
                     Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
