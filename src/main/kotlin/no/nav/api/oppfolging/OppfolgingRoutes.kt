@@ -1,36 +1,38 @@
 package no.nav.api.oppfolging
 
-import io.bkbn.kompendium.core.metadata.GetInfo
+import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
-import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import no.nav.api.CommonModels
+import no.nav.models.FnrRequest
+import no.nav.models.deserializeFnr
 import no.nav.utils.getJWT
 import kotlin.reflect.typeOf
 
 fun Route.configureOppfolgingRoutes(oppfolgingService: OppfolgingService) {
-    route("oppfolging/{fnr}/veileder") {
+    route("oppfolging/veileder") {
         install(NotarizedRoute()) {
-            get = Api.veileder
+            post = ApiV2.veileder
         }
-        get {
+        post {
             val payload = call.getJWT()
-            val fnr = requireNotNull(call.parameters["fnr"])
+            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
             call.respond(oppfolgingService.hentOppfolging(fnr, payload))
         }
     }
 }
 
-private object Api {
+private object ApiV2 {
     val veileder =
-        GetInfo.builder {
+        PostInfo.builder {
             summary("Brukers oppfølgingsveileder")
             description("Hentes fra veilarboppfølging")
             request {
-                parameters(CommonModels.fnrParameter)
+                requestType(typeOf<FnrRequest>())
+                description("Brukers ident")
             }
             response {
                 responseType(typeOf<OppfolgingService.Oppfolging>())

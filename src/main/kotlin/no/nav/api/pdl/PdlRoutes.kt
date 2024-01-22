@@ -1,34 +1,38 @@
 package no.nav.api.pdl
 
-import io.bkbn.kompendium.core.metadata.GetInfo
+import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
-import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
+import no.nav.models.FnrRequest
+import no.nav.models.deserializeFnr
 import no.nav.utils.getJWT
 import kotlin.reflect.typeOf
 
 fun Route.configurePdlRoutes(pdlService: PdlService) {
-    route("pdl/{fnr}") {
-        install(NotarizedRoute()) { get = Api.personalia }
-        get {
+    route("pdl") {
+        install(NotarizedRoute()) { post = ApiV2.personalia }
+        post {
             val payload = call.getJWT()
-            val fnr = requireNotNull(call.parameters["fnr"])
+            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
             call.respond(pdlService.hentPersonalia(fnr, payload))
         }
     }
 }
 
-private object Api {
+private object ApiV2 {
     val personalia =
-        GetInfo.builder {
+        PostInfo.builder {
             summary("Generelle personopplysninger")
             description("Hentes fra PDL")
-            request { parameters(CommonModels.fnrParameter) }
+            request {
+                requestType(typeOf<FnrRequest>())
+                description("Brukers ident")
+            }
             response {
                 responseCode(HttpStatusCode.OK)
                 responseType(typeOf<PdlPersonalia>())
