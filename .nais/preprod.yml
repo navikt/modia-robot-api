@@ -54,6 +54,9 @@ spec:
         - application: ida
           cluster: prod-fss
           namespace: traktor
+        - application: rpa-nav-okonomi-stonad
+          cluster: dev-fss
+          namespace: team-rpa-nos
   vault:
     enabled: true
     paths:
