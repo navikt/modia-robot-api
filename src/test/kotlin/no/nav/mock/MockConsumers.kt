@@ -163,9 +163,9 @@ private val pdlClientMock =
                     HentPersonalia.Result(
                         hentPerson =
                             Person(
-                                foedsel =
+                                foedselsdato =
                                     listOf(
-                                        Foedsel(
+                                        Foedselsdato(
                                             foedselsdato = LocalDate.now().minus(10, DateTimeUnit.YEAR),
                                         ),
                                     ),

@@ -33,7 +33,7 @@ internal class PdlTest {
                             {
                                 "data": {
                                     "hentPerson": {
-                                        "foedsel": [
+                                        "foedselsdato": [
                                             { "foedselsdato": "2020-06-06" }
                                         ],
                                         "oppholdsadresse": [],
@@ -51,7 +51,7 @@ internal class PdlTest {
             val pdlClient = PdlClient("http://no.no", tokenClient, mockEngine)
             val person = pdlClient.hentPersonalia("10108000398", "token")
 
-            assertEquals(1, person.data?.hentPerson?.foedsel?.size)
-            assertEquals(LocalDate(2020, 6, 6), person.data?.hentPerson?.foedsel?.get(0)?.foedselsdato)
+            assertEquals(1, person.data?.hentPerson?.foedselsdato?.size)
+            assertEquals(LocalDate(2020, 6, 6), person.data?.hentPerson?.foedselsdato?.get(0)?.foedselsdato)
         }
 }

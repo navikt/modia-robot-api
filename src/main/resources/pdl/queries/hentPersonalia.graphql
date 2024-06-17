@@ -47,7 +47,7 @@ fragment postboksadresse on Postboksadresse {
 
 query ($ident: ID!) {
     hentPerson(ident: $ident) {
-        foedsel {
+        foedselsdato {
             foedselsdato
         }
         oppholdsadresse {

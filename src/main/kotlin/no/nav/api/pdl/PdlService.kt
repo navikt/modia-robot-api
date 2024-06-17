@@ -53,7 +53,7 @@ class PdlService(
     }
 
     private fun hentAlder(person: Person?): Int? {
-        return person?.foedsel?.firstOrNull()?.foedselsdato?.periodUntil(LocalDate.now())?.years
+        return person?.foedselsdato?.firstOrNull()?.foedselsdato?.periodUntil(LocalDate.now())?.years
     }
 
     private fun hentBostedsAdresse(person: Person?): PdlAdresse? {
