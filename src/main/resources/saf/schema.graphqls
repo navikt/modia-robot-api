@@ -297,6 +297,12 @@ type Journalpost {
     # * Returneres kun for utgående journalposter
     utsendingsinfo: Utsendingsinfo
 
+    # Regel for innsyn for denne journalposten. Verdi er "BRUK_STANDARDREGLER" om innsyn ikke er overstyrt.
+    innsynsregel: String!
+
+    # Menneskevennlig beskrivelse av aktuell innsynsregel.
+    innsynsregelBeskrivelse: String!
+
     # Liste over fagspesifikke metadata som er tilknyttet journalpost.
     tilleggsopplysninger: [Tilleggsopplysning]
 
@@ -731,9 +737,17 @@ enum Kanal {
     # Forsendelsen inneholder en komplett chatdialog (inngående og utgående meldinger) mellom en bruker og en veileder i NAV.
     NAV_NO_CHAT
 
-    # Brevet er sendt til virksomhet som taushetsbelagt digital post.
+    # Brevet er sendt til virksomhet som Taushetsbelagt Post via Altinn.
     # * Brukes for utgående journalposter.
     DPVT
+
+    # Forsendelsen er mottatt på e-post.
+    # * Brukes for inngående journalposter.
+    E_POST
+
+    # Forsendelsen er mottatt i en av NAVs meldingsbokser i Altinn.
+    # * Brukes for inngående journalposter.
+    ALTINN_INNBOKS
 
     # Forsendelsen har ingen kjent kanal.
     UKJENT
@@ -880,7 +894,7 @@ enum Tema {
     # Serviceklager
     SER
 
-    # Regnskap/utbetaling
+    # Regnskap/utbetaling/årsoppgave
     STO
 
     # Supplerende stønad

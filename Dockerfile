@@ -1,4 +1,4 @@
-FROM navikt/java:17-appdynamics
+FROM navikt/java:21-appdynamics
 ENV APPD_ENABLED=true
 
 COPY java-debug.sh /init-scripts/08-java-debug.sh
