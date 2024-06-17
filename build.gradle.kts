@@ -83,7 +83,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstash_version")
     implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphql_kotlin_version")
-    implementation("io.ktor:ktor-client-okhttp-jvm:2.3.0")
+    implementation("io.ktor:ktor-client-okhttp-jvm:2.3.11")
     implementation("io.ktor:ktor-server-core-jvm:2.3.0")
     implementation("io.ktor:ktor-server-swagger-jvm:2.3.0")
 
