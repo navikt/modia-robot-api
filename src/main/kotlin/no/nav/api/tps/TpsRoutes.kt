@@ -1,33 +1,37 @@
 package no.nav.api.tps
 
-import io.bkbn.kompendium.core.metadata.GetInfo
+import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
-import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import no.nav.api.CommonModels
+import no.nav.models.FnrRequest
+import no.nav.models.deserializeFnr
 import kotlin.reflect.typeOf
 
 fun Route.configureTpsRoutes(tpsService: TpsService) {
-    route("tps/{fnr}/kontonummer") {
+    route("tps/kontonummer") {
         install(NotarizedRoute()) {
-            get = Api.kontonummer
+            post = ApiV2.kontonummer
         }
-        get {
-            val fnr = checkNotNull(call.parameters["fnr"])
+        post {
+            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
             call.respond(tpsService.hentKontonummer(fnr))
         }
     }
 }
 
-private object Api {
+private object ApiV2 {
     val kontonummer =
-        GetInfo.builder {
+        PostInfo.builder {
             summary("Brukers kontonummer")
             description("Hentes fra TPS")
-            request { parameters(CommonModels.fnrParameter) }
+            request {
+                requestType(typeOf<FnrRequest>())
+                description("Brukers ident")
+            }
             response {
                 responseType(typeOf<TpsService.Kontonummer>())
                 responseCode(HttpStatusCode.OK)
