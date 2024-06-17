@@ -1,4 +1,4 @@
-FROM navikt/java:21-appdynamics
+FROM ghcr.io/navikt/baseimages/temurin:21-appdynamics
 ENV APPD_ENABLED=true
 
 COPY java-debug.sh /init-scripts/08-java-debug.sh
