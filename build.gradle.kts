@@ -84,7 +84,7 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:$logstash_version")
     implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphql_kotlin_version")
     implementation("io.ktor:ktor-client-okhttp-jvm:2.3.11")
-    implementation("io.ktor:ktor-server-core-jvm:2.3.11")
+    implementation("io.ktor:ktor-server-core-jvm:2.3.12")
     implementation("io.ktor:ktor-server-swagger-jvm:2.3.11")
 
     testImplementation("io.mockk:mockk:1.13.11")
