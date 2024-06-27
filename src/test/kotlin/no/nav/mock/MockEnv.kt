@@ -5,9 +5,9 @@ import no.nav.utils.DownstreamApi
 import no.nav.utils.parse
 
 object MockEnv : Env {
-    override val soapStsUrl: String = ""
     override val jwksUrl: String = ""
-    override val tpsPersonV3Url: String = ""
+    override val kontonummerRegisterUrl: String = ""
+    override val kontonummerRegisterScope = DownstreamApi.parse("::")
     override val oppfolgingUrl: String = ""
     override val oppfolgingScope: DownstreamApi = DownstreamApi.parse("::")
     override val nomUrl: String = ""

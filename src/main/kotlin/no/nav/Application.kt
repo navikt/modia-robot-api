@@ -7,10 +7,10 @@ import io.ktor.server.routing.*
 import no.nav.api.debug.configureDebugRoutes
 import no.nav.api.dialog.configureDialogRoutes
 import no.nav.api.digdir.configureDigdirRoutes
+import no.nav.api.kontonummer.configureKontonummerRegisterRoutes
 import no.nav.api.oppfolging.configureOppfolgingRoutes
 import no.nav.api.pdl.configurePdlRoutes
 import no.nav.api.skrivestotte.configureSkrivestotteRoutes
-import no.nav.api.tps.configureTpsRoutes
 import no.nav.api.utbetalinger.configureUtbetalingerRoutes
 import no.nav.plugins.*
 
@@ -34,7 +34,7 @@ fun startApplication(
                     configureDebugRoutes(consumers.tokenclient)
                     configureOppfolgingRoutes(services.oppfolgingService)
                     configurePdlRoutes(services.pdlService)
-                    configureTpsRoutes(services.tpsService)
+                    configureKontonummerRegisterRoutes(consumers.kontonummerRegister)
                     configureDialogRoutes(services.dialogService)
                     configureDigdirRoutes(services.digdirService)
                     configureSkrivestotteRoutes(services.skrivestotteService)

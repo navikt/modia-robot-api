@@ -9,9 +9,7 @@ interface Env {
         operator fun invoke(): Env = EnvImpl()
     }
 
-    val soapStsUrl: String
     val jwksUrl: String
-    val tpsPersonV3Url: String
     val oppfolgingUrl: String
     val oppfolgingScope: DownstreamApi
     val nomUrl: String
@@ -20,6 +18,8 @@ interface Env {
     val pdlScope: DownstreamApi
     val digdirUrl: String
     val digdirScope: DownstreamApi
+    val kontonummerRegisterUrl: String
+    val kontonummerRegisterScope: DownstreamApi
     val utbetalingSokosUrl: String
     val utbetalingSokosScope: DownstreamApi
     val safUrl: String
@@ -31,9 +31,7 @@ interface Env {
 }
 
 class EnvImpl : Env {
-    override val soapStsUrl: String = getRequiredConfig("SECURITYTOKENSERVICE_URL")
     override val jwksUrl: String = getRequiredConfig("AZURE_OPENID_CONFIG_JWKS_URI")
-    override val tpsPersonV3Url: String = getRequiredConfig("TPS_PERSONV3_URL")
     override val oppfolgingUrl: String = getRequiredConfig("OPPFOLGING_URL")
     override val oppfolgingScope: DownstreamApi = getRequiredConfig("OPPFOLGING_SCOPE").toDownstreamApi()
     override val nomUrl: String = getRequiredConfig("NOM_URL")
@@ -42,6 +40,8 @@ class EnvImpl : Env {
     override val pdlScope: DownstreamApi = getRequiredConfig("PDL_SCOPE").toDownstreamApi()
     override val digdirUrl: String = getRequiredConfig("DIGDIR_KRR_URL")
     override val digdirScope: DownstreamApi = getRequiredConfig("DIGDIR_KRR_SCOPE").toDownstreamApi()
+    override val kontonummerRegisterUrl: String = getRequiredConfig("KONTOREGISTER_REST_URL")
+    override val kontonummerRegisterScope: DownstreamApi = getRequiredConfig("KONTOREGISTER_SCOPE").toDownstreamApi()
     override val utbetalingSokosUrl: String = getRequiredConfig("UTBETALDATA_SOKOS_URL")
     override val utbetalingSokosScope: DownstreamApi = getRequiredConfig("UTBETAL_SOKOS_SCOPE").toDownstreamApi()
     override val safUrl: String = getRequiredConfig("SAF_URL")
