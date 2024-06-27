@@ -33,11 +33,6 @@ import no.nav.common.client.nom.VeilederNavn
 import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.common.token_client.client.OnBehalfOfTokenClient
 import no.nav.common.types.identer.NavIdent
-import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
 import no.nav.utils.minus
 import no.nav.utils.now
 import java.util.*
@@ -81,7 +76,7 @@ private val oppfolgingClientMock =
 private val kontonummerRegisterMock =
     mockOf<KontonummerRegister> { kontonummerRegister ->
         coEvery { kontonummerRegister.hentKontonummer(any(), any(), any()) } returns
-                KontonummerRegister.Kontonummer("123456789123456")
+            KontonummerRegister.Kontonummer("123456789123456")
     }
 
 private val nomClientMock =

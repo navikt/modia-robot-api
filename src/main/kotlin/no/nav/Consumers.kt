@@ -10,13 +10,9 @@ import no.nav.api.pdl.PdlClient
 import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.utbetalinger.UtbetalingerClient
 import no.nav.common.client.nom.NomClient
-import no.nav.common.cxf.StsConfig
 import no.nav.common.token_client.builder.AzureAdTokenClientBuilder
 import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.common.token_client.client.OnBehalfOfTokenClient
-import no.nav.common.utils.NaisUtils
-import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
-import no.nav.utils.CXFClient
 import no.nav.utils.bindTo
 
 interface Consumers {
