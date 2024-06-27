@@ -1,6 +1,6 @@
-FROM ghcr.io/navikt/baseimages/temurin:21-appdynamics
-ENV APPD_ENABLED=true
-
-COPY java-debug.sh /init-scripts/08-java-debug.sh
+FROM gcr.io/distroless/java17-debian12
+USER nonroot
 
 COPY build/libs/app.jar app.jar
+
+CMD ["app.jar"]
