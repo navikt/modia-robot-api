@@ -22,7 +22,7 @@ plugins {
     application
     kotlin("jvm") version "2.0.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.expediagroup.graphql") version "7.1.1"
 }
 
@@ -127,6 +127,7 @@ val generateSAFClient by tasks.creating(GraphQLGenerateClientTask::class) {
 val downloadPDLSchema by tasks.creating(GraphQLDownloadSDLTask::class) {
     endpoint.set("https://navikt.github.io/pdl/pdl-api-sdl.graphqls")
     outputFile.set(file("${project.projectDir}/src/main/resources/pdl/schema.graphqls"))
+    dependsOn("generateSAFClient")
 }
 val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
     packageName.set("no.nav.api.generated.pdl")
@@ -155,4 +156,10 @@ val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
         ),
     )
     dependsOn("downloadPDLSchema")
+}
+
+tasks {
+    processResources {
+        dependsOn("generatePDLClient")
+    }
 }
