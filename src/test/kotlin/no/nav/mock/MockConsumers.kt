@@ -21,6 +21,7 @@ import no.nav.api.generated.saf.HentBrukerssaker
 import no.nav.api.generated.saf.enums.Sakstype
 import no.nav.api.generated.saf.enums.Tema
 import no.nav.api.generated.saf.hentbrukerssaker.Sak
+import no.nav.api.kontonummer.KontonummerRegister
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
 import no.nav.api.skrivestotte.SkrivestotteClient
@@ -32,11 +33,6 @@ import no.nav.common.client.nom.VeilederNavn
 import no.nav.common.token_client.client.MachineToMachineTokenClient
 import no.nav.common.token_client.client.OnBehalfOfTokenClient
 import no.nav.common.types.identer.NavIdent
-import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse
 import no.nav.utils.minus
 import no.nav.utils.now
 import java.util.*
@@ -45,7 +41,7 @@ object MockConsumers : Consumers {
     override val tokenclient = tokenClientMock
     override val oboTokenClient = oboTokenClientMock
     override val oppfolgingClient = oppfolgingClientMock
-    override val tps: PersonV3 = personV3Mock
+    override val kontonummerRegister = kontonummerRegisterMock
     override val nom: NomClient = nomClientMock
     override val skrivestotteClient = skrivestotteClientMock
     override val digdirClient = digdirClientMock
@@ -77,16 +73,10 @@ private val oppfolgingClientMock =
             )
     }
 
-private val personV3Mock =
-    mockOf<PersonV3> { tps ->
-        coEvery { tps.hentPerson(any()) } returns
-            HentPersonResponse().withPerson(
-                Bruker().withBankkonto(
-                    BankkontoNorge().withBankkonto(
-                        Bankkontonummer().withBankkontonummer("123456789123456"),
-                    ),
-                ),
-            )
+private val kontonummerRegisterMock =
+    mockOf<KontonummerRegister> { kontonummerRegister ->
+        coEvery { kontonummerRegister.hentKontonummer(any(), any(), any()) } returns
+            KontonummerRegister.Kontonummer("123456789123456")
     }
 
 private val nomClientMock =

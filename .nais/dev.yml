@@ -8,7 +8,6 @@ metadata:
 spec:
   image: {{image}}
   port: 7070
-  webproxy: true
   liveness:
     path: /internal/isAlive
     initialDelay: 20
@@ -32,7 +31,7 @@ spec:
       cpu: 2000m
       memory: 512Mi
   ingresses:
-    - https://modia-robot-api.dev.intern.nav.no
+    - https://modia-robot-api.intern.dev.nav.no
   replicas:
     min: 1
     max: 1
@@ -46,6 +45,16 @@ spec:
         extra:
           - "NAVident"
   accessPolicy:
+    outbound:
+      external:
+        - host: veilarboppfolging.dev-fss-pub.nais.io
+        - host: nom-api.intern.dev.nav.no
+        - host: pdl-api.dev-fss-pub.nais.io
+        - host: saf-q1.dev-fss-pub.nais.io
+        - host: digdir-krr-proxy.intern.dev.nav.no
+        - host: sokos-utbetaldata.dev-fss-pub.nais.io
+        - host: sf-henvendelse-api-proxy.dev-fss-pub.nais.io
+        - host: sokos-kontoregister-person.intern.dev.nav.no
     inbound:
       rules:
         - application: rpa-medlemskap-og-avgift
@@ -57,22 +66,11 @@ spec:
         - application: rpa-nav-okonomi-stonad
           cluster: dev-fss
           namespace: team-rpa-nos
-  vault:
-    enabled: true
-    paths:
-      - kvPath: /serviceuser/data/dev/srvmodiarobotapi
-        mountPath: /var/run/secrets/nais.io/srvmodiarobotapi
-      - kvPath: /serviceuser/data/dev/srvmodiabrukerdialog
-        mountPath: /var/run/secrets/nais.io/service_user
-      - kvPath: /serviceuser/data/dev/srvssolinux
-        mountPath: /var/run/secrets/nais.io/srvssolinux
-      - kvPath: /apikey/appdynamics/dev
-        mountPath: /var/run/secrets/nais.io/vault
   env:
     - name: IDENT_ALLOW_LIST
       value: "R154727,R156418,R158345,R158346,R160569,R165950,R165951,R165952,R150818,R150819,R155645,R162552,Z994123,Z990351,Z992779,Z990949,Z990467,Z991629,Z990237,Z994673,Z994818,Z990715,Z990715"
     - name: OPPFOLGING_URL
-      value: "https://veilarboppfolging.dev.intern.nav.no/veilarboppfolging/api"
+      value: "https://veilarboppfolging.dev-fss-pub.nais.io/veilarboppfolging/api"
     - name: OPPFOLGING_SCOPE
       value: "dev-fss:pto:veilarboppfolging"
     - name: NOM_URL
@@ -80,27 +78,27 @@ spec:
     - name: NOM_SCOPE
       value: "dev-gcp:nom:nom-api"
     - name: PDL_URL
-      value: "https://pdl-api.dev.intern.nav.no/graphql"
+      value: "https://pdl-api.dev-fss-pub.nais.io/graphql"
     - name: PDL_SCOPE
       value: "dev-fss:pdl:pdl-api"
     - name: SAF_URL
-      value: "https://saf-q1.nais.preprod.local/graphql"
+      value: "https://saf-q1.dev-fss-pub.nais.io/graphql"
     - name: SAF_SCOPE
       value: "dev-fss:teamdokumenthandtering:saf"
     - name: SKRIVESTOTTE_URL
-      value: "https://app-q1.adeo.no/modiapersonoversikt-skrivestotte"
+      value: "https://modiapersonoversikt-skrivestotte.intern.dev.nav.no"
     - name: DIGDIR_KRR_URL
-      value: "https://digdir-krr-proxy.intern.dev.nav.no"
+      value: "https://digdir-krr-proxy.intern.dev.nav.no/"
     - name: DIGDIR_KRR_SCOPE
       value: "dev-gcp:team-rocket:digdir-krr-proxy"
     - name: UTBETALDATA_SOKOS_URL
-      value: "https://sokos-utbetaldata.dev.intern.nav.no/utbetaldata/api"
+      value: "https://sokos-utbetaldata.dev-fss-pub.nais.io/utbetaldata/api"
     - name: UTBETAL_SOKOS_SCOPE
       value: "dev-fss:okonomi:sokos-utbetaldata"
     - name: SF_HENVENDELSE_URL
-      value: "https://sf-henvendelse.dev.intern.nav.no/api"
+      value: "https://sf-henvendelse-api-proxy.dev-fss-pub.nais.io/api"
     - name: SF_HENVENDELSE_SCOPE
-      value: "dev-fss:teamcrm:sf-henvendelse"
+      value: "dev-fss:teamnks:sf-henvendelse-api-proxy"
     - name: KONTOREGISTER_REST_URL
       value: "https://sokos-kontoregister-person.intern.dev.nav.no/api/system"
     - name: KONTOREGISTER_SCOPE
