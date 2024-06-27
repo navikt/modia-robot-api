@@ -8,7 +8,6 @@ metadata:
 spec:
   image: {{image}}
   port: 7070
-  webproxy: true
   liveness:
     path: /internal/isAlive
     initialDelay: 20
@@ -75,7 +74,7 @@ spec:
     - name: OPPFOLGING_SCOPE
       value: "prod-fss:pto:veilarboppfolging"
     - name: NOM_URL
-      value: "https://nom-api.intern.dev.nav.no"
+      value: "https://nom-api.intern.nav.no"
     - name: NOM_SCOPE
       value: "prod-gcp:nom:nom-api"
     - name: PDL_URL
@@ -89,7 +88,7 @@ spec:
     - name: SKRIVESTOTTE_URL
       value: "https://modiapersonoversikt-skrivestotte.intern.nav.no"
     - name: DIGDIR_KRR_URL
-      value: "https://digdir-krr-proxy.intern.dev.nav.no/"
+      value: "https://digdir-krr-proxy.intern.nav.no/"
     - name: DIGDIR_KRR_SCOPE
       value: "prod-gcp:team-rocket:digdir-krr-proxy"
     - name: UTBETALDATA_SOKOS_URL
@@ -101,7 +100,7 @@ spec:
     - name: SF_HENVENDELSE_SCOPE
       value: "prod-fss:teamnks:sf-henvendelse-api-proxy"
     - name: KONTOREGISTER_REST_URL
-      value: "https://sokos-kontoregister-person.intern.dev.nav.no/api/system"
+      value: "https://sokos-kontoregister-person.intern.nav.no/api/system"
     - name: KONTOREGISTER_SCOPE
       value: "prod-gcp:okonomi:sokos-kontoregister-person"
     - name: CXF_SECURE_LOG
