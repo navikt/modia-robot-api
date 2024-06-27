@@ -30,6 +30,7 @@ class PdlClient(
             header("Authorization", "Bearer $oboToken")
             header("Tema", "GEN")
             header("X-Correlation-ID", getCallId())
+            header("Behandlingsnummer", "B498")
         }
 
     suspend fun hentPersonalia(
