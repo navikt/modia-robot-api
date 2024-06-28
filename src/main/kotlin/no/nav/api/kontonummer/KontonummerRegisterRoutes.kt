@@ -1,4 +1,4 @@
-package no.nav.api.oppfolging
+package no.nav.api.kontonummer
 
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
@@ -10,36 +10,38 @@ import no.nav.api.CommonModels
 import no.nav.models.FnrRequest
 import no.nav.models.deserializeFnr
 import no.nav.utils.getJWT
+import no.nav.utils.getJWTPrincipalSubject
 import kotlin.reflect.typeOf
 
-fun Route.configureOppfolgingRoutesV2(oppfolgingService: OppfolgingService) {
-    route("v2/oppfolging/veileder") {
+fun Route.configureKontonummerRegisterRoutes(kontonummerRegister: KontonummerRegister) {
+    route("kontonummer-register/kontonummer") {
         install(NotarizedRoute()) {
-            post = ApiV2.veileder
+            post = ApiV2.kontonummer
         }
         post {
-            val payload = call.getJWT()
             val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
-            call.respond(oppfolgingService.hentOppfolging(fnr, payload))
+            val ident = call.getJWTPrincipalSubject()
+            val token = call.getJWT()
+            call.respond(kontonummerRegister.hentKontonummer(fnr, ident, token))
         }
     }
 }
 
 private object ApiV2 {
-    val veileder =
+    val kontonummer =
         PostInfo.builder {
-            summary("Brukers oppfølgingsveileder")
-            description("Hentes fra veilarboppfølging")
+            summary("Brukers kontonummer")
+            description("Hentes fra kontonummer register")
             request {
                 requestType(typeOf<FnrRequest>())
                 description("Brukers ident")
             }
             response {
-                responseType(typeOf<OppfolgingService.Oppfolging>())
+                responseType(typeOf<KontonummerRegister.Kontonummer>())
                 responseCode(HttpStatusCode.OK)
-                description("Navn og ident til brukers veileder")
+                description("Brukers kontonummer om det eksisterer i kontonummer register")
             }
-            tags("Oppfølging")
+            tags("KontonummerRegister")
             canRespond(CommonModels.standardResponses)
         }
 }

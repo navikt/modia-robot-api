@@ -20,10 +20,10 @@ val graphql_kotlin_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.8.0"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("com.expediagroup.graphql") version "6.4.0"
+    kotlin("jvm") version "2.0.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.expediagroup.graphql") version "7.1.1"
 }
 
 group = "no.nav"
@@ -77,18 +77,18 @@ dependencies {
     implementation("no.nav.common:cxf:$nav_common_version")
     implementation("no.nav.common:client:$nav_common_version")
     implementation("no.nav.common:log:$nav_common_version")
-    implementation("org.slf4j:jul-to-slf4j:1.7.21")
-    implementation("com.sun.xml.ws:jaxws-ri:2.3.3")
+    implementation("org.slf4j:jul-to-slf4j:2.0.13")
+    implementation("com.sun.xml.ws:jaxws-ri:4.0.2")
     implementation("io.micrometer:micrometer-registry-prometheus:$prometeus_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstash_version")
     implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphql_kotlin_version")
-    implementation("io.ktor:ktor-client-okhttp-jvm:2.3.0")
-    implementation("io.ktor:ktor-server-core-jvm:2.3.0")
-    implementation("io.ktor:ktor-server-swagger-jvm:2.3.0")
+    implementation("io.ktor:ktor-client-okhttp-jvm:2.3.12")
+    implementation("io.ktor:ktor-server-core-jvm:2.3.12")
+    implementation("io.ktor:ktor-server-swagger-jvm:2.3.12")
 
-    testImplementation("io.mockk:mockk:1.12.4")
-    testImplementation("io.ktor:ktor-server-tests:2.3.0")
+    testImplementation("io.mockk:mockk:1.13.11")
+    testImplementation("io.ktor:ktor-server-tests:2.3.12")
     testImplementation("io.ktor:ktor-client-mock:$ktor_version")
     testImplementation("org.junit.jupiter:junit-jupiter:$junit_version")
 }
@@ -127,6 +127,7 @@ val generateSAFClient by tasks.creating(GraphQLGenerateClientTask::class) {
 val downloadPDLSchema by tasks.creating(GraphQLDownloadSDLTask::class) {
     endpoint.set("https://navikt.github.io/pdl/pdl-api-sdl.graphqls")
     outputFile.set(file("${project.projectDir}/src/main/resources/pdl/schema.graphqls"))
+    dependsOn("generateSAFClient")
 }
 val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
     packageName.set("no.nav.api.generated.pdl")
@@ -155,4 +156,10 @@ val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
         ),
     )
     dependsOn("downloadPDLSchema")
+}
+
+tasks {
+    processResources {
+        dependsOn("generatePDLClient")
+    }
 }
