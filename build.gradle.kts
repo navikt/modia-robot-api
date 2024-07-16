@@ -87,7 +87,7 @@ dependencies {
     implementation("io.ktor:ktor-server-core-jvm:2.3.12")
     implementation("io.ktor:ktor-server-swagger-jvm:2.3.12")
 
-    testImplementation("io.mockk:mockk:1.13.11")
+    testImplementation("io.mockk:mockk:1.13.12")
     testImplementation("io.ktor:ktor-server-tests:2.3.12")
     testImplementation("io.ktor:ktor-client-mock:$ktor_version")
     testImplementation("org.junit.jupiter:junit-jupiter:$junit_version")
