@@ -6,7 +6,7 @@ metadata:
   labels:
     team: personoversikt
 spec:
-  image: {{image}}
+  image: "{{image}}"
   port: 7070
   liveness:
     path: /internal/isAlive
@@ -58,6 +58,9 @@ spec:
     inbound:
       rules:
         - application: rpa-medlemskap-og-avgift
+          namespace: team-rpa
+          cluster: dev-fss
+        - application: rpa-saf-tiltakspenger
           namespace: team-rpa
           cluster: dev-fss
         - application: ida
