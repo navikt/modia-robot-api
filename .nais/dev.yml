@@ -69,6 +69,9 @@ spec:
         - application: rpa-nav-okonomi-stonad
           cluster: dev-fss
           namespace: team-rpa-nos
+        - application: rpa-nos-robot1
+          cluster: dev-fss
+          namespace: team-rpa
   env:
     - name: IDENT_ALLOW_LIST
       value: "R154727,R156418,R158345,R158346,R160569,R165950,R165951,R165952,R150818,R150819,R155645,R162552,Z994123,Z990351,Z992779,Z990949,Z990467,Z991629,Z990237,Z994673,Z994818,Z990715,Z990715"
