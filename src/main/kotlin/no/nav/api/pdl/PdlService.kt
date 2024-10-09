@@ -40,6 +40,11 @@ class PdlService(
         return requireNotNull(client.hentAktorid(fnr, token).data?.hentIdenter?.identer?.firstOrNull()?.ident)
     }
 
+    suspend fun hentAktoridNullable(
+        fnr: String,
+        token: String,
+    ): String? = client.hentAktorid(fnr, token).data?.hentIdenter?.identer?.firstOrNull()?.ident
+
     suspend fun hentNavn(
         fnr: String,
         token: String,

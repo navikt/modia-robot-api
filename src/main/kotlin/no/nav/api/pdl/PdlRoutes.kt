@@ -28,7 +28,7 @@ fun Route.configurePdlRoutes(pdlService: PdlService) {
             post {
                 val token = call.getJWT()
                 val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
-                call.respond(pdlService.hentAktorid(fnr, token))
+                call.respond(AktorIdResponse(pdlService.hentAktoridNullable(fnr, token)))
             }
         }
     }
@@ -62,13 +62,18 @@ private object ApiV2 {
             }
             response {
                 responseCode(HttpStatusCode.OK)
-                responseType(typeOf<PdlPersonalia>())
+                responseType(typeOf<AktorIdResponse>())
                 description("identens tilhørende aktorid")
             }
             tags("PDL")
             canRespond(CommonModels.standardResponses)
         }
 }
+
+@Serializable
+data class AktorIdResponse(
+    val aktorid: String?,
+)
 
 @Serializable
 data class PdlPersonalia(
