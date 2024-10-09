@@ -21,6 +21,16 @@ fun Route.configurePdlRoutes(pdlService: PdlService) {
             val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
             call.respond(pdlService.hentPersonalia(fnr, payload))
         }
+        route("aktorid") {
+            install(NotarizedRoute()) {
+                post = ApiV2.hentAktorId
+            }
+            post {
+                val token = call.getJWT()
+                val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+                call.respond(pdlService.hentAktorid(fnr, token))
+            }
+        }
     }
 }
 
@@ -40,6 +50,21 @@ private object ApiV2 {
             }
             tags("PDL")
             canRespond(CommonModels.standardResponses)
+        }
+
+    val hentAktorId =
+        PostInfo.builder {
+            summary("Hent aktor ID")
+            description("Henter aktorid for en person")
+            request {
+                requestType(typeOf<FnrRequest>())
+                description("Brukers ident")
+            }
+            response {
+                responseCode(HttpStatusCode.OK)
+                responseType(typeOf<PdlPersonalia>())
+                description("identens tilhørende aktorid")
+            }
         }
 }
 
