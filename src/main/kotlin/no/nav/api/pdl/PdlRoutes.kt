@@ -65,6 +65,8 @@ private object ApiV2 {
                 responseType(typeOf<PdlPersonalia>())
                 description("identens tilhørende aktorid")
             }
+            tags("PDL")
+            canRespond(CommonModels.standardResponses)
         }
 }
 
