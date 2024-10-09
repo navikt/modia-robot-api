@@ -528,17 +528,16 @@ type Dokumentvariant {
     filnavn: String
 
     # Unik identifikator per fil.
-    # * NB: Feltet skal kun brukes etter avtale med Team Dokument.
-    filuuid: String @deprecated(reason: "Feltet er deprekert og vil bli fjernet i fremtiden. Feltet skal kun brukes etter avtale med Team Dokument.")
+    # * NB: Feltet skal kun brukes etter avtale med Team Dokumentløsninger.
+    filuuid: String @deprecated(reason: "Feltet er deprekert og vil bli fjernet i fremtiden. Feltet skal kun brukes etter avtale med Team Dokumentløsninger.")
 
-    # Dokumentets filtype, f.eks. PDFA, XML eller JPG. Gyldige verdier finnes på siden Fagarkiv - Filtype.
-    # * NB: Informasjonen er ikke garantert å samsvare med dokumentets faktiske filtype, da dette ikke valideres under arkivering.
-    # * NB: Verdien 'PDFA' mappes til 'PDF'
-    # * NB: Feltet skal kun brukes etter avtale med Team Dokument.
-    filtype: String @deprecated(reason: "Feltet er deprekert og er kun til internt bruk. Feltet skal kun brukes etter avtale med Team Dokument.")
+    # Dokumentets filtype. PDF, JPEG, PNG, TIFF, XLSX, JSON, XML, AXML, DXML, RTF er verdier som kan returneres.
+    # * Gyldige verdier finnes på siden Fagarkiv - Filtype (confluence). NB: Verdien 'PDFA' mappes til 'PDF'.
+    # * Vær oppmerksom på at dette ikke er garantert å samsvare med dokumentets faktiske filtype, da feltet lenge ikke ble sjekket opp mot filinnholdet.
+    filtype: String
 
     # Dokumentets filstørrelse i bytes.
-    filstoerrelse: Int @deprecated(reason: "Feltet er deprekert og er kun til internt bruk. Feltet skal kun brukes etter avtale med Team Dokument.")
+    filstoerrelse: Int @deprecated(reason: "Feltet er deprekert og er kun til internt bruk. Feltet skal kun brukes etter avtale med Team Dokumentløsninger.")
 
     # Sier hvorvidt saksbehandler som gjør oppslaget vil få tilgang til å åpne denne dokumentvarianten.
     # * Dersom verdien er false, vil tilgang bli avslått dersom saksbehandler forsøker å åpne dokumentet.
