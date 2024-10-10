@@ -85,7 +85,7 @@ dependencies {
     implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphql_kotlin_version")
     implementation("io.ktor:ktor-client-okhttp-jvm:2.3.12")
     implementation("io.ktor:ktor-server-core-jvm:2.3.12")
-    implementation("io.ktor:ktor-server-swagger-jvm:2.3.12")
+    implementation("io.ktor:ktor-server-swagger-jvm:3.0.0")
 
     testImplementation("io.mockk:mockk:1.13.13")
     testImplementation("io.ktor:ktor-server-tests:2.3.12")
