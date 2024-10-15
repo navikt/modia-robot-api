@@ -1,6 +1,5 @@
 package no.nav
 
-import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -13,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 class ApplicationTest {
     @Test
-    internal fun testRoot() {
+    fun testRoot() {
         testApplication {
             application {
                 configureOpenApi()

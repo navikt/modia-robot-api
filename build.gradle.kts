@@ -5,18 +5,18 @@ import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 
-val ktor_version: String by project
-val kotlin_version: String by project
-val kotlinx_datetime_version: String by project
-val kompendium_version: String by project
-val logback_version: String by project
-val logstash_version: String by project
-val prometeus_version: String by project
-val nav_common_version: String by project
-val tjenestespec_version: String by project
-val modia_common_utils_version: String by project
-val junit_version: String by project
-val graphql_kotlin_version: String by project
+val ktor_version = "2.3.12"
+val kotlin_version = "2.0.21"
+val kotlinx_datetime_version = "0.4.0"
+val kompendium_version = "3.14.4"
+val logback_version = "1.4.12"
+val logstash_version = "7.2"
+val prometeus_version = "1.6.3"
+val nav_common_version = "2.2023.01.10_13.49-81ddc732df3a"
+val tjenestespec_version = "1.2020.06.16-14.51-3b45df54f90a"
+val modia_common_utils_version = "1.2023.07.20-13.43-64707e48b53b"
+val junit_version = "5.8.2"
+val graphql_kotlin_version = "6.4.0"
 
 plugins {
     application
@@ -60,11 +60,14 @@ repositories {
 dependencies {
     implementation("io.ktor:ktor-server:$ktor_version")
     implementation("io.ktor:ktor-server-core:$ktor_version")
+    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
+    implementation("io.ktor:ktor-server-swagger-jvm:$ktor_version")
     implementation("io.ktor:ktor-serialization:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-okhttp-jvm:$ktor_version")
     implementation("io.ktor:ktor-client-okhttp:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version")
@@ -83,20 +86,20 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstash_version")
     implementation("com.expediagroup:graphql-kotlin-ktor-client:$graphql_kotlin_version")
-    implementation("io.ktor:ktor-client-okhttp-jvm:2.3.12")
-    implementation("io.ktor:ktor-server-core-jvm:2.3.12")
-    implementation("io.ktor:ktor-server-swagger-jvm:2.3.12")
 
+    testImplementation(kotlin("test"))
+    testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
+    testImplementation("io.ktor:ktor-server-test-host-jvm:$ktor_version")
+    testImplementation("io.ktor:ktor-client-mock-jvm:$ktor_version")
     testImplementation("io.mockk:mockk:1.13.13")
-    testImplementation("io.ktor:ktor-server-tests:2.3.12")
-    testImplementation("io.ktor:ktor-client-mock:$ktor_version")
     testImplementation("org.junit.jupiter:junit-jupiter:$junit_version")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 
-    testLogging { // This is for logging and can be removed.
+    testLogging {
+        // This is for logging and can be removed.
         events("passed", "skipped", "failed")
     }
 }
