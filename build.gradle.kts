@@ -15,7 +15,7 @@ val prometeus_version = "1.6.3"
 val nav_common_version = "2.2023.01.10_13.49-81ddc732df3a"
 val tjenestespec_version = "1.2020.06.16-14.51-3b45df54f90a"
 val modia_common_utils_version = "1.2023.07.20-13.43-64707e48b53b"
-val junit_version = "5.8.2"
+val junit_version = "5.11.2"
 val graphql_kotlin_version = "6.4.0"
 
 plugins {
