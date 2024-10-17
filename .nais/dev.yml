@@ -49,7 +49,7 @@ spec:
       external:
         - host: nom-api.intern.dev.nav.no
         - host: pdl-api.dev-fss-pub.nais.io
-        - host: saf-q1.dev-fss-pub.nais.io
+        - host: saf.dev-fss-pub.nais.io
         - host: digdir-krr-proxy.intern.dev.nav.no
         - host: sokos-utbetaldata.dev-fss-pub.nais.io
         - host: sf-henvendelse-api-proxy.dev-fss-pub.nais.io
@@ -90,7 +90,7 @@ spec:
     - name: PDL_SCOPE
       value: "dev-fss:pdl:pdl-api"
     - name: SAF_URL
-      value: "https://saf-q1.dev-fss-pub.nais.io/graphql"
+      value: "https://saf.dev-fss-pub.nais.io/graphql"
     - name: SAF_SCOPE
       value: "dev-fss:teamdokumenthandtering:saf"
     - name: SKRIVESTOTTE_URL
