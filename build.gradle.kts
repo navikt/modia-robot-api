@@ -12,7 +12,7 @@ val kompendium_version = "3.14.4"
 val logback_version = "1.5.11"
 val logstash_version = "8.0"
 val prometeus_version = "1.6.3"
-val nav_common_version = "2.2023.01.10_13.49-81ddc732df3a"
+val nav_common_version = "3.2024.09.16_11.09-578823a87a2f"
 val tjenestespec_version = "1.2021.02.22-10.45-4201aaea72fb"
 val modia_common_utils_version = "1.2023.07.20-13.43-64707e48b53b"
 val junit_version = "5.11.2"
@@ -77,7 +77,6 @@ dependencies {
     implementation("com.github.navikt.modia-common-utils:kotlin-utils:$modia_common_utils_version")
     implementation("com.github.navikt.modia-common-utils:ktor-utils:$modia_common_utils_version")
     implementation("no.nav.common:token-client:$nav_common_version")
-    implementation("no.nav.common:cxf:$nav_common_version")
     implementation("no.nav.common:client:$nav_common_version")
     implementation("no.nav.common:log:$nav_common_version")
     implementation("org.slf4j:jul-to-slf4j:2.0.16")
