@@ -32,7 +32,8 @@ class LoggingGraphQLKtorClient(
             TjenestekallLogger.info(
                 "$name-request: $callId ($requestId)",
                 mapOf(
-                    "request" to request,
+                    "requestName" to request.operationName,
+                    "variables" to request.variables,
                 ),
             )
             val response = super.execute(request, requestCustomizer)
