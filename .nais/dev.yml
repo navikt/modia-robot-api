@@ -94,7 +94,7 @@ spec:
     - name: PDL_SCOPE
       value: "dev-fss:pdl:pdl-api"
     - name: SAF_URL
-      value: "https://saf.dev-fss-pub.nais.io/graphql"
+      value: "https://saf-q2.dev-fss-pub.nais.io/graphql"
     - name: SAF_SCOPE
       value: "dev-fss:teamdokumenthandtering:saf"
     - name: SKRIVESTOTTE_URL
