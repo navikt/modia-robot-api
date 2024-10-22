@@ -7,7 +7,7 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransf
 
 val ktor_version = "2.3.12"
 val kotlin_version = "2.0.21"
-val kotlinx_datetime_version = "0.4.0"
+val kotlinx_datetime_version = "0.6.1"
 val kompendium_version = "3.14.4"
 val logback_version = "1.5.11"
 val logstash_version = "8.0"
