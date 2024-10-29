@@ -67,16 +67,17 @@ spec:
           namespace: team-rpa
           cluster: prod-fss
         - application: ida
-          cluster: prod-fss
           namespace: traktor
-        - application: rpa-nav-okonomi-stonad
           cluster: prod-fss
+        - application: rpa-nav-okonomi-stonad
           namespace: team-rpa-nos
-        - application: veilarboppfolging
-          namespace: poao
+          cluster: prod-fss
+        - application: rpa-nos-modia
+          namespace: team-rpa
+          cluster: prod-fss
   env:
     - name: IDENT_ALLOW_LIST
-      value: "R154727,R156418,R158345,R158346,R160569,R165950,R165951,R165952,R150818,R150819,R155645,R162552,D159483,U143410,R172987"
+      value: "R154727,R156418,R158345,R158346,R160569,R165950,R165951,R165952,R150818,R150819,R155645,R162552,D159483,U143410,R172987,R150819,R150818,R162552,R155645"
     - name: OPPFOLGING_URL
       value: "http://veilarboppfolging.poao/veilarboppfolging/api"
     - name: OPPFOLGING_SCOPE
