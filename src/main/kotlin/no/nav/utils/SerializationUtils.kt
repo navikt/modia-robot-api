@@ -13,9 +13,7 @@ import kotlin.reflect.KClass
 object UUIDSerializer : KSerializer<UUID> {
     override val descriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
 
-    override fun deserialize(decoder: Decoder): UUID {
-        return UUID.fromString(decoder.decodeString())
-    }
+    override fun deserialize(decoder: Decoder): UUID = UUID.fromString(decoder.decodeString())
 
     override fun serialize(
         encoder: Encoder,
@@ -25,7 +23,10 @@ object UUIDSerializer : KSerializer<UUID> {
     }
 }
 
-abstract class EnumSerializer<T : Enum<T>>(clazz: KClass<T>, private val defaultValue: T) : KSerializer<T> {
+abstract class EnumSerializer<T : Enum<T>>(
+    clazz: KClass<T>,
+    private val defaultValue: T,
+) : KSerializer<T> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor(
             serialName = requireNotNull(clazz.qualifiedName),
@@ -34,9 +35,7 @@ abstract class EnumSerializer<T : Enum<T>>(clazz: KClass<T>, private val default
     private val deserializeLUT = clazz.java.enumConstants.associateBy { it.serialName }
     private val serializeLUT = deserializeLUT.swapKeyValue()
 
-    override fun deserialize(decoder: Decoder): T {
-        return deserializeLUT[decoder.decodeString()] ?: defaultValue
-    }
+    override fun deserialize(decoder: Decoder): T = deserializeLUT[decoder.decodeString()] ?: defaultValue
 
     override fun serialize(
         encoder: Encoder,
@@ -46,5 +45,9 @@ abstract class EnumSerializer<T : Enum<T>>(clazz: KClass<T>, private val default
     }
 
     private val Enum<T>.serialName: String
-        get() = this::class.java.getField(name).getAnnotation(SerialName::class.java)?.value ?: name
+        get() =
+            this::class.java
+                .getField(name)
+                .getAnnotation(SerialName::class.java)
+                ?.value ?: name
 }

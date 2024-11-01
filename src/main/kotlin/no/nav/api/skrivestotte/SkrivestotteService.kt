@@ -9,7 +9,9 @@ import kotlin.concurrent.fixedRateTimer
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 
-class SkrivestotteService(private val skrivestotteClient: SkrivestotteClient) {
+class SkrivestotteService(
+    private val skrivestotteClient: SkrivestotteClient,
+) {
     private var teksterCache: Map<UUID, Tekst> = emptyMap()
     private var sokbareTeksterCache: Map<Tekst, String> = emptyMap()
     private val reporter = SelftestGenerator.Reporter(name = "SkrivestotteService", critical = false)
@@ -47,13 +49,9 @@ class SkrivestotteService(private val skrivestotteClient: SkrivestotteClient) {
         }
     }
 
-    fun hentTekstFraId(tekstId: UUID): Tekst? {
-        return teksterCache[tekstId]
-    }
+    fun hentTekstFraId(tekstId: UUID): Tekst? = teksterCache[tekstId]
 
-    private suspend fun hentTekster(): Tekster {
-        return skrivestotteClient.hentTekster()
-    }
+    private suspend fun hentTekster(): Tekster = skrivestotteClient.hentTekster()
 
     private suspend fun prepopulerCache() {
         retry.run {
@@ -62,15 +60,13 @@ class SkrivestotteService(private val skrivestotteClient: SkrivestotteClient) {
         }
     }
 
-    private fun byggSokbareTekster(tekster: Collection<Tekst>): Map<Tekst, String> {
-        return tekster.associateWith {
+    private fun byggSokbareTekster(tekster: Collection<Tekst>): Map<Tekst, String> =
+        tekster.associateWith {
             listOf(
                 it.overskrift,
                 it.tags.joinToString("\u0000"),
                 it.innhold.kombinert(),
-            )
-                .joinToString("\u0000")
+            ).joinToString("\u0000")
                 .lowercase()
         }
-    }
 }

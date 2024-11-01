@@ -20,7 +20,11 @@ const val SECURITY_SCHEME_NAME = "auth-jwt"
 const val NAV_IDENT_CLAIM = "NAVident"
 private val mockJwt =
     JWT.decode(
-        JWT.create().withSubject(UUID.randomUUID().toString()).withClaim(NAV_IDENT_CLAIM, "Z999999").sign(Algorithm.none()),
+        JWT
+            .create()
+            .withSubject(UUID.randomUUID().toString())
+            .withClaim(NAV_IDENT_CLAIM, "Z999999")
+            .sign(Algorithm.none()),
     )
 
 fun Application.configureSecurity(

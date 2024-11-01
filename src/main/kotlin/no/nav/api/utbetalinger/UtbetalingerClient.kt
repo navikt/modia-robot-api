@@ -92,8 +92,7 @@ class UtbetalingerClient(
                                 "Feil ved deseralisering av json",
                                 mapOf("exception" to it),
                             )
-                        }
-                        .getOrThrow()
+                        }.getOrThrow()
 
                 else -> throw WebStatusException(
                     message =
@@ -123,8 +122,8 @@ class UtbetalingerClient(
     )
 
     companion object {
-        fun lagHttpEngine(): HttpClientEngine {
-            return OkHttp.create {
+        fun lagHttpEngine(): HttpClientEngine =
+            OkHttp.create {
                 addInterceptor(XCorrelationIdInterceptor())
                 addInterceptor(
                     LoggingInterceptor(
@@ -140,6 +139,5 @@ class UtbetalingerClient(
                     },
                 )
             }
-        }
     }
 }

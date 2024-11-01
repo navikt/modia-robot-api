@@ -2,6 +2,7 @@ package no.nav.api.debug
 
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
+import io.bkbn.kompendium.oas.payload.MediaType
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -62,10 +63,12 @@ private object Api {
                 examples(
                     Pair(
                         "example",
-                        TokenExchangeRequest(
-                            cluster = "dev-fss",
-                            namespace = "teamname",
-                            application = "app-api",
+                        MediaType.Example(
+                            TokenExchangeRequest(
+                                cluster = "dev-fss",
+                                namespace = "teamname",
+                                application = "app-api",
+                            ),
                         ),
                     ),
                 )

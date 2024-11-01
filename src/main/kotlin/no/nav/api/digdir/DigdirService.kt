@@ -7,7 +7,9 @@ import no.nav.personoversikt.common.utils.SelftestGenerator
 import kotlin.concurrent.fixedRateTimer
 import kotlin.time.Duration.Companion.minutes
 
-class DigdirService(private val digdirClient: DigdirClient) {
+class DigdirService(
+    private val digdirClient: DigdirClient,
+) {
     private val reporter = SelftestGenerator.Reporter(name = "DigdirService", critical = false)
 
     init {

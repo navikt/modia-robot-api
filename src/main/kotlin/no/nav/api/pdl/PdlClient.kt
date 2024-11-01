@@ -36,20 +36,19 @@ class PdlClient(
     suspend fun hentPersonalia(
         fnr: String,
         token: String,
-    ): GraphQLClientResponse<HentPersonalia.Result> {
-        return externalServiceCall {
+    ): GraphQLClientResponse<HentPersonalia.Result> =
+        externalServiceCall {
             graphqlClient.execute(
                 request = HentPersonalia(HentPersonalia.Variables(fnr)),
                 requestCustomizer = requestConfig(token),
             )
         }
-    }
 
     suspend fun hentAktorid(
         fnr: String,
         token: String,
-    ): GraphQLClientResponse<HentAktorid.Result> {
-        return externalServiceCall {
+    ): GraphQLClientResponse<HentAktorid.Result> =
+        externalServiceCall {
             graphqlClient.execute(
                 request =
                     HentAktorid(
@@ -60,17 +59,15 @@ class PdlClient(
                 requestCustomizer = requestConfig(token),
             )
         }
-    }
 
     suspend fun hentNavn(
         fnr: String,
         token: String,
-    ): GraphQLClientResponse<HentNavn.Result> {
-        return externalServiceCall {
+    ): GraphQLClientResponse<HentNavn.Result> =
+        externalServiceCall {
             graphqlClient.execute(
                 request = HentNavn(HentNavn.Variables(fnr)),
                 requestCustomizer = requestConfig(token),
             )
         }
-    }
 }

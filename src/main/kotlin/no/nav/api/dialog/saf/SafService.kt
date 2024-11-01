@@ -8,12 +8,11 @@ class SafService(
     suspend fun hentBrukersSaker(
         fnr: String,
         token: String,
-    ): List<Sak> {
-        return safClient
+    ): List<Sak> =
+        safClient
             .hentBrukersSaker(fnr, token)
             .data
             ?.saker
             ?.filterNotNull()
             ?: emptyList()
-    }
 }

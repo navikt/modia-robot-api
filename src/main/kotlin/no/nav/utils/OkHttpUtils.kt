@@ -73,8 +73,7 @@ class LoggingInterceptor(
                             "time" to timer.measure(),
                         ),
                     )
-                }
-                .getOrThrow()
+                }.getOrThrow()
 
         val responseBody = response.peekContent(config)
 
@@ -103,10 +102,13 @@ class LoggingInterceptor(
 
 private fun Long.measure(): Long = System.currentTimeMillis() - this
 
-open class HeadersInterceptor(val headersProvider: () -> Map<String, String>) : Interceptor {
+open class HeadersInterceptor(
+    val headersProvider: () -> Map<String, String>,
+) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val builder =
-            chain.request()
+            chain
+                .request()
                 .newBuilder()
         headersProvider()
             .forEach { (name, value) -> builder.addHeader(name, value) }
@@ -115,17 +117,23 @@ open class HeadersInterceptor(val headersProvider: () -> Map<String, String>) : 
     }
 }
 
-class XCorrelationIdInterceptor : HeadersInterceptor({
-    mapOf("X-Correlation-ID" to getCallId())
-})
+class XCorrelationIdInterceptor :
+    HeadersInterceptor({
+        mapOf("X-Correlation-ID" to getCallId())
+    })
 
-class AuthorizationInterceptor(val tokenProvider: () -> String) : HeadersInterceptor({
-    mapOf("Authorization" to "Bearer ${tokenProvider()}")
-})
+class AuthorizationInterceptor(
+    val tokenProvider: () -> String,
+) : HeadersInterceptor({
+        mapOf("Authorization" to "Bearer ${tokenProvider()}")
+    })
 
-class BasicAuthorizationInterceptor(private val username: String, private val password: String) : HeadersInterceptor({
-    mapOf("Authorization" to Credentials.basic(username, password))
-})
+class BasicAuthorizationInterceptor(
+    private val username: String,
+    private val password: String,
+) : HeadersInterceptor({
+        mapOf("Authorization" to Credentials.basic(username, password))
+    })
 
 fun getCallId(): String = MDC.get("CallId") ?: UUID.randomUUID().toString()
 

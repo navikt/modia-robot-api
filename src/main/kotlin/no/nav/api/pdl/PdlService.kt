@@ -36,20 +36,40 @@ class PdlService(
     suspend fun hentAktorid(
         fnr: String,
         token: String,
-    ): String {
-        return requireNotNull(client.hentAktorid(fnr, token).data?.hentIdenter?.identer?.firstOrNull()?.ident)
-    }
+    ): String =
+        requireNotNull(
+            client
+                .hentAktorid(fnr, token)
+                .data
+                ?.hentIdenter
+                ?.identer
+                ?.firstOrNull()
+                ?.ident,
+        )
 
     suspend fun hentAktoridNullable(
         fnr: String,
         token: String,
-    ): String? = client.hentAktorid(fnr, token).data?.hentIdenter?.identer?.firstOrNull()?.ident
+    ): String? =
+        client
+            .hentAktorid(fnr, token)
+            .data
+            ?.hentIdenter
+            ?.identer
+            ?.firstOrNull()
+            ?.ident
 
     suspend fun hentNavn(
         fnr: String,
         token: String,
     ): Navn {
-        val navn = client.hentNavn(fnr, token).data?.hentPerson?.navn?.firstOrNull() ?: return Navn.UKJENT
+        val navn =
+            client
+                .hentNavn(fnr, token)
+                .data
+                ?.hentPerson
+                ?.navn
+                ?.firstOrNull() ?: return Navn.UKJENT
         return Navn(
             fornavn = navn.fornavn,
             mellomnavn = navn.mellomnavn,
@@ -57,12 +77,17 @@ class PdlService(
         )
     }
 
-    private fun hentAlder(person: Person?): Int? {
-        return person?.foedselsdato?.firstOrNull()?.foedselsdato?.periodUntil(LocalDate.now())?.years
-    }
+    private fun hentAlder(person: Person?): Int? =
+        person
+            ?.foedselsdato
+            ?.firstOrNull()
+            ?.foedselsdato
+            ?.periodUntil(LocalDate.now())
+            ?.years
 
-    private fun hentBostedsAdresse(person: Person?): PdlAdresse? {
-        return person?.bostedsadresse
+    private fun hentBostedsAdresse(person: Person?): PdlAdresse? =
+        person
+            ?.bostedsadresse
             ?.sortedByDescending { it.gyldigFraOgMed }
             ?.firstNotNullOfOrNull { adresse ->
                 when {
@@ -82,10 +107,10 @@ class PdlService(
                     }
                 }
             }
-    }
 
-    private fun hentKontaktAdresse(person: Person?): PdlAdresse? {
-        return person?.kontaktadresse
+    private fun hentKontaktAdresse(person: Person?): PdlAdresse? =
+        person
+            ?.kontaktadresse
             ?.sortedByDescending { it.gyldigFraOgMed }
             ?.firstNotNullOfOrNull { adresse ->
                 when {
@@ -117,10 +142,10 @@ class PdlService(
                     }
                 }
             }
-    }
 
-    private fun hentOppholdsAdresse(person: Person?): PdlAdresse? {
-        return person?.oppholdsadresse
+    private fun hentOppholdsAdresse(person: Person?): PdlAdresse? =
+        person
+            ?.oppholdsadresse
             ?.sortedByDescending { it.gyldigFraOgMed }
             ?.firstNotNullOfOrNull { adresse ->
                 when {
@@ -146,7 +171,6 @@ class PdlService(
                     }
                 }
             }
-    }
 
     private fun lagAdresseFraVegadresse(adresse: Vegadresse) =
         // TODO hente postnummer kodeverk

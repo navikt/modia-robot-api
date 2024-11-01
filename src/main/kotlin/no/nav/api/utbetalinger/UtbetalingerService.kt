@@ -8,7 +8,8 @@ class UtbetalingerService(
     private val utbetalingerClient: UtbetalingerClient,
 ) {
     private val reporter =
-        SelftestGenerator.Reporter(name = "UtbetalingService", critical = false)
+        SelftestGenerator
+            .Reporter(name = "UtbetalingService", critical = false)
             .also { it.reportOk() }
 
     @Serializable
@@ -25,10 +26,10 @@ class UtbetalingerService(
         token: String,
     ): List<Utbetalinger> {
         val utbetalinger =
-            utbetalingerClient.runCatching {
-                hentUtbetalinger(fnr, fra, til, token)
-            }
-                .onSuccess { reporter.reportOk() }
+            utbetalingerClient
+                .runCatching {
+                    hentUtbetalinger(fnr, fra, til, token)
+                }.onSuccess { reporter.reportOk() }
                 .onFailure { reporter.reportError(it) }
                 .getOrThrow()
 
@@ -48,8 +49,7 @@ class UtbetalingerService(
                         til = LocalDate.parse(ytelse.ytelsesperiode.tom),
                     )
                 }
-            }
-            .distinct()
+            }.distinct()
             .sortedWith(compareByDescending<Utbetalinger> { it.til }.thenBy { it.ytelse })
     }
 }

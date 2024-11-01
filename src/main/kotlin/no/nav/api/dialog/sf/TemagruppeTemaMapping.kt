@@ -54,7 +54,6 @@ object TemagruppeTemaMapping {
             "HJE" to Temagruppe.HJLPM.name,
         )
 
-    fun hentTemagruppeForTema(tema: String): String {
-        return if (TEMA_TEMAGRUPPE_MAPPING[tema] == null) TEMA_UTEN_TEMAGRUPPE.name else TEMA_TEMAGRUPPE_MAPPING[tema]!!
-    }
+    fun hentTemagruppeForTema(tema: String): String =
+        if (TEMA_TEMAGRUPPE_MAPPING[tema] == null) TEMA_UTEN_TEMAGRUPPE.name else TEMA_TEMAGRUPPE_MAPPING[tema]!!
 }

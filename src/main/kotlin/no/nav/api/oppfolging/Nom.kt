@@ -22,8 +22,7 @@ class Nom(
                     name = "nom",
                     callIdExtractor = { getCallId() },
                 ),
-            )
-            .build()
+            ).build()
 
     val client: NomClient =
         if (isNotProd()) {

@@ -3,7 +3,9 @@ package no.nav.api.pdl.converters
 import com.expediagroup.graphql.client.converter.ScalarConverter
 
 @JvmInline
-value class PdlLong(val value: Long)
+value class PdlLong(
+    val value: Long,
+)
 
 class LongScalarConverter : ScalarConverter<PdlLong> {
     override fun toJson(value: PdlLong): String = value.value.toString()

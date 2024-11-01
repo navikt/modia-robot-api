@@ -243,6 +243,4 @@ private val sfClientMock =
         coEvery { client.lukkTraad(any(), any()) } returns Unit
     }
 
-inline fun <reified T : Any> mockOf(impl: (T) -> Unit): T {
-    return mockk<T>().apply(impl)
-}
+inline fun <reified T : Any> mockOf(impl: (T) -> Unit): T = mockk<T>().apply(impl)

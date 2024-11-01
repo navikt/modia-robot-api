@@ -29,7 +29,9 @@ interface Consumers {
     val sfClient: SFClient
 }
 
-class ConsumersImpl(env: Env) : Consumers {
+class ConsumersImpl(
+    env: Env,
+) : Consumers {
     override val oboTokenClient: OnBehalfOfTokenClient =
         AzureAdTokenClientBuilder
             .builder()
