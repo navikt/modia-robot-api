@@ -27,8 +27,8 @@ class SafClient(
     suspend fun hentBrukersSaker(
         fnr: String,
         token: String,
-    ): GraphQLClientResponse<HentBrukerssaker.Result> {
-        return externalServiceCall {
+    ): GraphQLClientResponse<HentBrukerssaker.Result> =
+        externalServiceCall {
             graphqlClient.execute(
                 request =
                     HentBrukerssaker(
@@ -46,5 +46,4 @@ class SafClient(
                 },
             )
         }
-    }
 }

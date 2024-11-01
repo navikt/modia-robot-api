@@ -48,19 +48,21 @@ class DigdirClient(
         token: String,
     ): KrrData =
         externalServiceCall {
-            client.get("$digdirKrrProxyUrl/rest/v1/person") {
-                headers {
-                    append("Nav-Personident", fnr)
-                    append("Nav-Call-Id", getCallId())
-                }
-                header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
-            }.body()
+            client
+                .get("$digdirKrrProxyUrl/rest/v1/person") {
+                    headers {
+                        append("Nav-Personident", fnr)
+                        append("Nav-Call-Id", getCallId())
+                    }
+                    header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+                }.body()
         }
 
     suspend fun ping() =
         externalServiceCall {
-            client.get("$digdirKrrProxyUrl/rest/ping") {
-                header("Authorization", "Bearer ${tokenclient.createMachineToMachineToken()}")
-            }.status
+            client
+                .get("$digdirKrrProxyUrl/rest/ping") {
+                    header("Authorization", "Bearer ${tokenclient.createMachineToMachineToken()}")
+                }.status
         }
 }

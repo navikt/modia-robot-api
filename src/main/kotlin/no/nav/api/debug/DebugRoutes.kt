@@ -69,7 +69,7 @@ private object Api {
                                 namespace = "teamname",
                                 application = "app-api",
                             ),
-                        )
+                        ),
                     ),
                 )
             }

@@ -28,9 +28,7 @@ fun DownstreamApi.Companion.parse(value: String): DownstreamApi {
     return DownstreamApi(cluster = cluster, namespace = namespace, application = application)
 }
 
-fun MachineToMachineTokenClient.createMachineToMachineToken(api: DownstreamApi): String {
-    return this.createMachineToMachineToken(api.tokenscope())
-}
+fun MachineToMachineTokenClient.createMachineToMachineToken(api: DownstreamApi): String = this.createMachineToMachineToken(api.tokenscope())
 
 interface BoundedMachineToMachineTokenClient {
     fun createMachineToMachineToken(): String

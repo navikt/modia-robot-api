@@ -9,10 +9,9 @@ data class FnrRequest(
     val fnr: String,
 )
 
-suspend fun ApplicationCall.deserializeFnr(): String? {
-    return try {
+suspend fun ApplicationCall.deserializeFnr(): String? =
+    try {
         this.receive<FnrRequest>().fnr
     } catch (e: ContentTransformationException) {
         null
     }
-}

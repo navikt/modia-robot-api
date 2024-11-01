@@ -20,7 +20,9 @@ interface Services {
     val utbetalingerService: UtbetalingerService
 }
 
-class ServicesImpl(consumers: Consumers) : Services {
+class ServicesImpl(
+    consumers: Consumers,
+) : Services {
     override val oppfolgingService =
         OppfolgingService(
             consumers.oppfolgingClient,

@@ -30,10 +30,6 @@ fun LocalDateTime.plus(duration: Duration): LocalDateTime {
     return instant.plus(duration).toLocalDateTime(timeZone)
 }
 
-fun LocalDate.toJodaLocalDate(): JodaLocalDate {
-    return JodaLocalDate(this.year, this.monthNumber, this.dayOfMonth)
-}
+fun LocalDate.toJodaLocalDate(): JodaLocalDate = JodaLocalDate(this.year, this.monthNumber, this.dayOfMonth)
 
-fun DateTime.toKotlinLocalDate(): LocalDate {
-    return LocalDate(this.year, this.monthOfYear, this.dayOfMonth)
-}
+fun DateTime.toKotlinLocalDate(): LocalDate = LocalDate(this.year, this.monthOfYear, this.dayOfMonth)

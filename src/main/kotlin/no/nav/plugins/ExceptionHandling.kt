@@ -7,7 +7,10 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import kotlinx.serialization.Serializable
 
-class WebStatusException(message: String, val status: HttpStatusCode) : Exception(message)
+class WebStatusException(
+    message: String,
+    val status: HttpStatusCode,
+) : Exception(message)
 
 fun Application.configureExceptionHandling() {
     install(StatusPages) {
@@ -39,13 +42,12 @@ fun Application.configureExceptionHandling() {
     }
 }
 
-private fun AuthenticationFailedCause.prettyPrint(): String {
-    return when (this) {
+private fun AuthenticationFailedCause.prettyPrint(): String =
+    when (this) {
         AuthenticationFailedCause.NoCredentials -> "No credentials"
         AuthenticationFailedCause.InvalidCredentials -> "Invalid credentials"
         is AuthenticationFailedCause.Error -> "Error with credentials: ${this.message}"
     }
-}
 
 @Serializable
 internal data class HttpErrorResponse(

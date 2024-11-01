@@ -13,10 +13,14 @@ class OppfolgingClient(
     private val oboTokenProvider: BoundedOnBehalfOfTokenClient,
 ) {
     @Serializable
-    class Status(val erUnderOppfolging: Boolean?)
+    class Status(
+        val erUnderOppfolging: Boolean?,
+    )
 
     @Serializable
-    class VeilederIdent(val veilederIdent: String?)
+    class VeilederIdent(
+        val veilederIdent: String?,
+    )
 
     private val client =
         HttpClient(OkHttp) {
@@ -44,9 +48,10 @@ class OppfolgingClient(
         token: String,
     ): Status =
         externalServiceCall {
-            client.get("$oppfolgingUrl/v2/oppfolging?fnr=$fnr") {
-                header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
-            }.body()
+            client
+                .get("$oppfolgingUrl/v2/oppfolging?fnr=$fnr") {
+                    header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+                }.body()
         }
 
     suspend fun hentOppfolgingVeileder(

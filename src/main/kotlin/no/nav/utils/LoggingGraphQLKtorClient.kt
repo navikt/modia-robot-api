@@ -18,7 +18,8 @@ class LoggingGraphQLKtorClient(
     httpClient: HttpClient,
 ) : GraphQLKtorClient(url, httpClient) {
     val selftestReporter =
-        SelftestGenerator.Reporter(name, critical)
+        SelftestGenerator
+            .Reporter(name, critical)
             // Report OK to get application ready (/isReady)
             .also { it.reportOk() }
 

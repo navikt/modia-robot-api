@@ -18,7 +18,10 @@ fun Application.configureMonitoring() {
     install(CallLogging) {
         level = Level.INFO
         filter { call ->
-            call.request.path().contains("/internal/").not()
+            call.request
+                .path()
+                .contains("/internal/")
+                .not()
         }
         callIdMdc("call-id")
         format { call ->

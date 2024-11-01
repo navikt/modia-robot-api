@@ -43,14 +43,15 @@ class KontonummerRegister(
         token: String,
     ): Kontonummer =
         externalServiceCall {
-            client.post("$kontonummerRegisterUrl/rest/v1/hent-aktiv-konto") {
-                headers {
-                    append("Nav-Ident", ident)
-                    append("Nav-Call-Id", getCallId())
-                }
-                header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
-                contentType(ContentType.Application.Json)
-                setBody(HentAktivKontoDTO(fnr))
-            }.body()
+            client
+                .post("$kontonummerRegisterUrl/rest/v1/hent-aktiv-konto") {
+                    headers {
+                        append("Nav-Ident", ident)
+                        append("Nav-Call-Id", getCallId())
+                    }
+                    header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+                    contentType(ContentType.Application.Json)
+                    setBody(HentAktivKontoDTO(fnr))
+                }.body()
         }
 }

@@ -40,7 +40,8 @@ class OppfolgingService(
     ): Veileder? =
         externalServiceCall {
             val veileder = oppfolgingClient.hentOppfolgingVeileder(fnr, token)
-            veileder?.veilederIdent
+            veileder
+                ?.veilederIdent
                 ?.let { nom.finnNavn(NavIdent(it)) }
                 ?.let {
                     Veileder(

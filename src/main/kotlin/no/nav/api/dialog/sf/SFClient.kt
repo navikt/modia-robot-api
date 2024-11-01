@@ -28,7 +28,9 @@ class SFClient(
         }
 
     @Serializable
-    data class HenvendelseDTO(val kjedeId: String)
+    data class HenvendelseDTO(
+        val kjedeId: String,
+    )
 
     suspend fun sendSporsmal(
         request: SfMeldingRequest,
@@ -36,14 +38,15 @@ class SFClient(
         token: String,
     ): HenvendelseDTO =
         externalServiceCall {
-            client.post("$sfUrl/henvendelse/ny/melding") {
-                headers {
-                    append("Nav-Ident", ident)
-                }
-                header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
-                contentType(ContentType.Application.Json)
-                setBody(request)
-            }.body()
+            client
+                .post("$sfUrl/henvendelse/ny/melding") {
+                    headers {
+                        append("Nav-Ident", ident)
+                    }
+                    header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+                    contentType(ContentType.Application.Json)
+                    setBody(request)
+                }.body()
         }
 
     suspend fun sendInfomelding(
@@ -52,14 +55,15 @@ class SFClient(
         token: String,
     ): HenvendelseDTO =
         externalServiceCall {
-            client.post("$sfUrl/henvendelse/ny/melding") {
-                headers {
-                    append("Nav-Ident", ident)
-                }
-                header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
-                contentType(ContentType.Application.Json)
-                setBody(request)
-            }.body()
+            client
+                .post("$sfUrl/henvendelse/ny/melding") {
+                    headers {
+                        append("Nav-Ident", ident)
+                    }
+                    header("Authorization", "Bearer ${oboTokenProvider.exchangeOnBehalfOfToken(token)}")
+                    contentType(ContentType.Application.Json)
+                    setBody(request)
+                }.body()
         }
 
     suspend fun journalforMelding(
