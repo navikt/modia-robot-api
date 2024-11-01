@@ -5,16 +5,16 @@ import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 
-val ktor_version = "2.3.12"
+val ktor_version = "3.0.1"
 val kotlin_version = "2.0.21"
 val kotlinx_datetime_version = "0.6.1"
-val kompendium_version = "3.14.4"
+val kompendium_version = "4.0.1"
 val logback_version = "1.5.12"
 val logstash_version = "8.0"
 val prometeus_version = "1.6.3"
 val nav_common_version = "3.2024.10.25_13.44-9db48a0dbe67"
 val tjenestespec_version = "1.2021.02.22-10.45-4201aaea72fb"
-val modia_common_utils_version = "1.2023.07.20-13.43-64707e48b53b"
+val modia_common_utils_version = "1.2024.10.30-08.17-f565fe211cd4"
 val junit_version = "5.11.3"
 val graphql_kotlin_version = "8.2.1"
 
@@ -22,7 +22,7 @@ plugins {
     application
     kotlin("jvm") version "2.0.21"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "8.3.4"
     id("com.expediagroup.graphql") version "8.2.1"
 }
 

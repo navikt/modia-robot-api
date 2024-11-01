@@ -32,7 +32,7 @@ private val specSerializer =
 
 fun Application.configureOpenApi() {
     install(NotarizedApplication()) {
-        spec =
+        spec = {
             OpenApiSpec(
                 info =
                     Info(
@@ -47,9 +47,10 @@ fun Application.configureOpenApi() {
                             ),
                     ),
             )
+        }
 
-        openApiJson = {
-            route("/openapi.json") {
+        specRoute = { spec, routing ->
+            routing.route("/openapi.json") {
                 get {
                     call.respondText(
                         contentType = ContentType.Application.Json,
