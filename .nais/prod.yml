@@ -58,6 +58,9 @@ spec:
         - host: sokos-utbetaldata.prod-fss-pub.nais.io
         - host: sf-henvendelse-api-proxy.prod-fss-pub.nais.io
         - host: sokos-kontoregister-person.intern.nav.no
+      rules:
+        - application: veilarboppfolging
+          namespace: poao
     inbound:
       rules:
         - application: rpa-medlemskap-og-avgift
