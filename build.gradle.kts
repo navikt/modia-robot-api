@@ -14,7 +14,7 @@ val logstash_version = "8.0"
 val prometeus_version = "1.14.1"
 val nav_common_version = "3.2024.11.26_16.35-432a29107830"
 val tjenestespec_version = "1.2021.02.22-10.45-4201aaea72fb"
-val modia_common_utils_version = "1.2024.11.04-08.37-fc48ad30bbd1"
+val modia_common_utils_version = "1.2024.11.28-09.12-c4f9d4c27afb"
 val junit_version = "5.11.3"
 val graphql_kotlin_version = "8.2.1"
 
