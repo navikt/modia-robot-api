@@ -10,6 +10,8 @@ object MockEnv : Env {
     override val kontonummerRegisterScope = DownstreamApi.parse("::")
     override val oppfolgingUrl: String = ""
     override val oppfolgingScope: DownstreamApi = DownstreamApi.parse("::")
+    override val syfoUrl: String = ""
+    override val syfoScope: DownstreamApi = DownstreamApi.parse("::")
     override val nomUrl: String = ""
     override val nomScope: DownstreamApi = DownstreamApi.parse("::")
     override val pdlUrl: String = ""

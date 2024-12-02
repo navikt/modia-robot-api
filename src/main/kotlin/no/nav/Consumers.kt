@@ -8,6 +8,7 @@ import no.nav.api.oppfolging.Nom
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
 import no.nav.api.skrivestotte.SkrivestotteClient
+import no.nav.api.syfo.SyfoClient
 import no.nav.api.utbetalinger.UtbetalingerClient
 import no.nav.common.client.nom.NomClient
 import no.nav.common.token_client.builder.AzureAdTokenClientBuilder
@@ -19,6 +20,7 @@ interface Consumers {
     val tokenclient: MachineToMachineTokenClient
     val oboTokenClient: OnBehalfOfTokenClient
     val oppfolgingClient: OppfolgingClient
+    val syfoClient: SyfoClient
     val nom: NomClient
     val skrivestotteClient: SkrivestotteClient
     val pdlClient: PdlClient
@@ -45,6 +47,7 @@ class ConsumersImpl(
             .buildMachineToMachineTokenClient()
 
     override val oppfolgingClient: OppfolgingClient = OppfolgingClient(env.oppfolgingUrl, oboTokenClient.bindTo(env.oppfolgingScope))
+    override val syfoClient: SyfoClient = SyfoClient(env.syfoUrl, oboTokenClient.bindTo(env.syfoScope))
     override val nom: NomClient = Nom(env.nomUrl, tokenclient.bindTo(env.nomScope)).client
     override val skrivestotteClient: SkrivestotteClient = SkrivestotteClient(env.skrivestotteUrl)
     override val pdlClient: PdlClient = PdlClient(env.pdlUrl, oboTokenClient.bindTo(env.pdlScope))

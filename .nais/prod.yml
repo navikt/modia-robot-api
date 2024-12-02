@@ -61,6 +61,8 @@ spec:
       rules:
         - application: veilarboppfolging
           namespace: poao
+        - application: syfooversiktsrv
+          namespace: teamsykefravr
     inbound:
       rules:
         - application: rpa-medlemskap-og-avgift
@@ -85,6 +87,10 @@ spec:
       value: "http://veilarboppfolging.poao/veilarboppfolging/api"
     - name: OPPFOLGING_SCOPE
       value: "prod-gcp:poao:veilarboppfolging"
+    - name: SYFO_URL
+      value: "http://syfooversiktsrv.teamsykefravr/syfooversiktsrv/api"
+    - name: SYFO_SCOPE
+      value: "prod-gcp:teamsykefravr:syfooversiktsrv"
     - name: NOM_URL
       value: "https://nom-api.intern.nav.no"
     - name: NOM_SCOPE

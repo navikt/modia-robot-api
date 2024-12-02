@@ -11,6 +11,7 @@ import no.nav.api.kontonummer.configureKontonummerRegisterRoutes
 import no.nav.api.oppfolging.configureOppfolgingRoutes
 import no.nav.api.pdl.configurePdlRoutes
 import no.nav.api.skrivestotte.configureSkrivestotteRoutes
+import no.nav.api.syfo.configureSyfoRoutes
 import no.nav.api.utbetalinger.configureUtbetalingerRoutes
 import no.nav.plugins.*
 
@@ -39,6 +40,7 @@ fun startApplication(
                     configureDigdirRoutes(services.digdirService)
                     configureSkrivestotteRoutes(services.skrivestotteService)
                     configureUtbetalingerRoutes(services.utbetalingerService)
+                    configureSyfoRoutes(services.syfoService)
                 }
             }
         }
