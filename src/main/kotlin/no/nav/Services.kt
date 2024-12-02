@@ -7,10 +7,12 @@ import no.nav.api.digdir.DigdirService
 import no.nav.api.oppfolging.OppfolgingService
 import no.nav.api.pdl.PdlService
 import no.nav.api.skrivestotte.SkrivestotteService
+import no.nav.api.syfo.SyfoService
 import no.nav.api.utbetalinger.UtbetalingerService
 
 interface Services {
     val oppfolgingService: OppfolgingService
+    val syfoService: SyfoService
     val skrivestotteService: SkrivestotteService
     val digdirService: DigdirService
     val pdlService: PdlService
@@ -28,6 +30,7 @@ class ServicesImpl(
             consumers.oppfolgingClient,
             consumers.nom,
         )
+    override val syfoService = SyfoService(consumers.syfoClient, consumers.nom)
     override val skrivestotteService = SkrivestotteService(consumers.skrivestotteClient)
     override val digdirService = DigdirService(consumers.digdirClient)
     override val pdlService = PdlService(consumers.pdlClient)

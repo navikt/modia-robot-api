@@ -26,6 +26,7 @@ import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
 import no.nav.api.skrivestotte.SkrivestotteClient
 import no.nav.api.skrivestotte.SkrivestotteClient.*
+import no.nav.api.syfo.SyfoClient
 import no.nav.api.utbetalinger.UtbetalingerClient
 import no.nav.api.utbetalinger.utbetalinger
 import no.nav.common.client.nom.NomClient
@@ -41,6 +42,7 @@ object MockConsumers : Consumers {
     override val tokenclient = tokenClientMock
     override val oboTokenClient = oboTokenClientMock
     override val oppfolgingClient = oppfolgingClientMock
+    override val syfoClient = syfoClientMock
     override val kontonummerRegister = kontonummerRegisterMock
     override val nom: NomClient = nomClientMock
     override val skrivestotteClient = skrivestotteClientMock
@@ -70,6 +72,16 @@ private val oppfolgingClientMock =
         coEvery { client.hentOppfolgingVeileder(any(), any()) } returns
             OppfolgingClient.VeilederIdent(
                 veilederIdent = "Z123456",
+            )
+    }
+
+private val syfoClientMock =
+    mockOf<SyfoClient> { client ->
+        coEvery { client.hentSyfoVeileder(any(), any()) } returns
+            SyfoClient.SyfoTildeling(
+                personIdent = SyfoClient.PersonIdentValue("10108000398"),
+                tildeltVeilederIdent = "Z123456",
+                tildeltenhet = "4403",
             )
     }
 

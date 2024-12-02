@@ -12,6 +12,8 @@ interface Env {
     val jwksUrl: String
     val oppfolgingUrl: String
     val oppfolgingScope: DownstreamApi
+    val syfoUrl: String
+    val syfoScope: DownstreamApi
     val nomUrl: String
     val nomScope: DownstreamApi
     val pdlUrl: String
@@ -34,6 +36,8 @@ class EnvImpl : Env {
     override val jwksUrl: String = getRequiredConfig("AZURE_OPENID_CONFIG_JWKS_URI")
     override val oppfolgingUrl: String = getRequiredConfig("OPPFOLGING_URL")
     override val oppfolgingScope: DownstreamApi = getRequiredConfig("OPPFOLGING_SCOPE").toDownstreamApi()
+    override val syfoUrl: String = getRequiredConfig("SYFO_URL")
+    override val syfoScope: DownstreamApi = getRequiredConfig("SYFO_SCOPE").toDownstreamApi()
     override val nomUrl: String = getRequiredConfig("NOM_URL")
     override val nomScope: DownstreamApi = getRequiredConfig("NOM_SCOPE").toDownstreamApi()
     override val pdlUrl: String = getRequiredConfig("PDL_URL")
