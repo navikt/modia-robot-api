@@ -14,7 +14,7 @@ class OppfolgingClient(
 ) {
     @Serializable
     class Status(
-        val erUnderOppfolging: Boolean?,
+        val erUnderOppfolging: Boolean? = null,
     )
 
     @Serializable
