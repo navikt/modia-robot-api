@@ -19,9 +19,9 @@ class SyfoClient(
 
     @Serializable
     class SyfoTildeling(
-        val personIdent: PersonIdentValue,
-        val tildeltVeilederIdent: String?,
-        val tildeltenhet: String?,
+        val personident: PersonIdentValue,
+        val tildeltVeilederident: String? = null,
+        val tildeltEnhet: String? = null,
     )
 
     private val client =

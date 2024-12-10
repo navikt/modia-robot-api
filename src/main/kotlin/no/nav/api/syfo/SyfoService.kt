@@ -23,7 +23,7 @@ class SyfoService(
         externalServiceCall {
             val veileder = syfoClient.hentSyfoVeileder(fnr, token)
             veileder
-                ?.tildeltVeilederIdent
+                ?.tildeltVeilederident
                 ?.let { nom.finnNavn(NavIdent(it)) }
                 ?.let {
                     Veileder(
