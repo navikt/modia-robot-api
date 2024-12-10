@@ -88,7 +88,7 @@ spec:
     - name: OPPFOLGING_SCOPE
       value: "dev-gcp:poao:veilarboppfolging"
     - name: SYFO_URL
-      value: "http://syfooversiktsrv.teamsykefravr/syfooversiktsrv/api"
+      value: "http://syfooversiktsrv.teamsykefravr/api"
     - name: SYFO_SCOPE
       value: "dev-gcp:teamsykefravr:syfooversiktsrv"
     - name: NOM_URL
