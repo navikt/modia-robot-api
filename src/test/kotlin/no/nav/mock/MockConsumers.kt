@@ -79,9 +79,9 @@ private val syfoClientMock =
     mockOf<SyfoClient> { client ->
         coEvery { client.hentSyfoVeileder(any(), any()) } returns
             SyfoClient.SyfoTildeling(
-                personIdent = SyfoClient.PersonIdentValue("10108000398"),
-                tildeltVeilederIdent = "Z123456",
-                tildeltenhet = "4403",
+                personident = SyfoClient.PersonIdentValue("10108000398"),
+                tildeltVeilederident = "Z123456",
+                tildeltEnhet = "4403",
             )
     }
 
