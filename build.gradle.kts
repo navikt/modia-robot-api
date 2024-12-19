@@ -5,7 +5,7 @@ import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 
-val ktor_version = "3.0.2"
+val ktor_version = "3.0.3"
 val kotlin_version = "2.0.21"
 val kotlinx_datetime_version = "0.6.1"
 val kompendium_version = "4.0.3"
