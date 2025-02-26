@@ -79,7 +79,7 @@ dependencies {
     implementation("no.nav.common:token-client:$nav_common_version")
     implementation("no.nav.common:client:$nav_common_version")
     implementation("no.nav.common:log:$nav_common_version")
-    implementation("org.slf4j:jul-to-slf4j:2.0.16")
+    implementation("org.slf4j:jul-to-slf4j:2.0.17")
     implementation("com.sun.xml.ws:jaxws-ri:4.0.3")
     implementation("io.micrometer:micrometer-registry-prometheus:$prometeus_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
