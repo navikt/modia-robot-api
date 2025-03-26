@@ -6,6 +6,7 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
+import no.nav.plugins.WebStatusException
 import no.nav.utils.*
 
 class SyfoClient(
@@ -58,6 +59,7 @@ class SyfoClient(
             when (response.status) {
                 HttpStatusCode.NoContent -> null
                 HttpStatusCode.OK -> response.body()
+                HttpStatusCode.Forbidden -> throw WebStatusException("Ikke tilgang til brukers syfoveileder", HttpStatusCode.Forbidden)
                 else -> error("Ukjent status code: ${response.status}")
             }
         }
