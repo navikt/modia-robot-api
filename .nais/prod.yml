@@ -83,9 +83,12 @@ spec:
         - application: arbeid-og-ytelser
           cluster: prod-fss
           namespace: team-rpa
+        - application: rpa-nos-robot
+          cluster: prod-fss
+          namespace: team-rpa
   env:
     - name: IDENT_ALLOW_LIST
-      value: "R156347,R158611,R154727,R156418,R158345,R158346,R160569,R165950,R165951,R165952,R150818,R150819,R155645,R162552,D159483,U143410,R172987,R150819,R150818,R162552,R155645"
+      value: "R156347,R158611,R154727,R156418,R158345,R158346,R160569,R165950,R165951,R165952,R150818,R150819,R155645,R162552,D159483,U143410,R172987,R150819,R150818,R162552,R155645,R150819,R150818,R162552,R155645"
     - name: OPPFOLGING_URL
       value: "http://veilarboppfolging.poao/veilarboppfolging/api"
     - name: OPPFOLGING_SCOPE
