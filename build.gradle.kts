@@ -76,6 +76,7 @@ dependencies {
     implementation("no.nav.tjenestespesifikasjoner:utbetaling-tjenestespesifikasjon:$tjenestespec_version")
     implementation("com.github.navikt.modia-common-utils:kotlin-utils:$modia_common_utils_version")
     implementation("com.github.navikt.modia-common-utils:ktor-utils:$modia_common_utils_version")
+    implementation("com.github.navikt.modia-common-utils:logging:$modia_common_utils_version")
     implementation("no.nav.common:token-client:$nav_common_version")
     implementation("no.nav.common:client:$nav_common_version")
     implementation("no.nav.common:log:$nav_common_version")

@@ -25,8 +25,6 @@ spec:
     autoInstrumentation:
       enabled: true
       runtime: java
-  secureLogs:
-    enabled: true
   resources:
     requests:
       cpu: 50m
@@ -63,6 +61,8 @@ spec:
           namespace: poao
         - application: syfooversiktsrv
           namespace: teamsykefravr
+        - application: logging
+          namespace: nais-system
     inbound:
       rules:
         - application: rpa-medlemskap-og-avgift
