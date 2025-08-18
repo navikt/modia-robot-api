@@ -7,23 +7,23 @@ object TjenestekallLogger {
     fun info(
         header: String,
         fields: Map<String, Any?>,
-    ) = tjenestekallLogg.info(Logging.TEAM_LOGS_MARKER,format(header, fields))
+    ) = tjenestekallLogg.info(Logging.TEAM_LOGS_MARKER, format(header, fields))
 
     fun warn(
         header: String,
         fields: Map<String, Any?>,
-    ) = tjenestekallLogg.warn(Logging.TEAM_LOGS_MARKER,format(header, fields))
+    ) = tjenestekallLogg.warn(Logging.TEAM_LOGS_MARKER, format(header, fields))
 
     fun error(
         header: String,
         fields: Map<String, Any?>,
-    ) = tjenestekallLogg.error(Logging.TEAM_LOGS_MARKER,format(header, fields))
+    ) = tjenestekallLogg.error(Logging.TEAM_LOGS_MARKER, format(header, fields))
 
     fun error(
         header: String,
         fields: Map<String, Any?>,
         throwable: Throwable,
-    ) = tjenestekallLogg.error(Logging.TEAM_LOGS_MARKER,format(header, fields), throwable)
+    ) = tjenestekallLogg.error(Logging.TEAM_LOGS_MARKER, format(header, fields), throwable)
 
     fun format(
         header: String,
