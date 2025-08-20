@@ -1,33 +1,29 @@
 package no.nav.utils
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import no.nav.personoversikt.common.logging.Logging
 
 object TjenestekallLogger {
-    private val tjenestekallLogg = LoggerFactory.getLogger("SecureLog")
+    private val tjenestekallLogg = Logging.teamLog
 
     fun info(
         header: String,
         fields: Map<String, Any?>,
-    ) = tjenestekallLogg.info(format(header, fields))
+    ) = tjenestekallLogg.info(Logging.TEAM_LOGS_MARKER, format(header, fields))
 
     fun warn(
         header: String,
         fields: Map<String, Any?>,
-    ) = tjenestekallLogg.warn(format(header, fields))
+    ) = tjenestekallLogg.warn(Logging.TEAM_LOGS_MARKER, format(header, fields))
 
     fun error(
         header: String,
         fields: Map<String, Any?>,
-    ) = tjenestekallLogg.error(format(header, fields))
+    ) = tjenestekallLogg.error(Logging.TEAM_LOGS_MARKER, format(header, fields))
 
     fun error(
         header: String,
         fields: Map<String, Any?>,
         throwable: Throwable,
-    ) = tjenestekallLogg.error(format(header, fields), throwable)
-
-    val logger: Logger = tjenestekallLogg
+    ) = tjenestekallLogg.error(Logging.TEAM_LOGS_MARKER, format(header, fields), throwable)
 
     fun format(
         header: String,

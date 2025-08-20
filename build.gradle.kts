@@ -14,7 +14,7 @@ val logstash_version = "8.1"
 val prometeus_version = "1.15.3"
 val nav_common_version = "3.2025.06.23_14.50-3af3985d8555"
 val tjenestespec_version = "1.2021.02.22-10.45-4201aaea72fb"
-val modia_common_utils_version = "1.2025.07.23-07.40-7ea9c01d168f"
+val modia_common_utils_version = "1.2025.08.18-10.50-4e02c5797b17"
 val junit_version = "5.13.4"
 val graphql_kotlin_version = "8.8.1"
 
@@ -76,6 +76,7 @@ dependencies {
     implementation("no.nav.tjenestespesifikasjoner:utbetaling-tjenestespesifikasjon:$tjenestespec_version")
     implementation("com.github.navikt.modia-common-utils:kotlin-utils:$modia_common_utils_version")
     implementation("com.github.navikt.modia-common-utils:ktor-utils:$modia_common_utils_version")
+    implementation("com.github.navikt.modia-common-utils:logging:$modia_common_utils_version")
     implementation("no.nav.common:token-client:$nav_common_version")
     implementation("no.nav.common:client:$nav_common_version")
     implementation("no.nav.common:log:$nav_common_version")
