@@ -47,6 +47,11 @@ fragment postboksadresse on Postboksadresse {
 
 query ($ident: ID!) {
     hentPerson(ident: $ident) {
+        navn {
+            fornavn
+            mellomnavn
+            etternavn
+        }
         foedselsdato {
             foedselsdato
         }

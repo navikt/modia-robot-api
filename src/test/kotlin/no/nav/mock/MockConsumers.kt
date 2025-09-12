@@ -10,6 +10,9 @@ import no.nav.api.dialog.saf.SafClient
 import no.nav.api.dialog.sf.SFClient
 import no.nav.api.digdir.DigdirClient
 import no.nav.api.digdir.DigdirClient.*
+import no.nav.api.generated.kodeverk.models.Beskrivelse
+import no.nav.api.generated.kodeverk.models.Betydning
+import no.nav.api.generated.kodeverk.models.GetKodeverkKoderBetydningerResponse
 import no.nav.api.generated.pdl.HentAktorid
 import no.nav.api.generated.pdl.HentNavn
 import no.nav.api.generated.pdl.HentPersonalia
@@ -21,6 +24,8 @@ import no.nav.api.generated.saf.HentBrukerssaker
 import no.nav.api.generated.saf.enums.Sakstype
 import no.nav.api.generated.saf.enums.Tema
 import no.nav.api.generated.saf.hentbrukerssaker.Sak
+import no.nav.api.kodeverk.KodeverkClient
+import no.nav.api.kodeverk.KodeverkNavn
 import no.nav.api.kontonummer.KontonummerRegister
 import no.nav.api.oppfolging.OppfolgingClient
 import no.nav.api.pdl.PdlClient
@@ -37,6 +42,7 @@ import no.nav.common.types.identer.NavIdent
 import no.nav.utils.minus
 import no.nav.utils.now
 import java.util.*
+import no.nav.api.generated.pdl.hentpersonalia.Navn as PdlNavn
 
 object MockConsumers : Consumers {
     override val tokenclient = tokenClientMock
@@ -51,6 +57,7 @@ object MockConsumers : Consumers {
     override val pdlClient = pdlClientMock
     override val safClient = safClientMock
     override val sfClient = sfClientMock
+    override val kodeverkClient = kodeverkClientMock
 }
 
 private val tokenClientMock =
@@ -99,6 +106,53 @@ private val nomClientMock =
                 .setFornavn("Fornavn")
                 .setEtternavn("Etternavn")
                 .setVisningsNavn("Fornavn Etternavn")
+    }
+
+private val kodeverkClientMock =
+    mockOf<KodeverkClient> { client ->
+        coEvery { client.hentKodeverkRaw(KodeverkNavn.POSTNUMMER.kodeverkString) } returns
+            GetKodeverkKoderBetydningerResponse(
+                betydninger =
+                    mapOf(
+                        "0660" to
+                            listOf(
+                                Betydning(
+                                    beskrivelser =
+                                        mapOf(
+                                            "nb" to
+                                                Beskrivelse(
+                                                    term = "Oslo",
+                                                    tekst = "Oslo er hovedstaden i Norge",
+                                                ),
+                                        ),
+                                    gyldigFra = LocalDate.now(),
+                                    gyldigTil = LocalDate.now(),
+                                ),
+                            ),
+                    ),
+            )
+
+        coEvery { client.hentKodeverkRaw(KodeverkNavn.LAND.kodeverkString) } returns
+            GetKodeverkKoderBetydningerResponse(
+                betydninger =
+                    mapOf(
+                        "NO" to
+                            listOf(
+                                Betydning(
+                                    beskrivelser =
+                                        mapOf(
+                                            "nb" to
+                                                Beskrivelse(
+                                                    term = "Norge",
+                                                    tekst = "Norge er et land",
+                                                ),
+                                        ),
+                                    gyldigFra = LocalDate.now(),
+                                    gyldigTil = LocalDate.now(),
+                                ),
+                            ),
+                    ),
+            )
     }
 
 private val skrivestotteClientMock =
@@ -165,6 +219,7 @@ private val pdlClientMock =
                     HentPersonalia.Result(
                         hentPerson =
                             Person(
+                                navn = listOf(PdlNavn(fornavn = "Test", etternavn = "Testesen")),
                                 foedselsdato =
                                     listOf(
                                         Foedselsdato(

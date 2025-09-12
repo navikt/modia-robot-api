@@ -24,6 +24,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "2.2.10"
     id("com.gradleup.shadow") version "8.3.8"
     id("com.expediagroup.graphql") version "8.8.1"
+    id("org.openapi.generator") version "7.15.0"
 }
 
 group = "no.nav"
@@ -161,8 +162,40 @@ val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
     dependsOn("downloadPDLSchema")
 }
 
+val generatedSourcesPath = "$buildDir/generated/source/openapi"
+
+openApiGenerate {
+    inputSpec.set("${project.projectDir}/src/main/resources/kodeverk/openapi.json")
+    outputDir.set(generatedSourcesPath)
+    generatorName.set("kotlin")
+    packageName.set("no.nav.api.generated.kodeverk")
+    configOptions.set(
+        mapOf(
+            "library" to "jvm-ktor",
+            "serializationLibrary" to "kotlinx_serialization",
+            "dateLibrary" to "kotlinx-datetime",
+        ),
+    )
+}
+
 tasks {
+    register("generateApi") {
+        group = "build"
+        description = "Generate API"
+        dependsOn("openApiGenerate")
+    }
     processResources {
-        dependsOn("generatePDLClient")
+        dependsOn("generateApi", "generatePDLClient")
+    }
+    compileKotlin {
+        dependsOn("generateApi")
+    }
+}
+
+sourceSets {
+    main {
+        kotlin {
+            srcDir("$generatedSourcesPath/src/main/kotlin/")
+        }
     }
 }

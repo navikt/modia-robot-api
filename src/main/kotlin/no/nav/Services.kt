@@ -4,6 +4,7 @@ import no.nav.api.dialog.DialogService
 import no.nav.api.dialog.saf.SafService
 import no.nav.api.dialog.sf.SFService
 import no.nav.api.digdir.DigdirService
+import no.nav.api.kodeverk.KodeverkService
 import no.nav.api.oppfolging.OppfolgingService
 import no.nav.api.pdl.PdlService
 import no.nav.api.skrivestotte.SkrivestotteService
@@ -20,6 +21,7 @@ interface Services {
     val sfService: SFService
     val dialogService: DialogService
     val utbetalingerService: UtbetalingerService
+    val kodeverkService: KodeverkService
 }
 
 class ServicesImpl(
@@ -33,7 +35,8 @@ class ServicesImpl(
     override val syfoService = SyfoService(consumers.syfoClient, consumers.nom)
     override val skrivestotteService = SkrivestotteService(consumers.skrivestotteClient)
     override val digdirService = DigdirService(consumers.digdirClient)
-    override val pdlService = PdlService(consumers.pdlClient)
+    override val kodeverkService = KodeverkService(consumers.kodeverkClient)
+    override val pdlService = PdlService(consumers.pdlClient, kodeverkService)
     override val safService = SafService(consumers.safClient)
     override val sfService = SFService(consumers.sfClient)
     override val dialogService = DialogService(safService, sfService, pdlService)

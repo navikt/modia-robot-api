@@ -2,11 +2,15 @@ package no.nav.api.pdl
 
 import kotlinx.datetime.*
 import no.nav.api.generated.pdl.hentpersonalia.*
+import no.nav.api.kodeverk.KodeverkNavn
+import no.nav.api.kodeverk.KodeverkService
 import no.nav.utils.TjenestekallLogger
 import no.nav.utils.now
+import no.nav.api.generated.pdl.hentpersonalia.Navn as PdlNavn
 
 class PdlService(
     private val client: PdlClient,
+    private val kodeverk: KodeverkService,
 ) {
     data class Navn(
         val fornavn: String,
@@ -26,6 +30,7 @@ class PdlService(
     ): PdlPersonalia {
         val person = client.hentPersonalia(fnr, token).data?.hentPerson
         return PdlPersonalia(
+            navn = person?.let(::hentNavnPersonalia),
             alder = person?.let(::hentAlder),
             bostedsAdresse = person?.let(::hentBostedsAdresse),
             kontaktAdresse = person?.let(::hentKontaktAdresse),
@@ -71,6 +76,16 @@ class PdlService(
                 ?.navn
                 ?.firstOrNull() ?: return Navn.UKJENT
         return Navn(
+            fornavn = navn.fornavn,
+            mellomnavn = navn.mellomnavn,
+            etternavn = navn.etternavn,
+        )
+    }
+
+    fun hentNavnPersonalia(person: Person?): PdlNavn {
+        val navn =
+            person?.navn?.firstOrNull() ?: PdlNavn("", "", "")
+        return PdlNavn(
             fornavn = navn.fornavn,
             mellomnavn = navn.mellomnavn,
             etternavn = navn.etternavn,
@@ -173,10 +188,13 @@ class PdlService(
             }
 
     private fun lagAdresseFraVegadresse(adresse: Vegadresse) =
-        // TODO hente postnummer kodeverk
         PdlAdresse(
             linje1 = listOf(adresse.adressenavn, adresse.husnummer, adresse.husbokstav, adresse.bruksenhetsnummer),
-            linje2 = listOf(adresse.postnummer),
+            linje2 =
+                listOf(
+                    adresse.postnummer,
+                    adresse.postnummer?.let { kodeverk.hentKodeBeskrivelse(KodeverkNavn.POSTNUMMER, it, it) },
+                ),
         )
 
     private fun lagAdresseFraMatrikkeladresse(adresse: Matrikkeladresse) =
@@ -186,15 +204,19 @@ class PdlService(
         )
 
     private fun lagAdresseFraUtenlandskadresse(adresse: UtenlandskAdresse) =
-        // TODO hente land-kodeverk
         PdlAdresse(
             linje1 = listOf(adresse.postboksNummerNavn, adresse.adressenavnNummer, adresse.bygningEtasjeLeilighet),
             linje2 = listOf(adresse.postkode, adresse.bySted, adresse.regionDistriktOmraade),
-            linje3 = listOf(adresse.landkode),
+            linje3 =
+                listOf(
+                    adresse.landkode,
+                    adresse.landkode.let {
+                        kodeverk.hentKodeBeskrivelse(KodeverkNavn.LAND, it, it)
+                    },
+                ),
         )
 
     private fun lagAdresseFraUtenlandskadresseFrittFormat(adresse: UtenlandskAdresseIFrittFormat) =
-        // TODO hente land-kodeverk
         PdlAdresse(
             linje1 = listOf(adresse.adresselinje1),
             linje2 = listOf(adresse.adresselinje2),
@@ -204,6 +226,9 @@ class PdlService(
                     adresse.postkode,
                     adresse.byEllerStedsnavn,
                     adresse.landkode,
+                    adresse.landkode.let {
+                        kodeverk.hentKodeBeskrivelse(KodeverkNavn.LAND, it, it)
+                    },
                 ),
         )
 
@@ -227,18 +252,23 @@ class PdlService(
         )
 
     private fun lagAdresseFraPostboksadresse(adresse: Postboksadresse) =
-        // TODO hente postnummer kodeverk
         PdlAdresse(
             linje1 = listOf(adresse.postbokseier),
             linje2 = listOf("Postboks", adresse.postboks),
-            linje3 = listOf(adresse.postnummer),
+            linje3 = listOf(adresse.postnummer, adresse.postnummer?.let { kodeverk.hentKodeBeskrivelse(KodeverkNavn.POSTNUMMER, it, it) }),
         )
 
     private fun lagAdresseFraFrittformat(adresse: PostadresseIFrittFormat) =
-        // TODO hente postnummer kodeverk
         PdlAdresse(
             linje1 = listOf(adresse.adresselinje1),
             linje2 = listOf(adresse.adresselinje2),
-            linje3 = listOf(adresse.adresselinje3, adresse.postnummer),
+            linje3 =
+                listOf(
+                    adresse.adresselinje3,
+                    adresse.postnummer,
+                    adresse.postnummer?.let {
+                        kodeverk.hentKodeBeskrivelse(KodeverkNavn.POSTNUMMER, it, it)
+                    },
+                ),
         )
 }
