@@ -26,4 +26,6 @@ object MockEnv : Env {
     override val skrivestotteUrl: String = ""
     override val sfUrl: String = ""
     override val sfScope: DownstreamApi = DownstreamApi.parse("::")
+    override val kodeverkUrl: String = ""
+    override val kodeverkScope: DownstreamApi = DownstreamApi.parse("::")
 }

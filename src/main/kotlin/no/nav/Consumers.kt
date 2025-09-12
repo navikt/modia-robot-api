@@ -3,6 +3,7 @@ package no.nav
 import no.nav.api.dialog.saf.SafClient
 import no.nav.api.dialog.sf.SFClient
 import no.nav.api.digdir.DigdirClient
+import no.nav.api.kodeverk.KodeverkClient
 import no.nav.api.kontonummer.KontonummerRegister
 import no.nav.api.oppfolging.Nom
 import no.nav.api.oppfolging.OppfolgingClient
@@ -29,6 +30,7 @@ interface Consumers {
     val kontonummerRegister: KontonummerRegister
     val utbetalingerClient: UtbetalingerClient
     val sfClient: SFClient
+    val kodeverkClient: KodeverkClient
 }
 
 class ConsumersImpl(
@@ -49,6 +51,7 @@ class ConsumersImpl(
     override val oppfolgingClient: OppfolgingClient = OppfolgingClient(env.oppfolgingUrl, oboTokenClient.bindTo(env.oppfolgingScope))
     override val syfoClient: SyfoClient = SyfoClient(env.syfoUrl, oboTokenClient.bindTo(env.syfoScope))
     override val nom: NomClient = Nom(env.nomUrl, tokenclient.bindTo(env.nomScope)).client
+    override val kodeverkClient: KodeverkClient = KodeverkClient(env.kodeverkUrl, tokenclient.bindTo(env.kodeverkScope))
     override val skrivestotteClient: SkrivestotteClient = SkrivestotteClient(env.skrivestotteUrl)
     override val pdlClient: PdlClient = PdlClient(env.pdlUrl, oboTokenClient.bindTo(env.pdlScope))
     override val safClient: SafClient = SafClient(env.safUrl, oboTokenClient.bindTo(env.safScope))

@@ -63,6 +63,8 @@ spec:
           namespace: teamsykefravr
         - application: logging
           namespace: nais-system
+        - application: kodeverk-api
+          namespace: team-rocket
     inbound:
       rules:
         - application: rpa-medlemskap-og-avgift
