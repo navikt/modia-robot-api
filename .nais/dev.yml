@@ -56,6 +56,7 @@ spec:
         - host: sokos-utbetaldata.dev-fss-pub.nais.io
         - host: sf-henvendelse-api-proxy.dev-fss-pub.nais.io
         - host: sokos-kontoregister-person.intern.dev.nav.no
+        - host: kodeverk-api.nav.no
       rules:
         - application: veilarboppfolging
           namespace: poao
@@ -126,5 +127,5 @@ spec:
       value: "https://sokos-kontoregister-person.intern.dev.nav.no/api/system"
     - name: KONTOREGISTER_SCOPE
       value: "dev-gcp:okonomi:sokos-kontoregister-person"
-    - name: CXF_SECURE_LOG
-      value: "enabled"
+    - name: KODEVERK_URL
+      value: "https://kodeverk-api.nav.no"
