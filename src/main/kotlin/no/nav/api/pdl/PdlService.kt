@@ -6,6 +6,7 @@ import no.nav.api.kodeverk.KodeverkNavn
 import no.nav.api.kodeverk.KodeverkService
 import no.nav.utils.TjenestekallLogger
 import no.nav.utils.now
+import no.nav.api.generated.pdl.hentpersonalia.Navn as PdlNavn
 
 class PdlService(
     private val client: PdlClient,
@@ -29,6 +30,7 @@ class PdlService(
     ): PdlPersonalia {
         val person = client.hentPersonalia(fnr, token).data?.hentPerson
         return PdlPersonalia(
+            navn = person?.let(::hentNavnPersonalia),
             alder = person?.let(::hentAlder),
             bostedsAdresse = person?.let(::hentBostedsAdresse),
             kontaktAdresse = person?.let(::hentKontaktAdresse),
@@ -74,6 +76,16 @@ class PdlService(
                 ?.navn
                 ?.firstOrNull() ?: return Navn.UKJENT
         return Navn(
+            fornavn = navn.fornavn,
+            mellomnavn = navn.mellomnavn,
+            etternavn = navn.etternavn,
+        )
+    }
+
+    fun hentNavnPersonalia(person: Person?): PdlNavn {
+        val navn =
+            person?.navn?.firstOrNull() ?: PdlNavn("", "", "")
+        return PdlNavn(
             fornavn = navn.fornavn,
             mellomnavn = navn.mellomnavn,
             etternavn = navn.etternavn,

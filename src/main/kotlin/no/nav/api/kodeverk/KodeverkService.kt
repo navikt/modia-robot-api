@@ -45,6 +45,7 @@ class KodeverkService(
             }
         }
     }
+
     private fun hentKodeverk(navn: KodeverkNavn): Map<String, String> = (kodeverkCache[navn] ?: emptyKodeverk)
 
     internal fun parseTilKodeverk(respons: GetKodeverkKoderBetydningerResponse): Map<String, String> {
@@ -57,7 +58,6 @@ class KodeverkService(
             }
         return res
     }
-
 
     fun hentKodeBeskrivelse(
         kodeverkNavn: KodeverkNavn,

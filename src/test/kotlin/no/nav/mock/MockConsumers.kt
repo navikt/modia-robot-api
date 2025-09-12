@@ -42,6 +42,7 @@ import no.nav.common.types.identer.NavIdent
 import no.nav.utils.minus
 import no.nav.utils.now
 import java.util.*
+import no.nav.api.generated.pdl.hentpersonalia.Navn as PdlNavn
 
 object MockConsumers : Consumers {
     override val tokenclient = tokenClientMock
@@ -218,6 +219,7 @@ private val pdlClientMock =
                     HentPersonalia.Result(
                         hentPerson =
                             Person(
+                                navn = listOf(PdlNavn(fornavn = "Test", etternavn = "Testesen")),
                                 foedselsdato =
                                     listOf(
                                         Foedselsdato(

@@ -3,11 +3,11 @@ package no.nav.api.pdl
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
+import no.nav.api.generated.pdl.hentpersonalia.Navn
 import no.nav.models.FnrRequest
 import no.nav.models.deserializeFnr
 import no.nav.utils.getJWT
@@ -77,6 +77,7 @@ data class AktorIdResponse(
 
 @Serializable
 data class PdlPersonalia(
+    val navn: Navn? = null,
     val alder: Int? = null,
     val bostedsAdresse: PdlAdresse? = null,
     val kontaktAdresse: PdlAdresse? = null,
