@@ -4,6 +4,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.api.generated.kodeverk.models.GetKodeverkKoderBetydningerResponse
 import no.nav.personoversikt.common.utils.Retry
 import no.nav.personoversikt.common.utils.SelftestGenerator
+import no.nav.utils.TjenestekallLogger
 import kotlin.collections.set
 import kotlin.concurrent.fixedRateTimer
 import kotlin.time.Duration.Companion.hours
@@ -12,8 +13,8 @@ import kotlin.time.Duration.Companion.seconds
 enum class KodeverkNavn(
     val kodeverkString: String,
 ) {
-    LAND("Landkoder"),
     POSTNUMMER("Postnummer"),
+    LAND("Landkoder"),
 }
 
 class KodeverkService(
@@ -65,18 +66,20 @@ class KodeverkService(
         default: String,
     ): String {
         val kodeverk = this.hentKodeverk(kodeverkNavn)
-        val beskrivelse = kodeverk[kodeRef]
-        if (beskrivelse == null) {
-            return default
-        }
+        val beskrivelse = kodeverk[kodeRef] ?: return default
         return beskrivelse
     }
 
     internal fun prepopulerCache() {
         KodeverkNavn.entries.forEach { navn ->
             runBlocking {
-                retry.run {
-                    kodeverkCache[navn] = parseTilKodeverk(kodeverkClient.hentKodeverkRaw(navn.kodeverkString))
+                try {
+                    retry.run {
+                        kodeverkCache[navn] = parseTilKodeverk(kodeverkClient.hentKodeverkRaw(navn.kodeverkString))
+                    }
+                    TjenestekallLogger.info("${navn.kodeverkString}: kodeverk cachet", mapOf("antallKoder" to kodeverkCache[navn]?.size))
+                } catch (e: Exception) {
+                    TjenestekallLogger.error("kodeverk cache feilet: ${navn.kodeverkString}", mapOf("error" to e.message))
                 }
             }
         }
