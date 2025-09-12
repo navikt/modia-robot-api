@@ -131,4 +131,4 @@ spec:
     - name: KODEVERK_URL
       value: "https://kodeverk-api.nav.no"
     - name: KODEVERK_SCOPE
-      value: "prod-gcp.team-rocket.kodeverk-api"
+      value: "prod-gcp:team-rocket:kodeverk-api"
