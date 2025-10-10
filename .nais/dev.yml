@@ -78,7 +78,7 @@ spec:
         - application: rpa-nav-okonomi-stonad
           cluster: dev-fss
           namespace: team-rpa-nos
-        - application: rpa-nos-robot1
+        - application: rpa-nos-robot
           cluster: dev-fss
           namespace: team-rpa
         - application: arbeid-og-ytelser
