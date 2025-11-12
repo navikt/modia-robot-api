@@ -194,18 +194,20 @@ class PdlService(
                 listOf(
                     adresse.postnummer,
                     adresse.postnummer?.let { kodeverk.hentKodeBeskrivelse(KodeverkNavn.POSTNUMMER, it, it) },
-                    adresse.bydelsnummer?.let { "Bydel: ${kodeverk.hentKodeBeskrivelse(KodeverkNavn.KOMMUNE, it, it) }"},
-                    adresse.kommunenummer?.let { "Kommune: ${kodeverk.hentKodeBeskrivelse(KodeverkNavn.KOMMUNE, it, it) }"}
+                    adresse.bydelsnummer?.let { "Bydel: ${kodeverk.hentKodeBeskrivelse(KodeverkNavn.KOMMUNE, it, it) }" },
+                    adresse.kommunenummer?.let { "Kommune: ${kodeverk.hentKodeBeskrivelse(KodeverkNavn.KOMMUNE, it, it) }" },
                 ),
         )
 
     private fun lagAdresseFraMatrikkeladresse(adresse: Matrikkeladresse) =
         PdlAdresse(
             linje1 = listOf(adresse.bruksenhetsnummer, adresse.tilleggsnavn),
-            linje2 = listOf(
-                adresse.postnummer,
-                adresse.postnummer?.let { kodeverk.hentKodeBeskrivelse(KodeverkNavn.POSTNUMMER, it, it) },
-                adresse.kommunenummer?.let { "Kommune: ${kodeverk.hentKodeBeskrivelse(KodeverkNavn.KOMMUNE, it, it) }"}),
+            linje2 =
+                listOf(
+                    adresse.postnummer,
+                    adresse.postnummer?.let { kodeverk.hentKodeBeskrivelse(KodeverkNavn.POSTNUMMER, it, it) },
+                    adresse.kommunenummer?.let { "Kommune: ${kodeverk.hentKodeBeskrivelse(KodeverkNavn.KOMMUNE, it, it) }" },
+                ),
         )
 
     private fun lagAdresseFraUtenlandskadresse(adresse: UtenlandskAdresse) =
