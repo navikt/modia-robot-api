@@ -15,6 +15,8 @@ enum class KodeverkNavn(
 ) {
     POSTNUMMER("Postnummer"),
     LAND("Landkoder"),
+    BYDEL("Bydeler"),
+    KOMMUNE("Kommuner"),
 }
 
 class KodeverkService(

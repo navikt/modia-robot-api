@@ -86,10 +86,17 @@ data class PdlPersonalia(
 
 @Serializable
 data class PdlAdresse(
+    /** Adresse, linje 1. Inneholder typisk gatenavn og husnummer. */
     val linje1: String,
+    /** Adresse, linje 2. Inneholder typisk postnummer, poststed, bydel og kommune. kan være null.*/
     val linje2: String? = null,
+    /** Adresse, linje 3. Inneholder typisk land, kan være null. */
     val linje3: String? = null,
 ) {
+    /**
+     * Alternativ konstruktør for å ta inn lister av adressekomponenter og konvertere dem
+     * til tekstfelt. Nullverdier filtreres og fjernes.
+     */
     constructor(
         linje1: List<String?>,
         linje2: List<String?>? = null,
