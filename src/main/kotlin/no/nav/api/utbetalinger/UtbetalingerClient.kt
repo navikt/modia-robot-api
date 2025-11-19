@@ -83,8 +83,11 @@ class UtbetalingerClient(
                 }
 
             when (response.status) {
-                HttpStatusCode.NotFound -> emptyList()
-                HttpStatusCode.OK ->
+                HttpStatusCode.NotFound -> {
+                    emptyList()
+                }
+
+                HttpStatusCode.OK -> {
                     response
                         .runCatching { body<List<Utbetaling>>() }
                         .onFailure {
@@ -93,16 +96,19 @@ class UtbetalingerClient(
                                 mapOf("exception" to it),
                             )
                         }.getOrThrow()
+                }
 
-                else -> throw WebStatusException(
-                    message =
-                        """
-                        Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.
-                        HttpStatus: ${response.status}
-                        Body: ${response.bodyAsText()}
-                        """.trimIndent(),
-                    status = HttpStatusCode.InternalServerError,
-                )
+                else -> {
+                    throw WebStatusException(
+                        message =
+                            """
+                            Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.
+                            HttpStatus: ${response.status}
+                            Body: ${response.bodyAsText()}
+                            """.trimIndent(),
+                        status = HttpStatusCode.InternalServerError,
+                    )
+                }
             }
         }
 

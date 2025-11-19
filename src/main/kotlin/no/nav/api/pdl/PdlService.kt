@@ -106,10 +106,22 @@ class PdlService(
             ?.sortedByDescending { it.gyldigFraOgMed }
             ?.firstNotNullOfOrNull { adresse ->
                 when {
-                    adresse.vegadresse != null -> lagAdresseFraVegadresse(adresse.vegadresse)
-                    adresse.matrikkeladresse != null -> lagAdresseFraMatrikkeladresse(adresse.matrikkeladresse)
-                    adresse.utenlandskAdresse != null -> lagAdresseFraUtenlandskadresse(adresse.utenlandskAdresse)
-                    adresse.ukjentBosted != null -> lagAdresseFraUkjentbosted(adresse.ukjentBosted)
+                    adresse.vegadresse != null -> {
+                        lagAdresseFraVegadresse(adresse.vegadresse)
+                    }
+
+                    adresse.matrikkeladresse != null -> {
+                        lagAdresseFraMatrikkeladresse(adresse.matrikkeladresse)
+                    }
+
+                    adresse.utenlandskAdresse != null -> {
+                        lagAdresseFraUtenlandskadresse(adresse.utenlandskAdresse)
+                    }
+
+                    adresse.ukjentBosted != null -> {
+                        lagAdresseFraUkjentbosted(adresse.ukjentBosted)
+                    }
+
                     else -> {
                         TjenestekallLogger.error(
                             "PdlService",
@@ -129,21 +141,38 @@ class PdlService(
             ?.sortedByDescending { it.gyldigFraOgMed }
             ?.firstNotNullOfOrNull { adresse ->
                 when {
-                    adresse.coAdressenavn.isNullOrBlank().not() && adresse.vegadresse != null ->
+                    adresse.coAdressenavn.isNullOrBlank().not() && adresse.vegadresse != null -> {
                         lagAdresseFraCoVegadresse(
                             adresse.coAdressenavn!!,
                             lagAdresseFraVegadresse(adresse.vegadresse),
                         )
+                    }
 
-                    adresse.coAdressenavn.isNullOrBlank().not() -> lagAdresseFraCoadresse(adresse.coAdressenavn!!)
-                    adresse.vegadresse != null -> lagAdresseFraVegadresse(adresse.vegadresse)
-                    adresse.postboksadresse != null -> lagAdresseFraPostboksadresse(adresse.postboksadresse)
-                    adresse.postadresseIFrittFormat != null -> lagAdresseFraFrittformat(adresse.postadresseIFrittFormat)
-                    adresse.utenlandskAdresse != null -> lagAdresseFraUtenlandskadresse(adresse.utenlandskAdresse)
-                    adresse.utenlandskAdresseIFrittFormat != null ->
+                    adresse.coAdressenavn.isNullOrBlank().not() -> {
+                        lagAdresseFraCoadresse(adresse.coAdressenavn!!)
+                    }
+
+                    adresse.vegadresse != null -> {
+                        lagAdresseFraVegadresse(adresse.vegadresse)
+                    }
+
+                    adresse.postboksadresse != null -> {
+                        lagAdresseFraPostboksadresse(adresse.postboksadresse)
+                    }
+
+                    adresse.postadresseIFrittFormat != null -> {
+                        lagAdresseFraFrittformat(adresse.postadresseIFrittFormat)
+                    }
+
+                    adresse.utenlandskAdresse != null -> {
+                        lagAdresseFraUtenlandskadresse(adresse.utenlandskAdresse)
+                    }
+
+                    adresse.utenlandskAdresseIFrittFormat != null -> {
                         lagAdresseFraUtenlandskadresseFrittFormat(
                             adresse.utenlandskAdresseIFrittFormat,
                         )
+                    }
 
                     else -> {
                         TjenestekallLogger.error(
@@ -164,16 +193,29 @@ class PdlService(
             ?.sortedByDescending { it.gyldigFraOgMed }
             ?.firstNotNullOfOrNull { adresse ->
                 when {
-                    adresse.coAdressenavn.isNullOrBlank().not() && adresse.vegadresse != null ->
+                    adresse.coAdressenavn.isNullOrBlank().not() && adresse.vegadresse != null -> {
                         lagAdresseFraCoVegadresse(
                             adresse.coAdressenavn!!,
                             lagAdresseFraVegadresse(adresse.vegadresse),
                         )
+                    }
 
-                    adresse.coAdressenavn.isNullOrBlank().not() -> lagAdresseFraCoadresse(adresse.coAdressenavn!!)
-                    adresse.vegadresse != null -> lagAdresseFraVegadresse(adresse.vegadresse)
-                    adresse.matrikkeladresse != null -> lagAdresseFraMatrikkeladresse(adresse.matrikkeladresse)
-                    adresse.utenlandskAdresse != null -> lagAdresseFraUtenlandskadresse(adresse.utenlandskAdresse)
+                    adresse.coAdressenavn.isNullOrBlank().not() -> {
+                        lagAdresseFraCoadresse(adresse.coAdressenavn!!)
+                    }
+
+                    adresse.vegadresse != null -> {
+                        lagAdresseFraVegadresse(adresse.vegadresse)
+                    }
+
+                    adresse.matrikkeladresse != null -> {
+                        lagAdresseFraMatrikkeladresse(adresse.matrikkeladresse)
+                    }
+
+                    adresse.utenlandskAdresse != null -> {
+                        lagAdresseFraUtenlandskadresse(adresse.utenlandskAdresse)
+                    }
+
                     else -> {
                         TjenestekallLogger.error(
                             "PdlService",
@@ -194,8 +236,28 @@ class PdlService(
                 listOf(
                     adresse.postnummer,
                     adresse.postnummer?.let { kodeverk.hentKodeBeskrivelse(KodeverkNavn.POSTNUMMER, it, it) },
-                    adresse.bydelsnummer?.let { "Bydel: ${kodeverk.hentKodeBeskrivelse(KodeverkNavn.KOMMUNE, it, it) }" },
-                    adresse.kommunenummer?.let { "Kommune: ${kodeverk.hentKodeBeskrivelse(KodeverkNavn.KOMMUNE, it, it) }" },
+                ),
+            kommune =
+                listOf(
+                    adresse.kommunenummer,
+                    adresse.kommunenummer?.let {
+                        kodeverk.hentKodeBeskrivelse(
+                            KodeverkNavn.KOMMUNE,
+                            it,
+                            it,
+                        )
+                    },
+                ),
+            bydel =
+                listOf(
+                    adresse.bydelsnummer,
+                    adresse.bydelsnummer?.let {
+                        kodeverk.hentKodeBeskrivelse(
+                            KodeverkNavn.BYDEL,
+                            it,
+                            it,
+                        )
+                    },
                 ),
         )
 
@@ -206,7 +268,11 @@ class PdlService(
                 listOf(
                     adresse.postnummer,
                     adresse.postnummer?.let { kodeverk.hentKodeBeskrivelse(KodeverkNavn.POSTNUMMER, it, it) },
-                    adresse.kommunenummer?.let { "Kommune: ${kodeverk.hentKodeBeskrivelse(KodeverkNavn.KOMMUNE, it, it) }" },
+                ),
+            kommune =
+                listOf(
+                    adresse.kommunenummer,
+                    adresse.kommunenummer?.let { kodeverk.hentKodeBeskrivelse(KodeverkNavn.KOMMUNE, it, it) },
                 ),
         )
 
