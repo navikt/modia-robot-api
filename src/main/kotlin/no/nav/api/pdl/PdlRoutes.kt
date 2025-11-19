@@ -90,6 +90,10 @@ data class PdlAdresse(
     val linje1: String,
     /** Adresse, linje 2. Inneholder typisk postnummer, poststed, bydel og kommune. kan være null.*/
     val linje2: String? = null,
+    /** Adresse, bydel. Inneholder bydel. kan være null.*/
+    val bydel: String? = null,
+    /** Adresse, kommune. Inneholder kommune. kan være null.*/
+    val kommune: String? = null,
     /** Adresse, linje 3. Inneholder typisk land, kan være null. */
     val linje3: String? = null,
 ) {
@@ -100,10 +104,14 @@ data class PdlAdresse(
     constructor(
         linje1: List<String?>,
         linje2: List<String?>? = null,
+        bydel: List<String?>? = null,
+        kommune: List<String?>? = null,
         linje3: List<String?>? = null,
     ) : this(
         linje1.filterNotNull().joinToString(" "),
         linje2?.filterNotNull()?.joinToString(" "),
+        bydel?.let { "bydel: ${bydel.filterNotNull().joinToString(" ")}" },
+        kommune?.let { "kommune: ${kommune.filterNotNull().joinToString(" ")}" },
         linje3?.filterNotNull()?.joinToString(" "),
     )
 }
