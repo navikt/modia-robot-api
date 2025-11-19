@@ -90,7 +90,9 @@ data class PdlAdresse(
     val linje1: String,
     /** Adresse, linje 2. Inneholder typisk postnummer, poststed, bydel og kommune. kan være null.*/
     val linje2: String? = null,
+    /** Adresse, bydel. Inneholder bydel. kan være null.*/
     val bydel: String? = null,
+    /** Adresse, kommune. Inneholder kommune. kan være null.*/
     val kommune: String? = null,
     /** Adresse, linje 3. Inneholder typisk land, kan være null. */
     val linje3: String? = null,
