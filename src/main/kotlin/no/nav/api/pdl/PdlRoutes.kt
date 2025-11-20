@@ -112,8 +112,8 @@ data class PdlAdresse(
     ) : this(
         linje1.filterNotNull().joinToString(" "),
         linje2?.filterNotNull()?.joinToString(" "),
-        bydel?.let { "bydel: ${bydel.filterNotNull().joinToString(" ")}" },
-        kommune?.let { "kommune: ${kommune.filterNotNull().joinToString(" ")}" },
+        bydel?.filterNotNull()?.joinToString(" "),
+        kommune?.filterNotNull()?.joinToString(" "),
         linje3?.filterNotNull()?.joinToString(" "),
     )
 }
