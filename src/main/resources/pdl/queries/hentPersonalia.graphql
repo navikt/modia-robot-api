@@ -55,6 +55,9 @@ query ($ident: ID!) {
         foedselsdato {
             foedselsdato
         }
+        doedsfall {
+            doedsdato,
+        }
         oppholdsadresse {
             gyldigFraOgMed
             gyldigTilOgMed

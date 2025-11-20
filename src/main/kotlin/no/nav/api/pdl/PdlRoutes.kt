@@ -5,6 +5,7 @@ import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import no.nav.api.CommonModels
 import no.nav.api.generated.pdl.hentpersonalia.Navn
@@ -79,6 +80,7 @@ data class AktorIdResponse(
 data class PdlPersonalia(
     val navn: Navn? = null,
     val alder: Int? = null,
+    val dodsdato: LocalDate? = null,
     val bostedsAdresse: PdlAdresse? = null,
     val kontaktAdresse: PdlAdresse? = null,
     val oppholdsAdresse: PdlAdresse? = null,

@@ -32,6 +32,7 @@ class PdlService(
         return PdlPersonalia(
             navn = person?.let(::hentNavnPersonalia),
             alder = person?.let(::hentAlder),
+            dodsdato = person?.doedsfall?.firstOrNull()?.doedsdato,
             bostedsAdresse = person?.let(::hentBostedsAdresse),
             kontaktAdresse = person?.let(::hentKontaktAdresse),
             oppholdsAdresse = person?.let(::hentOppholdsAdresse),
