@@ -226,6 +226,7 @@ private val pdlClientMock =
                                             foedselsdato = LocalDate.now().minus(10, DateTimeUnit.YEAR),
                                         ),
                                     ),
+                                doedsfall = emptyList(),
                                 oppholdsadresse =
                                     listOf(
                                         Oppholdsadresse(

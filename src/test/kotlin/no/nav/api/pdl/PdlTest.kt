@@ -39,6 +39,7 @@ internal class PdlTest {
                                         "foedselsdato": [
                                             { "foedselsdato": "2020-06-06" }
                                         ],
+                                         "doedsfall": [],
                                         "oppholdsadresse": [],
                                         "kontaktadresse": [],
                                         "bostedsadresse": []
