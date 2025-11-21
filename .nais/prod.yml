@@ -54,7 +54,7 @@ spec:
         - host: saf.prod-fss-pub.nais.io
         - host: digdir-krr-proxy.intern.nav.no
         - host: sokos-utbetaldata.prod-fss-pub.nais.io
-        - host: sf-henvendelse-api-proxy.prod-fss-pub.nais.io
+        - host: sf-henvendelse-api-proxy.intern.nav.no
         - host: sokos-kontoregister-person.intern.nav.no
         - host: kodeverk-api.nav.no
       rules:
@@ -121,9 +121,9 @@ spec:
     - name: UTBETAL_SOKOS_SCOPE
       value: "prod-fss:okonomi:sokos-utbetaldata"
     - name: SF_HENVENDELSE_URL
-      value: "https://sf-henvendelse-api-proxy.prod-fss-pub.nais.io/api"
+      value: "https://sf-henvendelse.intern.nav.no/api"
     - name: SF_HENVENDELSE_SCOPE
-      value: "prod-fss:teamnks:sf-henvendelse-api-proxy"
+      value: "prod-gcp:teamnks:sf-henvendelse-api-proxy"
     - name: KONTOREGISTER_REST_URL
       value: "https://sokos-kontoregister-person.intern.nav.no/api/system"
     - name: KONTOREGISTER_SCOPE
