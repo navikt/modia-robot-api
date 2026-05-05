@@ -29,6 +29,7 @@ fun Route.configureDialogRoutes(dialogService: DialogService) {
                         request,
                         ident,
                         payload,
+                        request.tildelMeg,
                     ),
                 )
             }
@@ -47,6 +48,7 @@ fun Route.configureDialogRoutes(dialogService: DialogService) {
                         request,
                         ident,
                         payload,
+                        request.tildelMeg,
                     ),
                 )
             }
