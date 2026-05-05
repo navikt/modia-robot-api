@@ -65,7 +65,8 @@ private object ApiV2 {
                 requestType(typeOf<MeldingRequestV2>())
                 description(
                     """
-                    Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
+                    Innholdet i meldingen, temaet meldingen skal knyttes til, enheten som sender meldingen og tildelMeg 
+                    som angir om meldingen skal tildeles innlogget veileder. Standardverdi er false.
                     Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
                     før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
                     """.trimIndent(),
@@ -88,7 +89,8 @@ private object ApiV2 {
                 requestType(typeOf<MeldingRequestV2>())
                 description(
                     """
-                    Innholdet i meldingen, temaet meldingen skal knyttes til, og enheten som sender meldingen.
+                    Innholdet i meldingen, temaet meldingen skal knyttes til, enheten som sender meldingen og tildelMeg 
+                    som angir om meldingen skal tildeles innlogget veileder. Standardverdi er false.
                     Tekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier
                     før innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.
                     """.trimIndent(),
