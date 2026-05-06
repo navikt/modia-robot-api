@@ -30,6 +30,7 @@ class DialogService(
         override val tekst: String,
         override val tema: String,
         override val enhet: String,
+        val tildelMeg: Boolean? = false,
     ) : Melding()
 
     @Serializable
@@ -61,8 +62,9 @@ class DialogService(
         request: Melding,
         ident: String,
         token: String,
+        tildelMeg: Boolean?,
     ): Response {
-        val sfMeldingRequest = lagSfMeldingRequest(fnr, request, token)
+        val sfMeldingRequest = lagSfMeldingRequest(fnr, request, token, tildelMeg)
         val sak = safService.hentBrukersSaker(fnr, token).firstOrNull { it.tema?.name == request.tema }
         val nyHenvendelse = sfService.sendSporsmal(sfMeldingRequest, ident, token)
         val journalforRequest =
@@ -82,8 +84,9 @@ class DialogService(
         request: Melding,
         ident: String,
         token: String,
+        tildelMeg: Boolean?,
     ): Response {
-        val sfMeldingRequest = lagSfMeldingRequest(fnr, request, token)
+        val sfMeldingRequest = lagSfMeldingRequest(fnr, request, token, tildelMeg)
         val sak = safService.hentBrukersSaker(fnr, token).firstOrNull { it.tema?.name == request.tema }
         val nyHenvendelse = sfService.sendInfomelding(sfMeldingRequest, ident, token)
         val journalforRequest =
@@ -103,13 +106,14 @@ class DialogService(
         fnr: String,
         request: Melding,
         token: String,
+        tildelMeg: Boolean? = false,
     ) = SfMeldingRequest(
         aktorId = pdlService.hentAktorid(fnr, token),
         temagruppe = hentTemagruppeForTema(request.tema),
         enhet = request.enhet,
         fritekst = parseFritekst(fnr, request.tekst, token),
         tema = request.tema,
-        tildelMeg = false,
+        tildelMeg = tildelMeg,
     )
 
     suspend fun parseFritekst(
