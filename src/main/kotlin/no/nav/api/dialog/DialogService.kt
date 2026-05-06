@@ -30,7 +30,7 @@ class DialogService(
         override val tekst: String,
         override val tema: String,
         override val enhet: String,
-        val tildelMeg: Boolean = false,
+        val tildelMeg: Boolean? = false,
     ) : Melding()
 
     @Serializable
