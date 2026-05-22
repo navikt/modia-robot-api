@@ -84,6 +84,7 @@ data class PdlPersonalia(
     val bostedsAdresse: PdlAdresse? = null,
     val kontaktAdresse: PdlAdresse? = null,
     val oppholdsAdresse: PdlAdresse? = null,
+    val statsborgerskap: List<String>? = null,
 )
 
 @Serializable

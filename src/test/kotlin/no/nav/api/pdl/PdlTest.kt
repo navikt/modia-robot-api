@@ -33,16 +33,19 @@ internal class PdlTest {
                             {
                                 "data": {
                                     "hentPerson": {
-                                    "navn": [
-                                        { "fornavn": "Ola", "mellomnavn": null, "etternavn": "Nordmann" }
-                                    ],
+                                        "navn": [
+                                            { "fornavn": "Ola", "mellomnavn": null, "etternavn": "Nordmann" }
+                                        ],
                                         "foedselsdato": [
                                             { "foedselsdato": "2020-06-06" }
                                         ],
-                                         "doedsfall": [],
+                                        "doedsfall": [],
                                         "oppholdsadresse": [],
                                         "kontaktadresse": [],
-                                        "bostedsadresse": []
+                                        "bostedsadresse": [],
+                                        "statsborgerskap": [
+                                            { "land": "NOR" }
+                                        ]
                                     }
                                 }
                             }
@@ -78,6 +81,15 @@ internal class PdlTest {
                     ?.navn
                     ?.first()
                     ?.etternavn,
+            )
+
+            assertEquals(
+                "NOR",
+                person.data
+                    ?.hentPerson
+                    ?.statsborgerskap
+                    ?.first()
+                    ?.land,
             )
         }
 
