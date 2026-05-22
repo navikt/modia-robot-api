@@ -36,6 +36,7 @@ class PdlService(
             bostedsAdresse = person?.let(::hentBostedsAdresse),
             kontaktAdresse = person?.let(::hentKontaktAdresse),
             oppholdsAdresse = person?.let(::hentOppholdsAdresse),
+            statsborgerskap = person?.statsborgerskap?.map { it.land },
         )
     }
 

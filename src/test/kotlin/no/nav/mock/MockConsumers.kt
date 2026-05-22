@@ -240,6 +240,7 @@ private val pdlClientMock =
                                     ),
                                 kontaktadresse = emptyList(),
                                 bostedsadresse = emptyList(),
+                                statsborgerskap = emptyList(),
                             ),
                     ),
             )

@@ -109,5 +109,8 @@ query ($ident: ID!) {
                 bostedskommune
             }
         }
+        statsborgerskap {
+            land
+        }
     }
 }
