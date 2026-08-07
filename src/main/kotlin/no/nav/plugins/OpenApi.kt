@@ -2,7 +2,6 @@ package no.nav.plugins
 
 import io.bkbn.kompendium.core.attribute.KompendiumAttributes
 import io.bkbn.kompendium.core.plugin.NotarizedApplication
-import io.bkbn.kompendium.core.routes.swagger
 import io.bkbn.kompendium.json.schema.definition.TypeDefinition
 import io.bkbn.kompendium.oas.OpenApiSpec
 import io.bkbn.kompendium.oas.component.Components
@@ -14,7 +13,6 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.reflect.typeOf
 
@@ -34,6 +32,7 @@ fun Application.configureOpenApi() {
     install(NotarizedApplication()) {
         spec = {
             OpenApiSpec(
+                jsonSchemaDialect = "https://spec.openapis.org/oas/3.1/dialect/base",
                 info =
                     Info(
                         "modia-robot-api",
@@ -70,6 +69,27 @@ fun Application.configureOpenApi() {
     }
 
     routing {
-        swagger(pageTitle = "Modia Robot API")
+        get("swagger-ui") {
+            call.respondText(
+                contentType = ContentType.Text.Html,
+                status = HttpStatusCode.OK,
+                text = """<!DOCTYPE html>
+                        <html>
+                        <head>
+                          <title>Modia Robot API</title>
+                          <meta charset="utf-8"/>
+                          <meta name="viewport" content="width=device-width, initial-scale=1">
+                          <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css">
+                        </head>
+                        <body>
+                        <div id="swagger-ui"></div>
+                        <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+                        <script>
+                          SwaggerUIBundle({ url: '/openapi.json', dom_id: '#swagger-ui', presets: [SwaggerUIBundle.presets.apis] })
+                        </script>
+                        </body>
+                        </html>""",
+            )
+        }
     }
 }
