@@ -21,7 +21,7 @@ val graphql_kotlin_version = "10.2.0"
 plugins {
     application
     kotlin("jvm") version "2.3.0"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.4.10"
     id("com.gradleup.shadow") version "8.3.8"
     id("com.expediagroup.graphql") version "8.8.1"
     id("org.openapi.generator") version "7.24.0"
