@@ -2,8 +2,6 @@ import com.expediagroup.graphql.plugin.gradle.config.GraphQLScalar
 import com.expediagroup.graphql.plugin.gradle.config.GraphQLSerializer
 import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLDownloadSDLTask
 import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 
 val ktor_version = "3.5.2"
 val kotlin_version = "2.0.21"
@@ -22,7 +20,6 @@ plugins {
     application
     kotlin("jvm") version "2.3.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.4.10"
-    id("com.gradleup.shadow") version "8.3.8"
     id("com.expediagroup.graphql") version "10.2.0"
     id("org.openapi.generator") version "7.24.0"
 }
@@ -105,37 +102,30 @@ tasks.withType<Test> {
     }
 }
 
-tasks.withType<ShadowJar> {
-    archiveBaseName.set("app")
-    archiveClassifier.set("")
-    archiveVersion.set("")
-    mergeServiceFiles()
-    transform(ServiceFileTransformer::class.java) {
-        setPath("META-INF/cxf")
-        include("bus-extensions.txt")
-    }
-}
 
-val downloadSAFSchema by tasks.creating(GraphQLDownloadSDLTask::class) {
+val downloadSAFSchema = tasks.register<GraphQLDownloadSDLTask>("downloadSAFSchema") {
     endpoint.set("https://navikt.github.io/saf/saf-api-sdl.graphqls")
     outputFile.set(file("${project.projectDir}/src/main/resources/saf/schema.graphqls"))
 }
-val generateSAFClient by tasks.creating(GraphQLGenerateClientTask::class) {
+
+
+tasks.register<GraphQLGenerateClientTask>("generateSAFClient") {
     packageName.set("no.nav.api.generated.saf")
-    schemaFile.set(downloadSAFSchema.outputFile)
+    schemaFile.set(downloadSAFSchema.flatMap { it.outputFile })
     queryFiles.from(fileTree("${project.projectDir}/src/main/resources/saf/queries/").files)
     serializer.set(GraphQLSerializer.KOTLINX)
-    dependsOn("downloadSAFSchema")
+    dependsOn(downloadSAFSchema)
 }
 
-val downloadPDLSchema by tasks.creating(GraphQLDownloadSDLTask::class) {
+val downloadPDLSchema = tasks.register<GraphQLDownloadSDLTask>("downloadPDLSchema") {
     endpoint.set("https://navikt.github.io/pdl/pdl-api-sdl.graphqls")
     outputFile.set(file("${project.projectDir}/src/main/resources/pdl/schema.graphqls"))
     dependsOn("generateSAFClient")
 }
-val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
+
+tasks.register<GraphQLGenerateClientTask>("generatePDLClient") {
     packageName.set("no.nav.api.generated.pdl")
-    schemaFile.set(downloadPDLSchema.outputFile)
+    schemaFile.set(downloadPDLSchema.flatMap { it.outputFile })
     queryFiles.from(fileTree("${project.projectDir}/src/main/resources/pdl/queries/").files)
     serializer.set(GraphQLSerializer.KOTLINX)
     customScalars.add(
@@ -162,7 +152,7 @@ val generatePDLClient by tasks.creating(GraphQLGenerateClientTask::class) {
     dependsOn("downloadPDLSchema")
 }
 
-val generatedSourcesPath = "$buildDir/generated/source/openapi"
+val generatedSourcesPath =  layout.buildDirectory.dir("generated/source/openapi")
 
 openApiGenerate {
     inputSpec.set("${project.projectDir}/src/main/resources/kodeverk/openapi.json")
@@ -189,13 +179,14 @@ tasks {
     }
     compileKotlin {
         dependsOn("generateApi")
+        mustRunAfter("generatePDLClient")
     }
 }
 
 sourceSets {
     main {
         kotlin {
-            srcDir("$generatedSourcesPath/src/main/kotlin/")
+            srcDir(generatedSourcesPath.map { it.dir("src/main/kotlin") })
         }
     }
 }
