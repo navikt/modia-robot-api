@@ -5,7 +5,7 @@ import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
 
 val ktor_version = "3.5.2"
 val kotlin_version = "2.0.21"
-val kotlinx_datetime_version = "0.6.2"
+val kotlinx_datetime_version = "0.8.0"
 val kompendium_version = "4.0.3"
 val logback_version = "1.6.1"
 val logstash_version = "9.0"

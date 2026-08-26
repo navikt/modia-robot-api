@@ -2,6 +2,7 @@ package no.nav.utils
 
 import kotlinx.datetime.*
 import org.joda.time.DateTime
+import kotlin.time.Clock
 import kotlin.time.Duration
 import org.joda.time.LocalDate as JodaLocalDate
 
