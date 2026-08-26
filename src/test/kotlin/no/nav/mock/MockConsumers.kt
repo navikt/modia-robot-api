@@ -5,7 +5,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.datetime.*
-import kotlin.time.Clock
 import no.nav.Consumers
 import no.nav.api.dialog.saf.SafClient
 import no.nav.api.dialog.sf.SFClient
@@ -43,6 +42,7 @@ import no.nav.common.types.identer.NavIdent
 import no.nav.utils.minus
 import no.nav.utils.now
 import java.util.*
+import kotlin.time.Clock
 import no.nav.api.generated.pdl.hentpersonalia.Navn as PdlNavn
 
 object MockConsumers : Consumers {
