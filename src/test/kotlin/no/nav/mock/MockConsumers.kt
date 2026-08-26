@@ -5,6 +5,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.datetime.*
+import kotlin.time.Clock
 import no.nav.Consumers
 import no.nav.api.dialog.saf.SafClient
 import no.nav.api.dialog.sf.SFClient
