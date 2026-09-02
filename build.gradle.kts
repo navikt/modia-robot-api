@@ -20,7 +20,7 @@ plugins {
     application
     kotlin("jvm") version "2.4.10"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.4.10"
-    id("com.expediagroup.graphql") version "10.2.0"
+    id("com.expediagroup.graphql") version "10.2.2"
     id("org.openapi.generator") version "7.24.0"
 }
 
