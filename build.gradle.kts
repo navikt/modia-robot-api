@@ -15,6 +15,7 @@ val tjenestespec_version = "1.2021.02.22-10.45-4201aaea72fb"
 val modia_common_utils_version = "1.2026.08.06-12.11-d922f6248916"
 val junit_version = "6.1.3"
 val graphql_kotlin_version = "10.2.2"
+val swagger_ui_version = "5.25.3"
 
 plugins {
     application
@@ -62,6 +63,7 @@ dependencies {
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
     implementation("io.ktor:ktor-server-swagger-jvm:$ktor_version")
+    implementation("org.webjars:swagger-ui:$swagger_ui_version")
     implementation("io.ktor:ktor-serialization:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-client-core:$ktor_version")
@@ -102,12 +104,11 @@ tasks.withType<Test> {
     }
 }
 
-
-val downloadSAFSchema = tasks.register<GraphQLDownloadSDLTask>("downloadSAFSchema") {
-    endpoint.set("https://navikt.github.io/saf/saf-api-sdl.graphqls")
-    outputFile.set(file("${project.projectDir}/src/main/resources/saf/schema.graphqls"))
-}
-
+val downloadSAFSchema =
+    tasks.register<GraphQLDownloadSDLTask>("downloadSAFSchema") {
+        endpoint.set("https://navikt.github.io/saf/saf-api-sdl.graphqls")
+        outputFile.set(file("${project.projectDir}/src/main/resources/saf/schema.graphqls"))
+    }
 
 tasks.register<GraphQLGenerateClientTask>("generateSAFClient") {
     packageName.set("no.nav.api.generated.saf")
@@ -117,11 +118,12 @@ tasks.register<GraphQLGenerateClientTask>("generateSAFClient") {
     dependsOn(downloadSAFSchema)
 }
 
-val downloadPDLSchema = tasks.register<GraphQLDownloadSDLTask>("downloadPDLSchema") {
-    endpoint.set("https://navikt.github.io/pdl/pdl-api-sdl.graphqls")
-    outputFile.set(file("${project.projectDir}/src/main/resources/pdl/schema.graphqls"))
-    dependsOn("generateSAFClient")
-}
+val downloadPDLSchema =
+    tasks.register<GraphQLDownloadSDLTask>("downloadPDLSchema") {
+        endpoint.set("https://navikt.github.io/pdl/pdl-api-sdl.graphqls")
+        outputFile.set(file("${project.projectDir}/src/main/resources/pdl/schema.graphqls"))
+        dependsOn("generateSAFClient")
+    }
 
 tasks.register<GraphQLGenerateClientTask>("generatePDLClient") {
     packageName.set("no.nav.api.generated.pdl")
@@ -152,7 +154,7 @@ tasks.register<GraphQLGenerateClientTask>("generatePDLClient") {
     dependsOn("downloadPDLSchema")
 }
 
-val generatedSourcesPath =  layout.buildDirectory.dir("generated/source/openapi")
+val generatedSourcesPath = layout.buildDirectory.dir("generated/source/openapi")
 
 openApiGenerate {
     inputSpec.set("${project.projectDir}/src/main/resources/kodeverk/openapi.json")
