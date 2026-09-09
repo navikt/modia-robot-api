@@ -15,7 +15,7 @@ val tjenestespec_version = "1.2021.02.22-10.45-4201aaea72fb"
 val modia_common_utils_version = "1.2026.08.06-12.11-d922f6248916"
 val junit_version = "6.1.3"
 val graphql_kotlin_version = "10.2.2"
-val swagger_ui_version = "5.25.3"
+val swagger_ui_version = "5.32.14"
 
 plugins {
     application
