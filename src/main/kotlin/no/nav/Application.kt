@@ -1,5 +1,6 @@
 package no.nav
 
+import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -15,6 +16,35 @@ import no.nav.api.syfo.configureSyfoRoutes
 import no.nav.api.utbetalinger.configureUtbetalingerRoutes
 import no.nav.plugins.*
 
+fun Application.apiModule(
+    disableSecurity: Boolean,
+    env: Env,
+    consumers: Consumers,
+    services: Services,
+) {
+    configureOpenApi()
+    configureSecurity(disableSecurity, env)
+    configureMonitoring()
+    configureSerialization()
+    configureExceptionHandling()
+
+    routing {
+        authenticate(SECURITY_SCHEME_NAME) {
+            route("api") {
+                configureDebugRoutes(consumers.tokenclient)
+                configureOppfolgingRoutes(services.oppfolgingService)
+                configurePdlRoutes(services.pdlService)
+                configureKontonummerRegisterRoutes(consumers.kontonummerRegister)
+                configureDialogRoutes(services.dialogService)
+                configureDigdirRoutes(services.digdirService)
+                configureSkrivestotteRoutes(services.skrivestotteService)
+                configureUtbetalingerRoutes(services.utbetalingerService)
+                configureSyfoRoutes(services.syfoService)
+            }
+        }
+    }
+}
+
 fun startApplication(
     disableSecurity: Boolean,
     env: Env = Env(),
@@ -22,28 +52,7 @@ fun startApplication(
     services: Services = ServicesImpl(consumers),
 ) {
     embeddedServer(Netty, port = 7070, host = "0.0.0.0") {
-        environment.config
-        configureOpenApi()
-        configureSecurity(disableSecurity, env)
-        configureMonitoring()
-        configureSerialization()
-        configureExceptionHandling()
-
-        routing {
-            authenticate(SECURITY_SCHEME_NAME) {
-                route("api") {
-                    configureDebugRoutes(consumers.tokenclient)
-                    configureOppfolgingRoutes(services.oppfolgingService)
-                    configurePdlRoutes(services.pdlService)
-                    configureKontonummerRegisterRoutes(consumers.kontonummerRegister)
-                    configureDialogRoutes(services.dialogService)
-                    configureDigdirRoutes(services.digdirService)
-                    configureSkrivestotteRoutes(services.skrivestotteService)
-                    configureUtbetalingerRoutes(services.utbetalingerService)
-                    configureSyfoRoutes(services.syfoService)
-                }
-            }
-        }
+        apiModule(disableSecurity, env, consumers, services)
     }.start(wait = true)
 }
 
