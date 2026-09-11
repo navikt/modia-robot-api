@@ -17,7 +17,7 @@ fun Route.configureDialogRoutes(dialogService: DialogService) {
     route("dialog") {
         route("sendinfomelding") {
             install(NotarizedRoute()) {
-                post = ApiV2.sendInfoMelding
+                post = Api.sendInfoMelding
             }
             post {
                 val payload = call.getJWT()
@@ -36,7 +36,7 @@ fun Route.configureDialogRoutes(dialogService: DialogService) {
         }
         route("sendsporsmal") {
             install(NotarizedRoute()) {
-                post = ApiV2.sendSporsmal
+                post = Api.sendSporsmal
             }
             post {
                 val payload = call.getJWT()
@@ -56,7 +56,7 @@ fun Route.configureDialogRoutes(dialogService: DialogService) {
     }
 }
 
-private object ApiV2 {
+private object Api {
     val sendInfoMelding =
         PostInfo.builder {
             summary("Sender infomelding til bruker")

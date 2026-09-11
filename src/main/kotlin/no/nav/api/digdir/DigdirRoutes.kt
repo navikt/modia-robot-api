@@ -16,7 +16,7 @@ import kotlin.reflect.typeOf
 fun Route.configureDigdirRoutes(digdirService: DigdirService) {
     route("digdir/kontaktinformasjon") {
         install(NotarizedRoute()) {
-            post = ApiV2.kontaktinformasjon
+            post = Api.kontaktinformasjon
         }
         post {
             val payload = call.getJWT()
@@ -26,7 +26,7 @@ fun Route.configureDigdirRoutes(digdirService: DigdirService) {
     }
 }
 
-private object ApiV2 {
+private object Api {
     val kontaktinformasjon =
         PostInfo.builder {
             summary("Brukers epost og mobiltelefonnummer")

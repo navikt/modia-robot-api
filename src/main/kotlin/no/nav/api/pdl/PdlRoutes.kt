@@ -16,7 +16,7 @@ import kotlin.reflect.typeOf
 
 fun Route.configurePdlRoutes(pdlService: PdlService) {
     route("pdl") {
-        install(NotarizedRoute()) { post = ApiV2.personalia }
+        install(NotarizedRoute()) { post = Api.personalia }
         post {
             val payload = call.getJWT()
             val fnr = call.deserializeFnr()
@@ -24,7 +24,7 @@ fun Route.configurePdlRoutes(pdlService: PdlService) {
         }
         route("aktorid") {
             install(NotarizedRoute()) {
-                post = ApiV2.hentAktorId
+                post = Api.hentAktorId
             }
             post {
                 val token = call.getJWT()
@@ -35,7 +35,7 @@ fun Route.configurePdlRoutes(pdlService: PdlService) {
     }
 }
 
-private object ApiV2 {
+private object Api {
     val personalia =
         PostInfo.builder {
             summary("Generelle personopplysninger")
