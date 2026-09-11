@@ -20,7 +20,7 @@ fun Route.configureDigdirRoutes(digdirService: DigdirService) {
         }
         post {
             val payload = call.getJWT()
-            val ident = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val ident = call.deserializeFnr()
             call.respond(digdirService.hentKontaktinformasjon(ident, payload))
         }
     }

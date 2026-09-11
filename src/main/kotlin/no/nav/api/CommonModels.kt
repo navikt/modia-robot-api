@@ -35,8 +35,13 @@ object CommonModels {
     val badRequestResponse =
         ResponseInfo.builder {
             responseCode(HttpStatusCode.BadRequest)
-            description("Request-body mangler eller kunne ikke leses. Svaret har tom body.")
-            responseType(typeOf<Unit>())
+            description(
+                "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON " +
+                    "med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. " +
+                    "Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan " +
+                    "inneholde deler av request-bodyen.",
+            )
+            responseType(typeOf<HttpErrorResponse>())
         }
 
     /** Svar som kan komme fra alle routes i API-et. */

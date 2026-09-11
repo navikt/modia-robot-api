@@ -19,7 +19,7 @@ fun Route.configurePdlRoutes(pdlService: PdlService) {
         install(NotarizedRoute()) { post = ApiV2.personalia }
         post {
             val payload = call.getJWT()
-            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val fnr = call.deserializeFnr()
             call.respond(pdlService.hentPersonalia(fnr, payload))
         }
         route("aktorid") {
@@ -28,7 +28,7 @@ fun Route.configurePdlRoutes(pdlService: PdlService) {
             }
             post {
                 val token = call.getJWT()
-                val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+                val fnr = call.deserializeFnr()
                 call.respond(AktorIdResponse(pdlService.hentAktoridNullable(fnr, token)))
             }
         }

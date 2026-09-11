@@ -19,7 +19,7 @@ fun Route.configureOppfolgingRoutes(oppfolgingService: OppfolgingService) {
         }
         post {
             val payload = call.getJWT()
-            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val fnr = call.deserializeFnr()
             call.respond(oppfolgingService.hentOppfolging(fnr, payload))
         }
     }
