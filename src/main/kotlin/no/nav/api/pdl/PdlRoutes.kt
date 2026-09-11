@@ -50,7 +50,7 @@ private object ApiV2 {
                 description("Brukers pdl data")
             }
             tags("PDL")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 
     val hentAktorId =
@@ -67,7 +67,7 @@ private object ApiV2 {
                 description("identens tilhørende aktorid")
             }
             tags("PDL")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 }
 

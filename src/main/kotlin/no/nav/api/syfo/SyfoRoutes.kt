@@ -40,6 +40,11 @@ private object ApiV1 {
                 description("Navn og ident til brukers veileder dersom bruker er tildelt veileder")
             }
             tags("Syfo")
-            canRespond(CommonModels.standardResponses)
+            canRespond(
+                CommonModels.standardResponses +
+                    CommonModels.badRequestResponse +
+                    CommonModels.noContentResponse +
+                    CommonModels.forbiddenResponse,
+            )
         }
 }

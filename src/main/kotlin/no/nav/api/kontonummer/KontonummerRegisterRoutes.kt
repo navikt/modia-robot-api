@@ -42,6 +42,6 @@ private object ApiV2 {
                 description("Brukers kontonummer om det eksisterer i kontonummer register")
             }
             tags("KontonummerRegister")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 }
