@@ -142,6 +142,32 @@
                 ],
                 "type": "object"
             },
+            "HttpErrorResponse": {
+                "properties": {
+                    "cause": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "message": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    }
+                },
+                "required": [],
+                "type": "object"
+            },
             "Instant": {
                 "format": "date-time",
                 "type": "string"
@@ -161,6 +187,12 @@
                 },
                 "required": [],
                 "type": "object"
+            },
+            "List-SkrivestotteClientTekst": {
+                "items": {
+                    "$ref": "#/components/schemas/SkrivestotteClientTekst"
+                },
+                "type": "array"
             },
             "List-UtbetalingerServiceUtbetalinger": {
                 "items": {
@@ -516,6 +548,9 @@
                 ],
                 "type": "object"
             },
+            "String": {
+                "type": "string"
+            },
             "SyfoServiceVeileder": {
                 "properties": {
                     "etternavn": {
@@ -638,11 +673,35 @@
                         },
                         "description": "Token for bruk mot gitt applikasjon"
                     },
-                    "204": {
-                        "description": "Ingen informasjon funnet"
+                    "400": {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/String"
+                                }
+                            }
+                        },
+                        "description": "Endepunktet er ikke tilgjengelig i produksjon. Svaret er ren tekst, ikke JSON."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
@@ -684,11 +743,25 @@
                         },
                         "description": "Referanse til meldingen som ble sendt til bruker"
                     },
-                    "204": {
-                        "description": "Ingen informasjon funnet"
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
@@ -730,11 +803,25 @@
                         },
                         "description": "Referanse til meldingen som ble sendt til bruker"
                     },
-                    "204": {
-                        "description": "Ingen informasjon funnet"
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
@@ -776,11 +863,28 @@
                         },
                         "description": "Brukers epost og mobiltelefonnummer"
                     },
-                    "204": {
-                        "description": "Ingen informasjon funnet"
+                    "400": {
+                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
@@ -822,11 +926,28 @@
                         },
                         "description": "Brukers kontonummer om det eksisterer i kontonummer register"
                     },
-                    "204": {
-                        "description": "Ingen informasjon funnet"
+                    "400": {
+                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
@@ -868,11 +989,28 @@
                         },
                         "description": "Navn og ident til brukers veileder"
                     },
-                    "204": {
-                        "description": "Ingen informasjon funnet"
+                    "400": {
+                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
@@ -914,11 +1052,28 @@
                         },
                         "description": "Brukers pdl data"
                     },
-                    "204": {
-                        "description": "Ingen informasjon funnet"
+                    "400": {
+                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
@@ -960,11 +1115,28 @@
                         },
                         "description": "identens tilhørende aktorid"
                     },
-                    "204": {
-                        "description": "Ingen informasjon funnet"
+                    "400": {
+                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
@@ -998,17 +1170,31 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/SkrivestotteClientTekst"
+                                    "$ref": "#/components/schemas/List-SkrivestotteClientTekst"
                                 }
                             }
                         },
-                        "description": "Tekst som matcher søket"
+                        "description": "Tekster som matcher søket. Tom liste når ingenting matcher."
                     },
-                    "204": {
-                        "description": "Ingen informasjon funnet"
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
@@ -1049,11 +1235,28 @@
                         },
                         "description": "Tekst som matcher søket på ID"
                     },
-                    "204": {
-                        "description": "Ingen informasjon funnet"
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "404": {
+                        "description": "Fant ingen ressurs med den oppgitte identifikatoren. Svaret har tom body."
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
@@ -1097,10 +1300,40 @@
                         "description": "Navn og ident til brukers veileder dersom bruker er tildelt veileder"
                     },
                     "204": {
-                        "description": "Ingen informasjon funnet"
+                        "description": "Forespørselen var gyldig, men det finnes ingen informasjon å returnere. Svaret har tom body."
+                    },
+                    "400": {
+                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Den underliggende tjenesten avviste tilgang til opplysningene om brukeren"
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
@@ -1161,11 +1394,28 @@
                         },
                         "description": "Brukers utbetalinger"
                     },
-                    "204": {
-                        "description": "Ingen informasjon funnet"
+                    "400": {
+                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
                     },
                     "500": {
-                        "description": "Ingen informasjon funnet"
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
                     }
                 },
                 "security": [
