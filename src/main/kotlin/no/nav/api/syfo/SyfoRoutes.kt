@@ -14,18 +14,18 @@ import kotlin.reflect.typeOf
 fun Route.configureSyfoRoutes(syfoService: SyfoService) {
     route("syfo/veileder") {
         install(NotarizedRoute()) {
-            post = ApiV1.veileder
+            post = Api.veileder
         }
         post {
             val payload = call.getJWT()
-            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val fnr = call.deserializeFnr()
             val veileder = syfoService.hentVeileder(fnr, payload)
             call.respond(veileder ?: HttpStatusCode.NoContent)
         }
     }
 }
 
-private object ApiV1 {
+private object Api {
     val veileder =
         PostInfo.builder {
             summary("Brukers sykefraværsoppfølgingveileder")
@@ -40,6 +40,11 @@ private object ApiV1 {
                 description("Navn og ident til brukers veileder dersom bruker er tildelt veileder")
             }
             tags("Syfo")
-            canRespond(CommonModels.standardResponses)
+            canRespond(
+                CommonModels.standardResponses +
+                    CommonModels.badRequestResponse +
+                    CommonModels.noContentResponse +
+                    CommonModels.forbiddenResponse,
+            )
         }
 }

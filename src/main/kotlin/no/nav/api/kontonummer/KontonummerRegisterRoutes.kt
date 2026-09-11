@@ -16,10 +16,10 @@ import kotlin.reflect.typeOf
 fun Route.configureKontonummerRegisterRoutes(kontonummerRegister: KontonummerRegister) {
     route("kontonummer-register/kontonummer") {
         install(NotarizedRoute()) {
-            post = ApiV2.kontonummer
+            post = Api.kontonummer
         }
         post {
-            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val fnr = call.deserializeFnr()
             val ident = call.getJWTPrincipalSubject()
             val token = call.getJWT()
             call.respond(kontonummerRegister.hentKontonummer(fnr, ident, token))
@@ -27,7 +27,7 @@ fun Route.configureKontonummerRegisterRoutes(kontonummerRegister: KontonummerReg
     }
 }
 
-private object ApiV2 {
+private object Api {
     val kontonummer =
         PostInfo.builder {
             summary("Brukers kontonummer")
@@ -42,6 +42,6 @@ private object ApiV2 {
                 description("Brukers kontonummer om det eksisterer i kontonummer register")
             }
             tags("KontonummerRegister")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 }

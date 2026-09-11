@@ -16,17 +16,17 @@ import kotlin.reflect.typeOf
 fun Route.configureDigdirRoutes(digdirService: DigdirService) {
     route("digdir/kontaktinformasjon") {
         install(NotarizedRoute()) {
-            post = ApiV2.kontaktinformasjon
+            post = Api.kontaktinformasjon
         }
         post {
             val payload = call.getJWT()
-            val ident = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val ident = call.deserializeFnr()
             call.respond(digdirService.hentKontaktinformasjon(ident, payload))
         }
     }
 }
 
-private object ApiV2 {
+private object Api {
     val kontaktinformasjon =
         PostInfo.builder {
             summary("Brukers epost og mobiltelefonnummer")
@@ -41,6 +41,6 @@ private object ApiV2 {
                 description("Brukers epost og mobiltelefonnummer")
             }
             tags("Brukers epost og mobiltelefonnummer")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 }

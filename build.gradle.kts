@@ -98,6 +98,9 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 
+    workingDir = project.projectDir
+    systemProperty("oppdaterOpenapi", providers.gradleProperty("oppdaterOpenapi").getOrElse("false"))
+
     testLogging {
         // This is for logging and can be removed.
         events("passed", "skipped", "failed")

@@ -15,17 +15,17 @@ import kotlin.reflect.typeOf
 fun Route.configureOppfolgingRoutes(oppfolgingService: OppfolgingService) {
     route("oppfolging/veileder") {
         install(NotarizedRoute()) {
-            post = ApiV2.veileder
+            post = Api.veileder
         }
         post {
             val payload = call.getJWT()
-            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val fnr = call.deserializeFnr()
             call.respond(oppfolgingService.hentOppfolging(fnr, payload))
         }
     }
 }
 
-private object ApiV2 {
+private object Api {
     val veileder =
         PostInfo.builder {
             summary("Brukers oppfølgingsveileder")
@@ -40,6 +40,6 @@ private object ApiV2 {
                 description("Navn og ident til brukers veileder")
             }
             tags("Oppfølging")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 }

@@ -9,9 +9,11 @@ data class FnrRequest(
     val fnr: String,
 )
 
-suspend fun ApplicationCall.deserializeFnr(): String? =
-    try {
-        this.receive<FnrRequest>().fnr
-    } catch (e: ContentTransformationException) {
-        null
-    }
+/**
+ * Leser fødselsnummeret fra request-body.
+ *
+ * Kaster ved manglende eller ugyldig body. `StatusPages` oversetter det til 400, slik at alle routes
+ * svarer likt. Feilen håndteres sentralt fordi meldingen fra deserialiseringen kan inneholde selve
+ * request-bodyen, og den skal ikke ut til konsumenten eller i applikasjonsloggen.
+ */
+suspend fun ApplicationCall.deserializeFnr(): String = receive<FnrRequest>().fnr
