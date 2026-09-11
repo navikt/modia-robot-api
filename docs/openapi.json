@@ -751,7 +751,7 @@
                                 }
                             }
                         },
-                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
                     },
                     "401": {
                         "content": {
@@ -821,7 +821,7 @@
                                 }
                             }
                         },
-                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
                     },
                     "401": {
                         "content": {
@@ -891,7 +891,7 @@
                                 }
                             }
                         },
-                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
                     },
                     "401": {
                         "content": {
@@ -961,7 +961,7 @@
                                 }
                             }
                         },
-                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
                     },
                     "401": {
                         "content": {
@@ -1031,7 +1031,7 @@
                                 }
                             }
                         },
-                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
                     },
                     "401": {
                         "content": {
@@ -1091,7 +1091,7 @@
                                 }
                             }
                         },
-                        "description": "Brukers pdl data"
+                        "description": "Brukers personopplysninger. Alle felter er nullbare, og et felt er `null` enten fordi opplysningen ikke finnes i PDL eller fordi den ikke er utlevert. Finner ikke PDL personen i det hele tatt, svarer tjenesten fortsatt 200 med alle felter satt til `null`."
                     },
                     "400": {
                         "content": {
@@ -1101,7 +1101,7 @@
                                 }
                             }
                         },
-                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
                     },
                     "401": {
                         "content": {
@@ -1171,7 +1171,7 @@
                                 }
                             }
                         },
-                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
                     },
                     "401": {
                         "content": {
@@ -1212,9 +1212,10 @@
                 "parameters": [
                     {
                         "deprecated": false,
+                        "description": "Ord som må forekomme i overskrift, tagger eller innhold. Flere ord skilles med mellomrom, og alle må matche. Utelates parameteren, returneres alle tekster.",
                         "in": "query",
                         "name": "sokeVerdi",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "type": "string"
                         }
@@ -1271,10 +1272,12 @@
                 "parameters": [
                     {
                         "deprecated": false,
+                        "description": "Identifikatoren til teksten, som UUID",
                         "in": "path",
                         "name": "id",
                         "required": true,
                         "schema": {
+                            "format": "uuid",
                             "type": "string"
                         }
                     }
@@ -1289,6 +1292,16 @@
                             }
                         },
                         "description": "Tekst som matcher søket på ID"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
                     },
                     "401": {
                         "content": {
@@ -1365,7 +1378,7 @@
                                 }
                             }
                         },
-                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
                     },
                     "401": {
                         "content": {
@@ -1468,7 +1481,7 @@
                                 }
                             }
                         },
-                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
                     },
                     "401": {
                         "content": {

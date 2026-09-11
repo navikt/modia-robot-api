@@ -47,7 +47,12 @@ private object Api {
             response {
                 responseCode(HttpStatusCode.OK)
                 responseType(typeOf<PdlPersonalia>())
-                description("Brukers pdl data")
+                description(
+                    "Brukers personopplysninger. Alle felter er nullbare, og et felt er `null` " +
+                        "enten fordi opplysningen ikke finnes i PDL eller fordi den ikke er " +
+                        "utlevert. Finner ikke PDL personen i det hele tatt, svarer tjenesten " +
+                        "fortsatt 200 med alle felter satt til `null`.",
+                )
             }
             tags("PDL")
             canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)

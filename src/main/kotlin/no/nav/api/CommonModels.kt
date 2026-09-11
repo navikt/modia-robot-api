@@ -36,10 +36,11 @@ object CommonModels {
         ResponseInfo.builder {
             responseCode(HttpStatusCode.BadRequest)
             description(
-                "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON " +
-                    "med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. " +
-                    "Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan " +
-                    "inneholde deler av request-bodyen.",
+                "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, " +
+                    "har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For " +
+                    "routes med parametere: en parameter mangler eller har ugyldig format. Feil i " +
+                    "request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen " +
+                    "kan inneholde deler av bodyen.",
             )
             responseType(typeOf<HttpErrorResponse>())
         }
