@@ -40,6 +40,6 @@ private object ApiV2 {
                 description("Navn og ident til brukers veileder")
             }
             tags("Oppfølging")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 }

@@ -41,6 +41,6 @@ private object ApiV2 {
                 description("Brukers epost og mobiltelefonnummer")
             }
             tags("Brukers epost og mobiltelefonnummer")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 }

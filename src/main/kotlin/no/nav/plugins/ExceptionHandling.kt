@@ -35,12 +35,24 @@ fun Application.configureExceptionHandling() {
             )
         }
         status(HttpStatusCode.Unauthorized) { statusCode ->
-            val message = call.authentication.allFailures.joinToString("\n") { it.prettyPrint() }
-            this@configureExceptionHandling.log.error(message)
-            call.respond(statusCode, message)
+            val arsaker = call.authentication.allFailures.joinToString("\n") { it.prettyPrint() }
+            this@configureExceptionHandling.log.warn("Avviste forespørsel med 401: $arsaker")
+            call.respond(statusCode, UGYLDIG_TOKEN)
         }
     }
 }
+
+/**
+ * Samme svar uansett hvorfor tokenet ble avvist.
+ *
+ * Årsaken logges, men eksponeres ikke: `AuthenticationFailedCause.Error` kan inneholde detaljer fra
+ * JWT-valideringen, og forskjellen på «mangler token» og «ikke i tillatelseslisten» er informasjon
+ * en uautorisert klient ikke trenger.
+ */
+internal val UGYLDIG_TOKEN =
+    HttpErrorResponse(
+        message = "Token mangler, er ugyldig eller utløpt, eller identen har ikke tilgang til denne tjenesten",
+    )
 
 private fun AuthenticationFailedCause.prettyPrint(): String =
     when (this) {
@@ -50,7 +62,7 @@ private fun AuthenticationFailedCause.prettyPrint(): String =
     }
 
 @Serializable
-internal data class HttpErrorResponse(
+data class HttpErrorResponse(
     val message: String? = null,
     val cause: String? = null,
 )
