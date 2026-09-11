@@ -3,9 +3,11 @@ package no.nav.plugins
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.plugins.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import kotlinx.serialization.Serializable
+import no.nav.utils.TjenestekallLogger
 
 class WebStatusException(
     message: String,
@@ -24,6 +26,12 @@ fun Application.configureExceptionHandling() {
                 ),
             )
         }
+        exception<BadRequestException> { call, cause ->
+            call.besvarUgyldigForesporsel(this@configureExceptionHandling, cause)
+        }
+        exception<ContentTransformationException> { call, cause ->
+            call.besvarUgyldigForesporsel(this@configureExceptionHandling, cause)
+        }
         exception<Throwable> { call, cause ->
             this@configureExceptionHandling.log.error("Unhandled exception", cause)
             call.respond(
@@ -41,6 +49,31 @@ fun Application.configureExceptionHandling() {
         }
     }
 }
+
+/**
+ * Samme svar uansett hva som var galt med forespørselen.
+ *
+ * Detaljene logges i teamloggen, ikke i applikasjonsloggen og ikke i svaret: kotlinx.serialization
+ * tar med deler av request-bodyen i feilmeldingen sin, og den kan inneholde fødselsnummer.
+ */
+private suspend fun ApplicationCall.besvarUgyldigForesporsel(
+    application: Application,
+    cause: Throwable,
+) {
+    application.log.warn("Avviste forespørsel med 400: ${cause.message}")
+    TjenestekallLogger.warn(
+        "Ugyldig forespørsel",
+        mapOf("exception" to cause.stackTraceToString()),
+    )
+    respond(HttpStatusCode.BadRequest, UGYLDIG_FORESPORSEL)
+}
+
+internal val UGYLDIG_FORESPORSEL =
+    HttpErrorResponse(
+        message =
+            "Forespørselen kunne ikke leses. Kontroller at Content-Type er application/json og at " +
+                "bodyen er gyldig JSON med de påkrevde feltene.",
+    )
 
 /**
  * Samme svar uansett hvorfor tokenet ble avvist.

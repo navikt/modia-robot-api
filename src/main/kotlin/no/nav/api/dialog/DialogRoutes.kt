@@ -78,7 +78,7 @@ private object ApiV2 {
                 description("Referanse til meldingen som ble sendt til bruker")
             }
             tags("Dialog")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 
     val sendSporsmal =
@@ -102,6 +102,6 @@ private object ApiV2 {
                 description("Referanse til meldingen som ble sendt til bruker")
             }
             tags("Dialog")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 }

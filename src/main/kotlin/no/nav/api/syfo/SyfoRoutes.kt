@@ -18,7 +18,7 @@ fun Route.configureSyfoRoutes(syfoService: SyfoService) {
         }
         post {
             val payload = call.getJWT()
-            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val fnr = call.deserializeFnr()
             val veileder = syfoService.hentVeileder(fnr, payload)
             call.respond(veileder ?: HttpStatusCode.NoContent)
         }

@@ -19,7 +19,7 @@ fun Route.configureKontonummerRegisterRoutes(kontonummerRegister: KontonummerReg
             post = ApiV2.kontonummer
         }
         post {
-            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val fnr = call.deserializeFnr()
             val ident = call.getJWTPrincipalSubject()
             val token = call.getJWT()
             call.respond(kontonummerRegister.hentKontonummer(fnr, ident, token))

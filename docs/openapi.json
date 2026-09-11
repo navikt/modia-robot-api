@@ -743,6 +743,16 @@
                         },
                         "description": "Referanse til meldingen som ble sendt til bruker"
                     },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
+                    },
                     "401": {
                         "content": {
                             "application/json": {
@@ -802,6 +812,16 @@
                             }
                         },
                         "description": "Referanse til meldingen som ble sendt til bruker"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
                     },
                     "401": {
                         "content": {
@@ -864,7 +884,14 @@
                         "description": "Brukers epost og mobiltelefonnummer"
                     },
                     "400": {
-                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
                     },
                     "401": {
                         "content": {
@@ -927,7 +954,14 @@
                         "description": "Brukers kontonummer om det eksisterer i kontonummer register"
                     },
                     "400": {
-                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
                     },
                     "401": {
                         "content": {
@@ -990,7 +1024,14 @@
                         "description": "Navn og ident til brukers veileder"
                     },
                     "400": {
-                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
                     },
                     "401": {
                         "content": {
@@ -1053,7 +1094,14 @@
                         "description": "Brukers pdl data"
                     },
                     "400": {
-                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
                     },
                     "401": {
                         "content": {
@@ -1116,7 +1164,14 @@
                         "description": "identens tilhørende aktorid"
                     },
                     "400": {
-                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
                     },
                     "401": {
                         "content": {
@@ -1303,7 +1358,14 @@
                         "description": "Forespørselen var gyldig, men det finnes ingen informasjon å returnere. Svaret har tom body."
                     },
                     "400": {
-                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
                     },
                     "401": {
                         "content": {
@@ -1355,19 +1417,23 @@
                 "parameters": [
                     {
                         "deprecated": false,
+                        "description": "Første dag i perioden det hentes utbetalinger for, på formatet ÅÅÅÅ-MM-DD",
                         "in": "query",
                         "name": "fra",
                         "required": true,
                         "schema": {
+                            "format": "date",
                             "type": "string"
                         }
                     },
                     {
                         "deprecated": false,
+                        "description": "Siste dag i perioden det hentes utbetalinger for, på formatet ÅÅÅÅ-MM-DD",
                         "in": "query",
                         "name": "til",
                         "required": true,
                         "schema": {
+                            "format": "date",
                             "type": "string"
                         }
                     }
@@ -1395,7 +1461,14 @@
                         "description": "Brukers utbetalinger"
                     },
                     "400": {
-                        "description": "Request-body mangler eller kunne ikke leses. Svaret har tom body."
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Request-body mangler, har feil Content-Type, eller kunne ikke leses som gyldig JSON med de påkrevde feltene. Gjelder også ugyldige spørringsparametere der routen har dem. Årsaken spesifiseres ikke i detalj, fordi feilmeldingen fra deserialiseringen kan inneholde deler av request-bodyen."
                     },
                     "401": {
                         "content": {
