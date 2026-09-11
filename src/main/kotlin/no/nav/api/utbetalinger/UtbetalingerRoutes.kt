@@ -19,7 +19,7 @@ import kotlin.reflect.typeOf
 
 fun Route.configureUtbetalingerRoutes(utbetalingerService: UtbetalingerService) {
     route("utbetalinger/ytelseoversikt") {
-        install(NotarizedRoute()) { post = ApiV2.utbetalinger }
+        install(NotarizedRoute()) { post = Api.utbetalinger }
         post {
             val payload = call.getJWT()
             val fnr = call.deserializeFnr()
@@ -42,7 +42,7 @@ private suspend fun ApplicationCall.respondUgyldigDato(navn: String) =
         ),
     )
 
-private object ApiV2 {
+private object Api {
     val utbetalinger =
         PostInfo.builder {
             summary("Brukers utbetalinger")

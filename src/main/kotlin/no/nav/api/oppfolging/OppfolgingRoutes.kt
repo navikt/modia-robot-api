@@ -15,7 +15,7 @@ import kotlin.reflect.typeOf
 fun Route.configureOppfolgingRoutes(oppfolgingService: OppfolgingService) {
     route("oppfolging/veileder") {
         install(NotarizedRoute()) {
-            post = ApiV2.veileder
+            post = Api.veileder
         }
         post {
             val payload = call.getJWT()
@@ -25,7 +25,7 @@ fun Route.configureOppfolgingRoutes(oppfolgingService: OppfolgingService) {
     }
 }
 
-private object ApiV2 {
+private object Api {
     val veileder =
         PostInfo.builder {
             summary("Brukers oppfølgingsveileder")

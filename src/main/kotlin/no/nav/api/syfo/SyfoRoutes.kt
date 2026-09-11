@@ -14,7 +14,7 @@ import kotlin.reflect.typeOf
 fun Route.configureSyfoRoutes(syfoService: SyfoService) {
     route("syfo/veileder") {
         install(NotarizedRoute()) {
-            post = ApiV1.veileder
+            post = Api.veileder
         }
         post {
             val payload = call.getJWT()
@@ -25,7 +25,7 @@ fun Route.configureSyfoRoutes(syfoService: SyfoService) {
     }
 }
 
-private object ApiV1 {
+private object Api {
     val veileder =
         PostInfo.builder {
             summary("Brukers sykefraværsoppfølgingveileder")

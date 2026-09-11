@@ -16,7 +16,7 @@ import kotlin.reflect.typeOf
 fun Route.configureKontonummerRegisterRoutes(kontonummerRegister: KontonummerRegister) {
     route("kontonummer-register/kontonummer") {
         install(NotarizedRoute()) {
-            post = ApiV2.kontonummer
+            post = Api.kontonummer
         }
         post {
             val fnr = call.deserializeFnr()
@@ -27,7 +27,7 @@ fun Route.configureKontonummerRegisterRoutes(kontonummerRegister: KontonummerReg
     }
 }
 
-private object ApiV2 {
+private object Api {
     val kontonummer =
         PostInfo.builder {
             summary("Brukers kontonummer")
