@@ -31,7 +31,6 @@ object CommonModels {
             responseType(typeOf<HttpErrorResponse>())
         }
 
-
     val badRequestResponse =
         ResponseInfo.builder {
             responseCode(HttpStatusCode.BadRequest)
