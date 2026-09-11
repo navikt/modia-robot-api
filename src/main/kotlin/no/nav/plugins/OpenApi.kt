@@ -14,6 +14,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import no.nav.utils.appVersjon
 import java.util.Properties
 import kotlin.reflect.typeOf
 
@@ -37,7 +38,7 @@ fun Application.configureOpenApi() {
                 info =
                     Info(
                         "modia-robot-api",
-                        version = "1.0.0",
+                        version = appVersjon,
                     ),
                 components =
                     Components(

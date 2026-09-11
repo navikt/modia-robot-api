@@ -8,6 +8,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import no.nav.mock.MockConsumers
 import no.nav.mock.MockEnv
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -82,10 +83,22 @@ class OpenApiKontraktTest {
      * Spesifikasjonsruten svarer med kompakt JSON. Vi lagrer den formatert og med sorterte nøkler,
      * så diffen viser hva som faktisk endret seg og ikke bare én lang linje. Sorteringen gjør også
      * snapshotet robust mot at Kompendium bygger objektene i en annen rekkefølge mellom kjøringer.
+     *
+     * `info.version` følger image-taggen og endrer seg for hvert bygg. Den erstattes med en fast
+     * verdi her, ellers ville snapshotet vært utdatert i det øyeblikket det ble committet.
      */
     private fun String.normalisertJson(): String {
-        val sortert = Json.parseToJsonElement(this).sortert()
+        val sortert = Json.parseToJsonElement(this).sortert().utenVersjon()
         return snapshotFormat.encodeToString(JsonElement.serializer(), sortert)
+    }
+
+    /** Se [normalisertJson]. */
+    private fun JsonElement.utenVersjon(): JsonElement {
+        val rot = this as? JsonObject ?: return this
+        val info = rot["info"] as? JsonObject ?: return this
+        return JsonObject(
+            rot + ("info" to JsonObject(info + ("version" to JsonPrimitive("<versjon>")))),
+        )
     }
 
     /** Sorterer nøkler rekursivt. Rekkefølgen i lister er en del av kontrakten og beholdes. */
