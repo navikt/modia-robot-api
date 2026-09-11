@@ -9,6 +9,7 @@ import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import no.nav.api.CommonModels
+import no.nav.plugins.HttpErrorResponse
 import java.util.*
 import kotlin.reflect.typeOf
 
@@ -28,7 +29,13 @@ fun Route.configureSkrivestotteRoutes(skrivestotteService: SkrivestotteService) 
         }
         get {
             val id = requireNotNull(call.parameters["id"])
-            val tekst = skrivestotteService.hentTekstFraId(UUID.fromString(id))
+            val tekstId =
+                runCatching { UUID.fromString(id) }.getOrNull()
+                    ?: return@get call.respond(
+                        HttpStatusCode.BadRequest,
+                        HttpErrorResponse(message = "«$id» er ikke en gyldig UUID"),
+                    )
+            val tekst = skrivestotteService.hentTekstFraId(tekstId)
             if (tekst != null) {
                 call.respond(tekst)
             } else {
@@ -66,7 +73,9 @@ private object Api {
                 description("Tekst som matcher søket på ID")
             }
             tags("Skrivestøtte")
-            canRespond(CommonModels.standardResponses + CommonModels.notFoundResponse)
+            canRespond(
+                CommonModels.standardResponses + CommonModels.badRequestResponse + CommonModels.notFoundResponse,
+            )
         }
 }
 
@@ -75,7 +84,8 @@ private object Models {
         Parameter(
             name = "id",
             `in` = Parameter.Location.path,
-            schema = TypeDefinition.STRING,
+            schema = TypeDefinition.UUID,
+            description = "Identifikatoren til teksten, som UUID",
         )
 
     val sokeVerdiParameter =
@@ -83,5 +93,9 @@ private object Models {
             name = "sokeVerdi",
             `in` = Parameter.Location.query,
             schema = TypeDefinition.STRING,
+            required = false,
+            description =
+                "Ord som må forekomme i overskrift, tagger eller innhold. Flere ord skilles med " +
+                    "mellomrom, og alle må matche. Utelates parameteren, returneres alle tekster.",
         )
 }
