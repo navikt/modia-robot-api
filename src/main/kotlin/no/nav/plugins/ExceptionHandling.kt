@@ -49,8 +49,9 @@ private fun AuthenticationFailedCause.prettyPrint(): String =
         is AuthenticationFailedCause.Error -> "Error with credentials: ${this.message}"
     }
 
+/** Feilsvaret alle routes deler. Er en del av den dokumenterte API-kontrakten, se `CommonModels`. */
 @Serializable
-internal data class HttpErrorResponse(
+data class HttpErrorResponse(
     val message: String? = null,
     val cause: String? = null,
 )

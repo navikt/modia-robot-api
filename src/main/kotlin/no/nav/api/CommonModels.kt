@@ -4,6 +4,7 @@ import io.bkbn.kompendium.core.metadata.ResponseInfo
 import io.bkbn.kompendium.json.schema.definition.TypeDefinition
 import io.bkbn.kompendium.oas.payload.Parameter
 import io.ktor.http.*
+import no.nav.plugins.HttpErrorResponse
 import kotlin.reflect.typeOf
 
 object CommonModels {
@@ -33,4 +34,18 @@ object CommonModels {
             noContentResponse,
             internalServerErrorResponse,
         )
+
+    val forbiddenResponse =
+        ResponseInfo.builder {
+            responseCode(HttpStatusCode.Forbidden)
+            description("Den underliggende tjenesten avviste tilgang til opplysningene om brukeren")
+            responseType(typeOf<HttpErrorResponse>())
+        }
+
+    val notFoundResponse =
+        ResponseInfo.builder {
+            responseCode(HttpStatusCode.NotFound)
+            description("Fant ingen person med den oppgitte identen")
+            responseType(typeOf<HttpErrorResponse>())
+        }
 }
