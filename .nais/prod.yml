@@ -113,7 +113,7 @@ spec:
     - name: SKRIVESTOTTE_URL
       value: "https://modiapersonoversikt-skrivestotte.intern.nav.no"
     - name: DIGDIR_KRR_URL
-      value: "https://digdir-krr-proxy.intern.nav.no/"
+      value: "https://digdir-krr-proxy.intern.nav.no"
     - name: DIGDIR_KRR_SCOPE
       value: "prod-gcp:team-rocket:digdir-krr-proxy"
     - name: UTBETALDATA_SOKOS_URL
