@@ -99,13 +99,18 @@ class UtbetalingerClient(
                 }
 
                 else -> {
+                    TjenestekallLogger.error(
+                        "Henting av utbetalinger feilet",
+                        mapOf(
+                            "fnr" to fnr,
+                            "fra" to fra,
+                            "til" to til,
+                            "httpStatus" to response.status,
+                            "body" to response.bodyAsText(),
+                        ),
+                    )
                     throw WebStatusException(
-                        message =
-                            """
-                            Henting av utbetalinger for bruker med fnr $fnr mellom $fra og $til feilet.
-                            HttpStatus: ${response.status}
-                            Body: ${response.bodyAsText()}
-                            """.trimIndent(),
+                        message = "Henting av utbetalinger feilet",
                         status = HttpStatusCode.InternalServerError,
                     )
                 }

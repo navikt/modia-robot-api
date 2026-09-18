@@ -1,0 +1,1523 @@
+{
+    "components": {
+        "schemas": {
+            "AktorIdResponse": {
+                "properties": {
+                    "aktorid": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    }
+                },
+                "required": [],
+                "type": "object"
+            },
+            "DialogServiceMeldingRequestV2": {
+                "properties": {
+                    "enhet": {
+                        "type": "string"
+                    },
+                    "fnr": {
+                        "type": "string"
+                    },
+                    "tekst": {
+                        "type": "string"
+                    },
+                    "tema": {
+                        "type": "string"
+                    },
+                    "tildelMeg": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "boolean"
+                            }
+                        ]
+                    }
+                },
+                "required": [
+                    "enhet",
+                    "fnr",
+                    "tekst",
+                    "tema"
+                ],
+                "type": "object"
+            },
+            "DialogServiceResponse": {
+                "properties": {
+                    "kjedeId": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "kjedeId"
+                ],
+                "type": "object"
+            },
+            "DigdirServiceKontaktinformasjon": {
+                "properties": {
+                    "epostadresse": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "epostadresseOppdatert": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "format": "date-time",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "epostadresseVerifisert": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "format": "date-time",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "mobiltelefonnummer": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "mobiltelefonnummerOppdatert": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "format": "date-time",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "mobiltelefonnummerVerifisert": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "format": "date-time",
+                                "type": "string"
+                            }
+                        ]
+                    }
+                },
+                "required": [],
+                "type": "object"
+            },
+            "FnrRequest": {
+                "properties": {
+                    "fnr": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "fnr"
+                ],
+                "type": "object"
+            },
+            "HttpErrorResponse": {
+                "properties": {
+                    "cause": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "message": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    }
+                },
+                "required": [],
+                "type": "object"
+            },
+            "Instant": {
+                "format": "date-time",
+                "type": "string"
+            },
+            "KontonummerRegisterKontonummer": {
+                "properties": {
+                    "kontonummer": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    }
+                },
+                "required": [],
+                "type": "object"
+            },
+            "List-SkrivestotteClientTekst": {
+                "items": {
+                    "$ref": "#/components/schemas/SkrivestotteClientTekst"
+                },
+                "type": "array"
+            },
+            "List-UtbetalingerServiceUtbetalinger": {
+                "items": {
+                    "$ref": "#/components/schemas/UtbetalingerServiceUtbetalinger"
+                },
+                "type": "array"
+            },
+            "LocalDate": {
+                "format": "date",
+                "type": "string"
+            },
+            "LocalDateTime": {
+                "format": "date-time",
+                "type": "string"
+            },
+            "Navn": {
+                "properties": {
+                    "etternavn": {
+                        "type": "string"
+                    },
+                    "fornavn": {
+                        "type": "string"
+                    },
+                    "mellomnavn": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    }
+                },
+                "required": [
+                    "etternavn",
+                    "fornavn"
+                ],
+                "type": "object"
+            },
+            "OppfolgingServiceOppfolging": {
+                "properties": {
+                    "underOppfolging": {
+                        "type": "boolean"
+                    },
+                    "veileder": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "$ref": "#/components/schemas/OppfolgingServiceVeileder"
+                            }
+                        ]
+                    }
+                },
+                "required": [
+                    "underOppfolging"
+                ],
+                "type": "object"
+            },
+            "OppfolgingServiceVeileder": {
+                "properties": {
+                    "etternavn": {
+                        "type": "string"
+                    },
+                    "fornavn": {
+                        "type": "string"
+                    },
+                    "ident": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "etternavn",
+                    "fornavn",
+                    "ident"
+                ],
+                "type": "object"
+            },
+            "PdlAdresse": {
+                "properties": {
+                    "bydel": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "kommune": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "linje1": {
+                        "type": "string"
+                    },
+                    "linje2": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "linje3": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    }
+                },
+                "required": [
+                    "linje1"
+                ],
+                "type": "object"
+            },
+            "PdlPersonalia": {
+                "properties": {
+                    "alder": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "format": "int32",
+                                "type": "number"
+                            }
+                        ]
+                    },
+                    "bostedsAdresse": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "$ref": "#/components/schemas/PdlAdresse"
+                            }
+                        ]
+                    },
+                    "dodsdato": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "format": "date",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "kontaktAdresse": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "$ref": "#/components/schemas/PdlAdresse"
+                            }
+                        ]
+                    },
+                    "navn": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "$ref": "#/components/schemas/Navn"
+                            }
+                        ]
+                    },
+                    "oppholdsAdresse": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "$ref": "#/components/schemas/PdlAdresse"
+                            }
+                        ]
+                    },
+                    "statsborgerskap": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            }
+                        ]
+                    }
+                },
+                "required": [],
+                "type": "object"
+            },
+            "SkrivestotteClientInnhold": {
+                "properties": {
+                    "de_DE": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "en_US": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "es_ES": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "fr_FR": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "nb_NO": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "nn_NO": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "pl_PL": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "ru_RU": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "se_NO": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "ur": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    }
+                },
+                "required": [],
+                "type": "object"
+            },
+            "SkrivestotteClientTekst": {
+                "properties": {
+                    "id": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "format": "uuid",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "innhold": {
+                        "$ref": "#/components/schemas/SkrivestotteClientInnhold"
+                    },
+                    "overskrift": {
+                        "type": "string"
+                    },
+                    "tags": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "vekttall": {
+                        "format": "int32",
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "innhold",
+                    "overskrift",
+                    "tags"
+                ],
+                "type": "object"
+            },
+            "String": {
+                "type": "string"
+            },
+            "SyfoServiceVeileder": {
+                "properties": {
+                    "etternavn": {
+                        "type": "string"
+                    },
+                    "fornavn": {
+                        "type": "string"
+                    },
+                    "ident": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "etternavn",
+                    "fornavn",
+                    "ident"
+                ],
+                "type": "object"
+            },
+            "TokenExchangeRequest": {
+                "properties": {
+                    "application": {
+                        "type": "string"
+                    },
+                    "cluster": {
+                        "type": "string"
+                    },
+                    "namespace": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "application",
+                    "cluster",
+                    "namespace"
+                ],
+                "type": "object"
+            },
+            "TokenExchangeResponse": {
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "token"
+                ],
+                "type": "object"
+            },
+            "UtbetalingerServiceUtbetalinger": {
+                "properties": {
+                    "fra": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "til": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "ytelse": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "fra",
+                    "til",
+                    "ytelse"
+                ],
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "auth-jwt": {
+                "scheme": "bearer",
+                "type": "http"
+            }
+        }
+    },
+    "info": {
+        "title": "modia-robot-api",
+        "version": "<versjon>"
+    },
+    "jsonSchemaDialect": "https://spec.openapis.org/oas/3.1/dialect/base",
+    "openapi": "3.1.0",
+    "paths": {
+        "/api/debug/token-exchange": {
+            "parameters": [],
+            "post": {
+                "deprecated": false,
+                "description": "",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "examples": {
+                                "example": {
+                                    "value": {
+                                        "application": "app-api",
+                                        "cluster": "dev-fss",
+                                        "namespace": "teamname"
+                                    }
+                                }
+                            },
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenExchangeRequest"
+                            }
+                        }
+                    },
+                    "description": "Beskrivelse av applikasjonen man ønsker token til",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenExchangeResponse"
+                                }
+                            }
+                        },
+                        "description": "Token for bruk mot gitt applikasjon"
+                    },
+                    "400": {
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/String"
+                                }
+                            }
+                        },
+                        "description": "Endepunktet er ikke tilgjengelig i produksjon. Svaret er ren tekst, ikke JSON."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Hente ut downstream-api token",
+                "tags": [
+                    "Debug"
+                ]
+            }
+        },
+        "/api/dialog/sendinfomelding": {
+            "parameters": [],
+            "post": {
+                "deprecated": false,
+                "description": "",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DialogServiceMeldingRequestV2"
+                            }
+                        }
+                    },
+                    "description": "Innholdet i meldingen, temaet meldingen skal knyttes til, enheten som sender meldingen og tildelMeg \nsom angir om meldingen skal tildeles innlogget veileder. Standardverdi er false.\nTekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier\nfør innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DialogServiceResponse"
+                                }
+                            }
+                        },
+                        "description": "Referanse til meldingen som ble sendt til bruker"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Sender infomelding til bruker",
+                "tags": [
+                    "Dialog"
+                ]
+            }
+        },
+        "/api/dialog/sendsporsmal": {
+            "parameters": [],
+            "post": {
+                "deprecated": false,
+                "description": "",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DialogServiceMeldingRequestV2"
+                            }
+                        }
+                    },
+                    "description": "Innholdet i meldingen, temaet meldingen skal knyttes til, enheten som sender meldingen og tildelMeg \nsom angir om meldingen skal tildeles innlogget veileder. Standardverdi er false.\nTekster som inneholder referanser til brukers navn og fødselsnummer (og kun disse) vil bli omgjort med riktig verdier\nfør innsending. Eksempel på referanse: [bruker.fornavn], [bruker.etternavn] etc.",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DialogServiceResponse"
+                                }
+                            }
+                        },
+                        "description": "Referanse til meldingen som ble sendt til bruker"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Sender spørsmål til bruker",
+                "tags": [
+                    "Dialog"
+                ]
+            }
+        },
+        "/api/digdir/kontaktinformasjon": {
+            "parameters": [],
+            "post": {
+                "deprecated": false,
+                "description": "Hentes fra digdir-proxy",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FnrRequest"
+                            }
+                        }
+                    },
+                    "description": "Brukers ident",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DigdirServiceKontaktinformasjon"
+                                }
+                            }
+                        },
+                        "description": "Brukers epost og mobiltelefonnummer"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Brukers epost og mobiltelefonnummer",
+                "tags": [
+                    "Brukers epost og mobiltelefonnummer"
+                ]
+            }
+        },
+        "/api/kontonummer-register/kontonummer": {
+            "parameters": [],
+            "post": {
+                "deprecated": false,
+                "description": "Hentes fra kontonummer register",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FnrRequest"
+                            }
+                        }
+                    },
+                    "description": "Brukers ident",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KontonummerRegisterKontonummer"
+                                }
+                            }
+                        },
+                        "description": "Brukers kontonummer om det eksisterer i kontonummer register"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Brukers kontonummer",
+                "tags": [
+                    "KontonummerRegister"
+                ]
+            }
+        },
+        "/api/oppfolging/veileder": {
+            "parameters": [],
+            "post": {
+                "deprecated": false,
+                "description": "Hentes fra veilarboppfølging",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FnrRequest"
+                            }
+                        }
+                    },
+                    "description": "Brukers ident",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OppfolgingServiceOppfolging"
+                                }
+                            }
+                        },
+                        "description": "Navn og ident til brukers veileder"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Brukers oppfølgingsveileder",
+                "tags": [
+                    "Oppfølging"
+                ]
+            }
+        },
+        "/api/pdl": {
+            "parameters": [],
+            "post": {
+                "deprecated": false,
+                "description": "Hentes fra PDL",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FnrRequest"
+                            }
+                        }
+                    },
+                    "description": "Brukers ident",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PdlPersonalia"
+                                }
+                            }
+                        },
+                        "description": "Brukers personopplysninger. Alle felter er nullbare, og et felt er `null` enten fordi opplysningen ikke finnes i PDL eller fordi den ikke er utlevert. Finner ikke PDL personen i det hele tatt, svarer tjenesten fortsatt 200 med alle felter satt til `null`."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Generelle personopplysninger",
+                "tags": [
+                    "PDL"
+                ]
+            }
+        },
+        "/api/pdl/aktorid": {
+            "parameters": [],
+            "post": {
+                "deprecated": false,
+                "description": "Henter aktorid for en person",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FnrRequest"
+                            }
+                        }
+                    },
+                    "description": "Brukers ident",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AktorIdResponse"
+                                }
+                            }
+                        },
+                        "description": "identens tilhørende aktorid"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Hent aktor ID",
+                "tags": [
+                    "PDL"
+                ]
+            }
+        },
+        "/api/skrivestotte/": {
+            "get": {
+                "deprecated": false,
+                "description": "Hentes fra modiapersonoversikt-skrivestotte",
+                "parameters": [
+                    {
+                        "deprecated": false,
+                        "description": "Ord som må forekomme i overskrift, tagger eller innhold. Flere ord skilles med mellomrom, og alle må matche. Utelates parameteren, returneres alle tekster.",
+                        "in": "query",
+                        "name": "sokeVerdi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/List-SkrivestotteClientTekst"
+                                }
+                            }
+                        },
+                        "description": "Tekster som matcher søket. Tom liste når ingenting matcher."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Tekster fra skrivestøtte",
+                "tags": [
+                    "Skrivestøtte"
+                ]
+            },
+            "parameters": []
+        },
+        "/api/skrivestotte/{id}": {
+            "get": {
+                "deprecated": false,
+                "description": "Hentes fra modiapersonoversikt-skrivestotte",
+                "parameters": [
+                    {
+                        "deprecated": false,
+                        "description": "Identifikatoren til teksten, som UUID",
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "format": "uuid",
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SkrivestotteClientTekst"
+                                }
+                            }
+                        },
+                        "description": "Tekst som matcher søket på ID"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "404": {
+                        "description": "Fant ingen ressurs med den oppgitte identifikatoren. Svaret har tom body."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Tekst fra skrivestøtte gitt ID",
+                "tags": [
+                    "Skrivestøtte"
+                ]
+            },
+            "parameters": []
+        },
+        "/api/syfo/veileder": {
+            "parameters": [],
+            "post": {
+                "deprecated": false,
+                "description": "Hentes fra isyfo",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FnrRequest"
+                            }
+                        }
+                    },
+                    "description": "Brukers ident",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SyfoServiceVeileder"
+                                }
+                            }
+                        },
+                        "description": "Navn og ident til brukers veileder dersom bruker er tildelt veileder"
+                    },
+                    "204": {
+                        "description": "Forespørselen var gyldig, men det finnes ingen informasjon å returnere. Svaret har tom body."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Den underliggende tjenesten avviste tilgang til opplysningene om brukeren"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Brukers sykefraværsoppfølgingveileder",
+                "tags": [
+                    "Syfo"
+                ]
+            }
+        },
+        "/api/utbetalinger/ytelseoversikt": {
+            "parameters": [],
+            "post": {
+                "deprecated": false,
+                "description": "Hentes fra utbetaldata",
+                "parameters": [
+                    {
+                        "deprecated": false,
+                        "description": "Første dag i perioden det hentes utbetalinger for, på formatet ÅÅÅÅ-MM-DD",
+                        "in": "query",
+                        "name": "fra",
+                        "required": true,
+                        "schema": {
+                            "format": "date",
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "deprecated": false,
+                        "description": "Siste dag i perioden det hentes utbetalinger for, på formatet ÅÅÅÅ-MM-DD",
+                        "in": "query",
+                        "name": "til",
+                        "required": true,
+                        "schema": {
+                            "format": "date",
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FnrRequest"
+                            }
+                        }
+                    },
+                    "description": "Brukers ident",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/List-UtbetalingerServiceUtbetalinger"
+                                }
+                            }
+                        },
+                        "description": "Brukers utbetalinger"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forespørselen kunne ikke leses. For routes som tar en request-body: bodyen mangler, har feil Content-Type, eller er ikke gyldig JSON med de påkrevde feltene. For routes med parametere: en parameter mangler eller har ugyldig format. Feil i request-bodyen spesifiseres ikke i detalj, fordi meldingen fra deserialiseringen kan inneholde deler av bodyen."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Uventet feil i tjenesten eller i en av de underliggende tjenestene"
+                    }
+                },
+                "security": [
+                    {
+                        "auth-jwt": []
+                    }
+                ],
+                "summary": "Brukers utbetalinger",
+                "tags": [
+                    "Utbetalinger"
+                ]
+            }
+        }
+    },
+    "security": [],
+    "servers": [],
+    "tags": [],
+    "webhooks": {}
+}
