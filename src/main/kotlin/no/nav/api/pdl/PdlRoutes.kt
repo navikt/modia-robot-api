@@ -16,26 +16,26 @@ import kotlin.reflect.typeOf
 
 fun Route.configurePdlRoutes(pdlService: PdlService) {
     route("pdl") {
-        install(NotarizedRoute()) { post = ApiV2.personalia }
+        install(NotarizedRoute()) { post = Api.personalia }
         post {
             val payload = call.getJWT()
-            val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val fnr = call.deserializeFnr()
             call.respond(pdlService.hentPersonalia(fnr, payload))
         }
         route("aktorid") {
             install(NotarizedRoute()) {
-                post = ApiV2.hentAktorId
+                post = Api.hentAktorId
             }
             post {
                 val token = call.getJWT()
-                val fnr = call.deserializeFnr() ?: return@post call.respond(HttpStatusCode.BadRequest)
+                val fnr = call.deserializeFnr()
                 call.respond(AktorIdResponse(pdlService.hentAktoridNullable(fnr, token)))
             }
         }
     }
 }
 
-private object ApiV2 {
+private object Api {
     val personalia =
         PostInfo.builder {
             summary("Generelle personopplysninger")
@@ -47,10 +47,15 @@ private object ApiV2 {
             response {
                 responseCode(HttpStatusCode.OK)
                 responseType(typeOf<PdlPersonalia>())
-                description("Brukers pdl data")
+                description(
+                    "Brukers personopplysninger. Alle felter er nullbare, og et felt er `null` " +
+                        "enten fordi opplysningen ikke finnes i PDL eller fordi den ikke er " +
+                        "utlevert. Finner ikke PDL personen i det hele tatt, svarer tjenesten " +
+                        "fortsatt 200 med alle felter satt til `null`.",
+                )
             }
             tags("PDL")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 
     val hentAktorId =
@@ -67,7 +72,7 @@ private object ApiV2 {
                 description("identens tilhørende aktorid")
             }
             tags("PDL")
-            canRespond(CommonModels.standardResponses)
+            canRespond(CommonModels.standardResponses + CommonModels.badRequestResponse)
         }
 }
 

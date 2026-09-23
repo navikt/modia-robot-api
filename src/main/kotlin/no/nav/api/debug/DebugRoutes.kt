@@ -1,10 +1,10 @@
 package no.nav.api.debug
 
 import io.bkbn.kompendium.core.metadata.PostInfo
+import io.bkbn.kompendium.core.metadata.ResponseInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.bkbn.kompendium.oas.payload.MediaType
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -53,6 +53,14 @@ data class TokenExchangeResponse(
 )
 
 private object Api {
+    private val badRequestIProd =
+        ResponseInfo.builder {
+            responseCode(HttpStatusCode.BadRequest)
+            description("Endepunktet er ikke tilgjengelig i produksjon. Svaret er ren tekst, ikke JSON.")
+            responseType(typeOf<String>())
+            mediaTypes("text/plain")
+        }
+
     val post =
         PostInfo.builder {
             summary("Hente ut downstream-api token")
@@ -79,9 +87,6 @@ private object Api {
                 description("Token for bruk mot gitt applikasjon")
             }
             tags("Debug")
-            canRespond(CommonModels.standardResponses)
-//        canRespond {
-//            CommonModels.standardResponses
-//        }
+            canRespond(CommonModels.standardResponses + badRequestIProd)
         }
 }
