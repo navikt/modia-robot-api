@@ -903,6 +903,16 @@
                         },
                         "description": "Token mangler, er ugyldig eller utløpt, eller identen står ikke i tjenestens tillatelsesliste. Årsaken spesifiseres ikke i svaret."
                     },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Den underliggende tjenesten avviste tilgang til opplysningene om brukeren"
+                    },
                     "500": {
                         "content": {
                             "application/json": {
