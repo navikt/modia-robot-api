@@ -25,8 +25,7 @@ Kjør Main() i `RunLocally.kt`
 ### Oppdatering av Open API spesifikasjon
 
 Open API spec ligger versjonert i [`docs/openapi.json`](docs/openapi.json) og kan deles direkte med
-konsumentene. Den serveres også fra applikasjonen på `/openapi.json`, med Swagger-UI på
-`/swagger-ui`.
+konsumentene.
 
 `OpenApiKontraktTest` sammenligner spesifikasjonen bygget fra rutene med den versjonerte filen, slik
 at en kontraktsendring blir synlig i pull request-diffen i stedet for å oppdages av konsumentene i
