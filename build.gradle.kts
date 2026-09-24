@@ -3,7 +3,7 @@ import com.expediagroup.graphql.plugin.gradle.config.GraphQLSerializer
 import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLDownloadSDLTask
 import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
 
-val ktor_version = "3.5.2"
+val ktor_version = "3.6.0"
 val kotlin_version = "2.0.21"
 val kotlinx_datetime_version = "0.8.0"
 val kompendium_version = "4.0.3"
