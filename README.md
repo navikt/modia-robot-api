@@ -30,7 +30,8 @@ konsumentene.
 `OpenApiKontraktTest` sammenligner spesifikasjonen bygget fra rutene med den versjonerte filen, slik
 at en kontraktsendring blir synlig i pull request-diffen i stedet for å oppdages av konsumentene i
 produksjon. Testene vil feile dersom spesifikasjonen blir endret.
-Dersom du har med intensjon endret på spesifikasjonen kan du oppdatere den med kommandoen:
+Dersom du med hensikt har endret spesifikasjonen, bump `OPENAPI_VERSJON` i `OpenApi.kt` og oppdater
+den versjonerte spesifikasjonen med:
 
 ```
 ./gradlew test -PoppdaterOpenapi=true

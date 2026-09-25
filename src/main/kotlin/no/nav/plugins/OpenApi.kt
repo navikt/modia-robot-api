@@ -14,7 +14,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import no.nav.utils.appVersjon
 import java.util.Properties
 import kotlin.reflect.typeOf
 
@@ -38,7 +37,7 @@ fun Application.configureOpenApi() {
                 info =
                     Info(
                         "modia-robot-api",
-                        version = appVersjon,
+                        version = OPENAPI_VERSJON,
                     ),
                 components =
                     Components(
@@ -77,6 +76,7 @@ fun Application.configureOpenApi() {
 
 private const val SWAGGER_UI_PATH = "swagger-ui"
 private const val SWAGGER_UI_ASSETS = "$SWAGGER_UI_PATH/assets"
+private const val OPENAPI_VERSJON = "1.0.0"
 
 /**
  * Server Swagger-UI fra webjar-en `org.webjars:swagger-ui` på klassestien.
