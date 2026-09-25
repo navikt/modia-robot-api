@@ -29,6 +29,23 @@ class OpenApiKontraktTest {
         val gjeldende = hentSpesifikasjon()
 
         if (skalOppdatereSnapshot) {
+            val eksisterende =
+                snapshotFil
+                    .takeIf(File::exists)
+                    ?.readText()
+                    ?.normalisertJson()
+
+            if (
+                eksisterende != null &&
+                eksisterende.utenVersjon() != gjeldende.utenVersjon() &&
+                eksisterende.hentVersjon() == gjeldende.hentVersjon()
+            ) {
+                error(
+                    "API-kontrakten har endret seg uten at info.version er bumpet. " +
+                        "Oppdater OPENAPI_VERSJON i OpenApi.kt og kjør kommandoen på nytt.",
+                )
+            }
+
             snapshotFil.parentFile.mkdirs()
             snapshotFil.writeText(gjeldende)
             return
@@ -83,22 +100,23 @@ class OpenApiKontraktTest {
      * Spesifikasjonsruten svarer med kompakt JSON. Vi lagrer den formatert og med sorterte nøkler,
      * så diffen viser hva som faktisk endret seg og ikke bare én lang linje. Sorteringen gjør også
      * snapshotet robust mot at Kompendium bygger objektene i en annen rekkefølge mellom kjøringer.
-     *
-     * `info.version` følger image-taggen og endrer seg for hvert bygg. Den erstattes med en fast
-     * verdi her, ellers ville snapshotet vært utdatert i det øyeblikket det ble committet.
      */
     private fun String.normalisertJson(): String {
-        val sortert = Json.parseToJsonElement(this).sortert().utenVersjon()
+        val sortert = Json.parseToJsonElement(this).sortert()
         return snapshotFormat.encodeToString(JsonElement.serializer(), sortert)
     }
 
-    /** Se [normalisertJson]. */
-    private fun JsonElement.utenVersjon(): JsonElement {
-        val rot = this as? JsonObject ?: return this
-        val info = rot["info"] as? JsonObject ?: return this
-        return JsonObject(
-            rot + ("info" to JsonObject(info + ("version" to JsonPrimitive("<versjon>")))),
-        )
+    private fun String.utenVersjon(): JsonElement {
+        val json = Json.parseToJsonElement(this)
+        val rot = json as? JsonObject ?: return json
+        val info = rot["info"] as? JsonObject ?: return json
+        return JsonObject(rot + ("info" to JsonObject(info - "version")))
+    }
+
+    private fun String.hentVersjon(): String? {
+        val rot = Json.parseToJsonElement(this) as? JsonObject ?: return null
+        val info = rot["info"] as? JsonObject ?: return null
+        return (info["version"] as? JsonPrimitive)?.content
     }
 
     /** Sorterer nøkler rekursivt. Rekkefølgen i lister er en del av kontrakten og beholdes. */
