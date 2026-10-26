@@ -17,6 +17,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
+          check-latest: true
           cache: 'gradle'
       - name: Install ktlint
         uses: nbadal/action-ktlint-setup@v1
@@ -45,6 +46,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
+          check-latest: true
           cache: 'gradle'
         continue-on-error: true
       - name: Build
