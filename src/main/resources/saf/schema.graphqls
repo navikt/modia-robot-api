@@ -514,6 +514,9 @@ type DokumentInfo {
     # Benyttes av Pesys for å angi at dokumentet kun kan vises til bruker ved innlogging på nivå 4. Feltet skal kun brukes av pensjonsområdet.
     sensitivtPselv: Boolean!
 
+    # Sier hvorvidt saksbehandleren som gjør oppslaget har tilgang til en visningsvariant (SLADDET eller ARKIV) av dokumentet.
+    saksbehandlerHarTilgangTilVisningsvariant: Boolean!
+
     # Liste over andre dokumenter som også befinner seg inne i den fysiske filen som dokumentinfo-objektet peker på.
     logiskeVedlegg: [LogiskVedlegg]!
 
@@ -564,12 +567,12 @@ type Dokumentvariant {
     skjerming: SkjermingType
 
     # Viser om pålogget bruker i selvbetjeningsløsningen på Nav.no kan se dokumentet til denne dokumentvarianten.
-    brukerHarTilgang: Boolean! @deprecated(reason: "Feltet er eksperimentelt og under utvikling. Det har ingen mening i produksjon, og skal ikke brukes uten avtale med Team Dokumentløsninger. Feltet kan plutselig endres og/eller forsvinne.")
+    brukerHarTilgang: Boolean!
 
     # Begrunnelse for hvorfor pålogget bruker i selvbetjeningsløsningen eventuelt nektes tilgang til å se dokumentet.
     # Hvis brukerHarTilgang er false, inneholder denne en liste med en eller flere grunner til at brukeren ikke har tilgang
     # til å se dokumentet i selvbetjeningsløsningen. Om brukerHarTilgang er true, er denne listen tom.
-    brukerTilgangAvvistBegrunnelser: [TilgangAvvistBegrunnelse!]!  @deprecated(reason: "Feltet er eksperimentelt og under utvikling. Det har ingen mening i produksjon, og skal ikke brukes uten avtale med Team Dokumentløsninger. Feltet kan plutselig endres og/eller forsvinne.")
+    brukerTilgangAvvistBegrunnelser: [TilgangAvvistBegrunnelse!]!
 }
 
 # Beskriver hvorfor journalposten eller dokumentet er skjermet. Det kan komme flere verdier enn disse i fremtiden.
@@ -578,7 +581,10 @@ enum SkjermingType {
     POL
 
     # Indikerer at det har blitt gjort en feil under mottak, journalføring eller brevproduksjon, slik at journalposten eller dokumentene er markert for sletting.
-    FEIL
+    FEIL @deprecated(reason: "Denne verdien er erstattet av ARK")
+
+    # Indikerer at det er fattet et vedtak etter arkivloven. Det skjer fordi det har blitt gjort en feil under mottak, journalføring eller brevproduksjon, slik at journalposten eller dokumentene er markert for sletting.
+    ARK
 }
 # Beskriver en type dato som kan være relevant for en journalpost, for eksempel **DATO_OPPRETTET**. Ulike datotyper returneres for ulike journalstatuser.
 enum Datotype {
@@ -764,7 +770,6 @@ enum Kanal {
     # Presentert direkte på nav.no for innlogget bruker
     NAV_NO_UTEN_VARSLING
 
-
     # Brevet er sendt til virksomhet som Taushetsbelagt Post via Altinn.
     # * Brukes for utgående journalposter.
     DPVT
@@ -809,6 +814,9 @@ enum Tema {
 
     # Arbeidsrådgivning – skjermet
     ARS
+
+    # Aktivitetspenger
+    AVP
 
     # Barnetrygd
     BAR

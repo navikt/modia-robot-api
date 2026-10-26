@@ -47,7 +47,7 @@ fragment postboksadresse on Postboksadresse {
 
 query ($ident: ID!) {
     hentPerson(ident: $ident) {
-        navn {
+        navn(historikk: false) {
             fornavn
             mellomnavn
             etternavn
@@ -58,7 +58,7 @@ query ($ident: ID!) {
         doedsfall {
             doedsdato,
         }
-        oppholdsadresse {
+        oppholdsadresse(historikk: false) {
             gyldigFraOgMed
             gyldigTilOgMed
             oppholdAnnetSted
@@ -73,7 +73,7 @@ query ($ident: ID!) {
                 ...utenlandskadresse
             }
         }
-        kontaktadresse {
+        kontaktadresse(historikk: false) {
             gyldigFraOgMed
             gyldigTilOgMed
             coAdressenavn
@@ -93,7 +93,7 @@ query ($ident: ID!) {
                 ...utenlandskadresseIFrittFormat
             }
         }
-        bostedsadresse {
+        bostedsadresse(historikk: false) {
             gyldigFraOgMed
             gyldigTilOgMed
             vegadresse {
@@ -109,7 +109,7 @@ query ($ident: ID!) {
                 bostedskommune
             }
         }
-        statsborgerskap {
+        statsborgerskap(historikk: false) {
             land
         }
     }
