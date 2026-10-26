@@ -14,7 +14,7 @@ val nav_common_version = "4.2026.09.24_06.17-80dfc0eacb29"
 val tjenestespec_version = "1.2021.02.22-10.45-4201aaea72fb"
 val modia_common_utils_version = "1.2026.08.06-12.11-d922f6248916"
 val junit_version = "6.1.3"
-val graphql_kotlin_version = "10.2.2"
+val graphql_kotlin_version = "11.0.0"
 val swagger_ui_version = "5.33.1"
 
 plugins {
