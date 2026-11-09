@@ -3,26 +3,26 @@ import com.expediagroup.graphql.plugin.gradle.config.GraphQLSerializer
 import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLDownloadSDLTask
 import com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask
 
-val ktor_version = "3.6.0"
+val ktor_version = "3.6.1"
 val kotlin_version = "2.0.21"
 val kotlinx_datetime_version = "0.8.0"
 val kompendium_version = "4.0.3"
-val logback_version = "1.6.5"
+val logback_version = "1.6.6"
 val logstash_version = "9.0"
 val prometeus_version = "1.17.2"
-val nav_common_version = "4.2026.09.24_06.17-80dfc0eacb29"
+val nav_common_version = "4.2026.11.05_07.24-dd0ce2805c16"
 val tjenestespec_version = "1.2021.02.22-10.45-4201aaea72fb"
 val modia_common_utils_version = "1.2026.08.06-12.11-d922f6248916"
 val junit_version = "6.1.3"
 val graphql_kotlin_version = "11.0.0"
-val swagger_ui_version = "5.33.1"
+val swagger_ui_version = "5.34.1"
 
 plugins {
     application
     kotlin("jvm") version "2.4.21"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.4.21"
     id("com.expediagroup.graphql") version "11.0.0"
-    id("org.openapi.generator") version "7.26.0"
+    id("org.openapi.generator") version "7.27.0"
 }
 
 group = "no.nav"
