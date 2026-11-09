@@ -9,24 +9,29 @@ val kotlinx_datetime_version = "0.8.0"
 val kompendium_version = "4.0.3"
 val logback_version = "1.6.5"
 val logstash_version = "9.0"
-val prometeus_version = "1.17.1"
+val prometeus_version = "1.17.2"
 val nav_common_version = "4.2026.09.24_06.17-80dfc0eacb29"
 val tjenestespec_version = "1.2021.02.22-10.45-4201aaea72fb"
 val modia_common_utils_version = "1.2026.08.06-12.11-d922f6248916"
 val junit_version = "6.1.3"
-val graphql_kotlin_version = "10.2.2"
+val graphql_kotlin_version = "11.0.0"
 val swagger_ui_version = "5.33.1"
 
 plugins {
     application
     kotlin("jvm") version "2.4.21"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.4.20"
-    id("com.expediagroup.graphql") version "10.2.2"
-    id("org.openapi.generator") version "7.25.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.4.21"
+    id("com.expediagroup.graphql") version "11.0.0"
+    id("org.openapi.generator") version "7.26.0"
 }
 
 group = "no.nav"
 version = "0.0.1"
+
+dependencyLocking {
+    lockAllConfigurations()
+    lockMode.set(LockMode.STRICT)
+}
 
 application {
     mainClass.set("no.nav.ApplicationKt")
@@ -57,6 +62,12 @@ repositories {
 }
 
 dependencies {
+    constraints {
+        implementation("com.google.guava:guava:33.8.0-jre") {
+            because("Keep the transitive Guava dependency up to date")
+        }
+    }
+
     implementation("io.ktor:ktor-server:$ktor_version")
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
