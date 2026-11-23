@@ -7,8 +7,8 @@ import ch.qos.logback.classic.joran.JoranConfigurator
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.classic.spi.LoggingEvent
 import ch.qos.logback.core.filter.EvaluatorFilter
-import ch.qos.logback.core.status.Status
 import ch.qos.logback.core.spi.FilterReply
+import ch.qos.logback.core.status.Status
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -24,8 +24,10 @@ class LoggingConfigurationTest {
                 JoranConfigurator().apply { setContext(context) }.doConfigure(it)
             }
 
-            val configurationErrors = context.statusManager.getCopyOfStatusList()
-                .filter { it.level >= Status.ERROR }
+            val configurationErrors =
+                context.statusManager
+                    .getCopyOfStatusList()
+                    .filter { it.level >= Status.ERROR }
             assertTrue(
                 configurationErrors.isEmpty(),
                 "Production logging configuration errors: ${configurationErrors.joinToString { it.message }}",
@@ -33,10 +35,12 @@ class LoggingConfigurationTest {
 
             val rootLogger = context.getLogger(Logger.ROOT_LOGGER_NAME)
             val stdoutAppender = requireNotNull(rootLogger.getAppender("stdout_json_masked"))
-            val cxfFilter = requireNotNull(
-                stdoutAppender.copyOfAttachedFiltersList.filterIsInstance<EvaluatorFilter<ILoggingEvent>>()
-                    .singleOrNull(),
-            )
+            val cxfFilter =
+                requireNotNull(
+                    stdoutAppender.copyOfAttachedFiltersList
+                        .filterIsInstance<EvaluatorFilter<ILoggingEvent>>()
+                        .singleOrNull(),
+                )
             assertEquals(
                 "no.nav.common.log.CxfNonErrorEventEvaluator",
                 cxfFilter.evaluator.javaClass.name,
