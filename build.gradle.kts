@@ -7,15 +7,15 @@ val ktor_version = "3.6.1"
 val kotlin_version = "2.0.21"
 val kotlinx_datetime_version = "0.8.0"
 val kompendium_version = "4.0.3"
-val logback_version = "1.6.6"
+val logback_version = "1.6.8"
 val logstash_version = "9.0"
-val prometeus_version = "1.17.2"
+val prometeus_version = "1.18.0"
 val nav_common_version = "4.2026.11.20_21.59-c0e8159bf802"
 val tjenestespec_version = "1.2021.02.22-10.45-4201aaea72fb"
 val modia_common_utils_version = "1.2026.08.06-12.11-d922f6248916"
 val junit_version = "6.1.3"
 val graphql_kotlin_version = "11.0.0"
-val swagger_ui_version = "5.34.1"
+val swagger_ui_version = "5.35.1"
 
 plugins {
     application
@@ -102,7 +102,7 @@ dependencies {
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
     testImplementation("io.ktor:ktor-server-test-host-jvm:$ktor_version")
     testImplementation("io.ktor:ktor-client-mock-jvm:$ktor_version")
-    testImplementation("io.mockk:mockk:1.14.11")
+    testImplementation("io.mockk:mockk:1.14.12")
     testImplementation("org.junit.jupiter:junit-jupiter:$junit_version")
 }
 
