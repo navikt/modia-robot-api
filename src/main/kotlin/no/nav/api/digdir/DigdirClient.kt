@@ -69,13 +69,20 @@ class DigdirClient(
                     setBody(PersonerRequest(personidenter = setOf(fnr)))
                 }
             when (response.status) {
-                HttpStatusCode.OK -> response.body<PersonerResponse>().kontaktinformasjonFor(fnr)
-                HttpStatusCode.Forbidden ->
+                HttpStatusCode.OK -> {
+                    response.body<PersonerResponse>().kontaktinformasjonFor(fnr)
+                }
+
+                HttpStatusCode.Forbidden -> {
                     throw WebStatusException(
                         "Ikke tilgang til brukers kontaktinformasjon i KRR",
                         HttpStatusCode.Forbidden,
                     )
-                else -> error("Ukjent status code: ${response.status}")
+                }
+
+                else -> {
+                    error("Ukjent status code: ${response.status}")
+                }
             }
         }
 
